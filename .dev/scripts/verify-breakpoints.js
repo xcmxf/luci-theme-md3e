@@ -19,7 +19,7 @@ const generatedBreakpointFiles = [
 ];
 const tokenizedSourceFiles = [
   ".dev/src/media/main/20-layout-shell.css",
-  ".dev/src/media/main/23-tables-forms-segmented.css",
+  ".dev/src/media/main/23-table-layout.css",
   ".dev/src/media/main/24-navigation-page-chrome.css",
   ".dev/src/public-md3e/components/50-tabs.css",
   ".dev/src/public-md3e/components/60-page-outline.css",
@@ -75,7 +75,7 @@ const tokenizedSourcePatterns = new Map([
     ],
   ],
   [
-    ".dev/src/media/main/23-tables-forms-segmented.css",
+    ".dev/src/media/main/23-table-layout.css",
     [`max-width: ${layoutBreakpointTokens.mobileMaxWidth}px`],
   ],
   [

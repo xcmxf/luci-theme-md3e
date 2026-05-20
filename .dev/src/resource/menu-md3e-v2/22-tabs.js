@@ -19,6 +19,10 @@
       clearTimeout(this._vercelTabsResizeTimer);
       this._vercelTabsResizeTimer = setTimeout(() => {
         this._vercelTabMenus?.forEach((menu) => {
+          if (!menu.isConnected) {
+            menu._md3eCleanupTabMenu?.();
+            return;
+          }
           menu._md3eUpdateActiveIndicator?.();
         });
       }, 100);
@@ -80,9 +84,11 @@
       let lastHoverTop = null;
       let hoverHideTimer = null;
       let hoverTarget = null;
+      const itemCleanup = [];
 
       const updateHoverIndicator = (li) => {
         if (!li) {
+          hoverTarget = null;
           hoverHideTimer = setTimeout(() => {
             tabMenu.classList.remove("tab-hovering");
             lastHoverTop = null;
@@ -132,14 +138,42 @@
       };
 
       items.forEach((li) => {
-        li.addEventListener("mouseenter", () => updateHoverIndicator(li));
+        const onMouseEnter = () => updateHoverIndicator(li);
+        li.addEventListener("mouseenter", onMouseEnter);
+        itemCleanup.push(() =>
+          li.removeEventListener("mouseenter", onMouseEnter),
+        );
       });
-      tabMenu.addEventListener("mouseleave", () => updateHoverIndicator(null));
+      const onMouseLeave = () => updateHoverIndicator(null);
+      tabMenu.addEventListener("mouseleave", onMouseLeave);
 
       const observer = new MutationObserver(updateActiveIndicator);
       items.forEach((li) =>
         observer.observe(li, { attributes: true, attributeFilter: ["class"] }),
       );
+      tabMenu._md3eCleanupTabMenu = () => {
+        [
+          "_md3eTabInitialActiveFrame",
+          "_md3eTabActiveFrame",
+          "_md3eTabActiveWriteFrame",
+          "_md3eTabActiveJumpFrame",
+          "_md3eTabHoverFrame",
+          "_md3eTabHoverWriteFrame",
+          "_md3eTabHoverJumpFrame",
+        ].forEach((frameKey) => {
+          if (tabMenu[frameKey]) cancelAnimationFrame(tabMenu[frameKey]);
+          delete tabMenu[frameKey];
+        });
+        observer.disconnect();
+        itemCleanup.forEach((cleanup) => cleanup());
+        tabMenu.removeEventListener("mouseleave", onMouseLeave);
+        if (hoverHideTimer) clearTimeout(hoverHideTimer);
+        hoverHideTimer = null;
+        hoverTarget = null;
+        this._vercelTabMenus?.delete(tabMenu);
+        delete tabMenu._md3eCleanupTabMenu;
+        delete tabMenu._md3eUpdateActiveIndicator;
+      };
 
       this.scheduleElementFrame(
         tabMenu,
@@ -161,6 +195,13 @@
     this.observeDomMutations(target, "vercel-tabs", (mutations) => {
       for (const mutation of mutations) {
         if (mutation.type !== "childList") continue;
+        for (const node of mutation.removedNodes) {
+          if (node.nodeType !== 1) continue;
+          if (node.matches?.(".cbi-tabmenu")) node._md3eCleanupTabMenu?.();
+          node
+            .querySelectorAll?.(".cbi-tabmenu")
+            .forEach((menu) => menu._md3eCleanupTabMenu?.());
+        }
         for (const node of mutation.addedNodes) {
           if (node.nodeType !== 1) continue;
           bindExistingTabs(node);

@@ -189,6 +189,12 @@
   em {
     @apply text-muted-foreground font-medium italic;
   }
+
+  /* Focus Ring for Keyboard Navigation */
+  :focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--md-sys-color-primary) 70%, transparent);
+    outline-offset: 3px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

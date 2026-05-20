@@ -117,32 +117,6 @@
     return label.replace(/\s+/g, " ").trim();
   },
 
-  syncPageOutlineScrollState(outline) {
-    if (!(outline instanceof HTMLElement)) return;
-    if (this._pageOutlineScrollStateInit) return;
-
-    this._pageOutlineScrollStateInit = true;
-
-    const markScrolling = () => {
-      const current = document.querySelector(".md3e-on-this-page");
-      if (!(current instanceof HTMLElement)) return;
-
-      current.classList.add("is-scrolling");
-      if (this._pageOutlineScrollStateTimer) {
-        clearTimeout(this._pageOutlineScrollStateTimer);
-      }
-
-      this._pageOutlineScrollStateTimer = setTimeout(() => {
-        current.classList.remove("is-scrolling");
-        this._pageOutlineScrollStateTimer = null;
-      }, 220);
-    };
-
-    this._pageOutlineScrollStateHandler = markScrolling;
-    window.addEventListener("wheel", markScrolling, { passive: true });
-    window.addEventListener("scroll", markScrolling, { passive: true });
-  },
-
   teardownPageChrome() {
     const main = document.querySelector("#maincontent");
     const content = document.querySelector(".docs-content");
@@ -159,18 +133,6 @@
 
     main?.querySelector(":scope > .md3e-on-this-page")?.remove();
     document.body?.classList.remove("md3e-has-page-outline");
-
-    if (this._pageOutlineScrollStateHandler) {
-      window.removeEventListener("wheel", this._pageOutlineScrollStateHandler);
-      window.removeEventListener("scroll", this._pageOutlineScrollStateHandler);
-      this._pageOutlineScrollStateHandler = null;
-      this._pageOutlineScrollStateInit = false;
-    }
-
-    if (this._pageOutlineScrollStateTimer) {
-      clearTimeout(this._pageOutlineScrollStateTimer);
-      this._pageOutlineScrollStateTimer = null;
-    }
 
     if (content instanceof HTMLElement) {
       content._md3ePageChromeInit = false;
@@ -240,7 +202,7 @@
           E(
             "a",
             {
-              class: "md3e-on-this-page__link" + (index === 0 ? " active" : ""),
+              class: "md3e-on-this-page__link",
               href: "#" + section.id,
             },
             [section.label],
@@ -251,7 +213,6 @@
 
     nav.appendChild(list);
     outline.appendChild(nav);
-    this.syncPageOutlineScrollState(outline);
 
     if (this._pageOutlineObserver) {
       this._pageOutlineObserver.disconnect();
@@ -260,15 +221,36 @@
     const links = Array.from(
       outline.querySelectorAll(".md3e-on-this-page__link"),
     );
-    const setActive = (id) => {
-      if (!visibleSectionIds.has(id)) return false;
-
+    const applyActive = () => {
+      const activeId = outline.dataset.md3eActiveSectionId;
       links.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+        const isActive = link.getAttribute("href") === "#" + activeId;
+        link.classList.toggle("active", isActive);
+        if (isActive) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
       });
+    };
+    const setActive = (id, immediate = false) => {
+      if (!visibleSectionIds.has(id)) return false;
+      if (outline.dataset.md3eActiveSectionId === id && !immediate) return true;
+
+      outline.dataset.md3eActiveSectionId = id;
+      if (immediate) {
+        applyActive();
+      } else {
+        this.scheduleFrame("_pageOutlineActiveFrame", applyActive);
+      }
 
       return true;
     };
+    const initialActiveId = location.hash?.slice(1);
+    setActive(
+      visibleSectionIds.has(initialActiveId) ? initialActiveId : visibleSections[0].id,
+      true,
+    );
 
     links.forEach((link) => {
       link.addEventListener("click", (event) => {

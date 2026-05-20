@@ -47,8 +47,11 @@ const publicComponentsCss = readProjectFile(".dev/public/md3e/components.css");
 const statusCardsCss = readProjectFile(
   ".dev/src/media/main/22-status-cards.css",
 );
-const tablesFormsCss = readProjectFile(
-  ".dev/src/media/main/23-tables-forms-segmented.css",
+const tableLayoutCss = readProjectFile(
+  ".dev/src/media/main/23-table-layout.css",
+);
+const segmentedTabsCss = readProjectFile(
+  ".dev/src/media/main/23-segmented-tabs.css",
 );
 
 assertIncludes(
@@ -162,32 +165,32 @@ assertNotMatch(
 );
 
 assertIncludes(
-  tablesFormsCss,
+  tableLayoutCss,
   '[data-page="admin-network-network"] &',
   "network interfaces table must keep page-scoped responsive badge layout",
 );
 assertIncludes(
-  tablesFormsCss,
+  tableLayoutCss,
   "& .ifacebox-body .cbi-tooltip.ifacebadge.large",
   "network interface badge tooltip must stay out of normal icon flow",
 );
 assertIncludes(
-  tablesFormsCss,
+  tableLayoutCss,
   '&[data-name="_ifacestat"]',
   "network interface status details must keep the redesigned compact card",
 );
 assertIncludes(
-  tablesFormsCss,
+  tableLayoutCss,
   "max-md:flex-none",
   "network interface cells must not shrink and squeeze redesigned badges on mobile",
 );
 assertIncludes(
-  tablesFormsCss,
+  tableLayoutCss,
   ".md3e-interface-row",
   "network interface rows must use explicit JS markers for mobile redesign",
 );
 assertIncludes(
-  tablesFormsCss,
+  tableLayoutCss,
   "grid-template-columns: minmax(0, 1fr) !important",
   "network interface row grid must override LuCI's generated multi-column table layout",
 );
@@ -217,12 +220,12 @@ assertIncludes(
   "row action button clusters must get an explicit marker class",
 );
 assertIncludes(
-  tablesFormsCss,
+  tableLayoutCss,
   ".md3e-row-action-cluster",
   "row action button cluster CSS must use the explicit marker class",
 );
 assertIncludes(
-  tablesFormsCss,
+  segmentedTabsCss,
   ".md3e-tab-panel-hidden",
   "hidden LuCI tab panels must use an explicit runtime marker class",
 );
@@ -237,22 +240,22 @@ assertIncludes(
   "tab content runtime must mark inactive panels explicitly",
 );
 assertIncludes(
-  tablesFormsCss,
+  segmentedTabsCss,
   '#maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed) > [data-tab-title]:not([data-tab-active="true"])',
   "hidden LuCI tab panels must be clipped so inactive content cannot extend mobile page scroll height",
 );
 assertIncludes(
-  tablesFormsCss,
+  segmentedTabsCss,
   "margin-block: 0 !important",
   "hidden LuCI tab panels must not leave inactive tab margin in page flow",
 );
 assertIncludes(
-  tablesFormsCss,
+  segmentedTabsCss,
   "overflow: hidden !important",
   "hidden LuCI tab panels must override generic cbi-section overflow-visible rules",
 );
 assertNotMatch(
-  tablesFormsCss,
+  tableLayoutCss,
   />\s*div:has\(\s*>\s*:is\(\.cbi-button,\s*\.btn,\s*button,\s*a\.btn,\s*input\.btn\)\)/,
   "row action button cluster CSS must not rely on div:has(> button)",
 );
