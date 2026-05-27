@@ -179,6 +179,8 @@
   --md-comp-switch-unselected-track-color: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 92%, transparent);
   --md-comp-switch-unselected-handle-color: var(--md-sys-color-outline);
 
+}
+:root {
   /* Compatibility aliases for the existing selector graph */
   --background: var(--md-sys-color-background);
   --foreground: var(--md-sys-color-on-background);
@@ -272,8 +274,8 @@
   --space-2xl: 2.5rem;
   --container-max-width: 72rem;
   --sidebar-pill-width: 13rem;
-}
 
+}
 [data-darkmode="true"] {
   --md-sys-color-primary: rgb(173 198 255);
   --md-sys-color-surface-tint: rgb(173 198 255);
@@ -864,9 +866,14 @@
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
 
-        @media (min-width: 64rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+        @media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
           backdrop-filter: blur(10px) saturate(1.04);
           -webkit-backdrop-filter: blur(10px) saturate(1.04);
+        }
+
+        @media (prefers-reduced-transparency: reduce) {
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
         }
 
         &[data-is-opaque="true"] {
@@ -1221,9 +1228,18 @@
         @apply size-4 shrink-0;
       }
     }
-
+  }
+}
+@layer components {
+  @layer layout {
     #maincontent {
       --sidebar-drawer-width: clamp(14rem, 16.5vw, 15rem);
+      --md3e-content-gutter: clamp(0.85rem, 1.4vw, 1.5rem);
+      --md3e-content-edge: clamp(0.85rem, 1.2vw, 1.35rem);
+      --md3e-content-max-width: 72rem;
+      --md3e-content-wide-max-width: 82rem;
+      --md3e-content-form-max-width: 66rem;
+      --md3e-content-readable-width: 68ch;
       @apply relative mx-auto min-h-[calc(100vh-4rem)] w-full px-6 max-lg:px-4;
       display: grid;
       grid-template-columns: max-content minmax(0, 1fr);
@@ -1259,7 +1275,8 @@
       & > .docs-content {
         @apply flex min-w-0 flex-col;
         position: relative;
-        max-width: min(100%, 72rem);
+        width: 100%;
+        max-width: min(100%, var(--md3e-content-max-width));
         padding: var(--space-lg) var(--space-lg) var(--space-2xl);
         border-radius: var(--md-sys-shape-corner-extra-large);
         border: 0;
@@ -1374,7 +1391,9 @@
       }
 
       .cbi-map {
-        @apply mx-auto flex max-w-[80rem] flex-col;
+        @apply mx-auto flex flex-col;
+        width: 100%;
+        max-width: min(100%, var(--md3e-content-wide-max-width));
         gap: var(--space-2xl);
         border: 0 !important;
         outline: none !important;
@@ -1586,7 +1605,10 @@
           inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-primary) 12%, transparent) !important;
       }
     }
-
+  }
+}
+@layer components {
+  @layer layout {
     footer {
       @apply text-muted-foreground mt-4 mb-6 flex min-h-16 flex-wrap items-center justify-end text-xs;
 
@@ -1695,6 +1717,8 @@
 
     }
   }
+}
+@layer components {
   @layer button {
     button,
     .btn,
@@ -1742,6 +1766,49 @@
       box-shadow: 0 18px 30px -24px color-mix(in oklab, var(--md-comp-filled-button-container-color) 28%, transparent);
     }
 
+    .cbi-button-action,
+    .cbi-button-edit,
+    .td .cbi-button-apply,
+    .td .cbi-button-action {
+      color: var(--md-comp-tonal-button-label-text-color);
+      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 82%, transparent);
+      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 92%, transparent);
+    }
+
+    .cbi-button-add {
+      @apply h-10;
+      color: var(--md-comp-tonal-button-label-text-color);
+      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 82%, transparent);
+      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 88%, transparent);
+    }
+
+    .cbi-button-neutral,
+    .cbi-button-positive,
+    .cbi-button-fieldadd,
+    .cbi-button-save {
+      color: var(--md-comp-tonal-button-label-text-color);
+      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 78%, transparent);
+      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 82%, transparent);
+    }
+
+    .cbi-button-negative,
+    .cbi-section-remove .cbi-button,
+    .cbi-button-reset,
+    .cbi-button-remove {
+      color: var(--md-sys-color-on-error-container);
+      border-color: color-mix(in oklab, var(--md-sys-color-error) 18%, var(--md-sys-color-outline-variant));
+      background: color-mix(in oklab, var(--md-sys-color-error-container) 88%, transparent);
+    }
+
+    .cbi-button-apply.important {
+      @apply text-warning-foreground;
+      border-color: color-mix(in oklab, var(--warning) 36%, var(--border));
+      background: color-mix(in oklab, var(--warning) 84%, transparent);
+    }
+  }
+}
+@layer components {
+  @layer button {
     .cbi-page-actions > .cbi-button,
     .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn) {
       transform: none !important;
@@ -1765,22 +1832,6 @@
     .cbi-page-actions > .cbi-button:active,
     .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn):active {
       background: color-mix(in oklab, var(--md-comp-outlined-button-container-color) 76%, var(--md-sys-color-primary-container));
-    }
-
-    .cbi-button-action,
-    .cbi-button-edit,
-    .td .cbi-button-apply,
-    .td .cbi-button-action {
-      color: var(--md-comp-tonal-button-label-text-color);
-      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 82%, transparent);
-      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 92%, transparent);
-    }
-
-    .cbi-button-add {
-      @apply h-10;
-      color: var(--md-comp-tonal-button-label-text-color);
-      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 82%, transparent);
-      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 88%, transparent);
     }
 
     .cbi-page-actions > .cbi-dropdown {
@@ -1934,30 +1985,6 @@
       }
     }
 
-    .cbi-button-neutral,
-    .cbi-button-positive,
-    .cbi-button-fieldadd,
-    .cbi-button-save {
-      color: var(--md-comp-tonal-button-label-text-color);
-      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 78%, transparent);
-      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 82%, transparent);
-    }
-
-    .cbi-button-negative,
-    .cbi-section-remove .cbi-button,
-    .cbi-button-reset,
-    .cbi-button-remove {
-      color: var(--md-sys-color-on-error-container);
-      border-color: color-mix(in oklab, var(--md-sys-color-error) 18%, var(--md-sys-color-outline-variant));
-      background: color-mix(in oklab, var(--md-sys-color-error-container) 88%, transparent);
-    }
-
-    .cbi-button-apply.important {
-      @apply text-warning-foreground;
-      border-color: color-mix(in oklab, var(--warning) 36%, var(--border));
-      background: color-mix(in oklab, var(--warning) 84%, transparent);
-    }
-
     .cbi-page-actions > .cbi-dropdown.cbi-button-apply.important,
     .cbi-page-actions > .cbi-dropdown.btn.cbi-button-apply.important {
       color: var(--md-comp-filled-button-label-text-color);
@@ -1992,9 +2019,14 @@
         max-width: min(100%, 32rem);
         margin-block: 1rem 0;
 
-        @media (min-width: 64rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+        @media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
           backdrop-filter: blur(8px) saturate(1.04);
           -webkit-backdrop-filter: blur(8px) saturate(1.04);
+        }
+
+        @media (prefers-reduced-transparency: reduce) {
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
         }
 
         [data-darkmode="true"] & {
@@ -2041,6 +2073,8 @@
       }
     }
   }
+}
+@layer components {
   @layer input {
     input {
       @apply disabled:cursor-not-allowed disabled:opacity-60 disabled:dark:opacity-50;
@@ -2249,6 +2283,8 @@
     }
 
   }
+}
+@layer components {
   @layer dropdown {
     .cbi-dropdown {
       @apply inline-flex h-fit max-w-full min-w-fit shrink-0 items-center p-0 whitespace-nowrap shadow-sm transition-all duration-200;
@@ -2398,7 +2434,8 @@
       }
     }
   }
-
+}
+@layer components {
   @keyframes dropdown-enter {
     from {
       opacity: 0;
@@ -2467,7 +2504,8 @@
       mask: url("@assets/icons/check.svg") center / cover no-repeat;
     }
   }
-
+}
+@layer components {
   .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) {
     --md3e-action-primary-bg: color-mix(
       in oklab,
@@ -2668,6 +2706,8 @@
       grid-template-columns: minmax(0, 1fr) 2.65rem;
     }
   }
+}
+@layer components {
   @layer tooltip {
     .cbi-tooltip {
       @apply bg-tooltip-bg text-foreground border-border/60 absolute z-110 max-w-[13rem] rounded-md border px-2 py-2 text-xs leading-4 break-normal whitespace-normal opacity-0 scale-95 shadow-md pointer-events-none;
@@ -2765,12 +2805,12 @@
         }
 
         /* Toasts with close button need extra right padding */
-        &:has(> div:not([class]) > .btn) {
+        &.md3e-toast-has-close {
           padding-right: 2.5rem;
         }
 
         /* X close button — dismiss wrapper is classless div (not .right) */
-        & > div:not([class]):has(> .btn) {
+        & > .md3e-toast-close-wrap {
           position: absolute;
           top: 0.5rem;
           right: 0.5rem;
@@ -2936,6 +2976,8 @@
     }
 
   }
+}
+@layer components {
   @layer progress {
     .cbi-progressbar {
       @apply relative flex items-center justify-start gap-3 cursor-help;
@@ -3004,6 +3046,8 @@
       }
     }
   }
+}
+@layer components {
   @layer badge {
     .label {
       @apply bg-default text-default-foreground rounded-full px-3 py-1 text-xs font-bold uppercase;
@@ -3088,6 +3132,8 @@
       }
     }
   }
+}
+@layer components {
   @layer card {
     .cbi-section {
       @apply overflow-visible border-b-0 p-0;
@@ -3186,7 +3232,7 @@
         background: color-mix(in srgb, var(--label-surface) 80%, transparent);
       }
 
-      & div:has(> input[type="checkbox"]):not(.cbi-checkbox) {
+      & .md3e-alert-checkbox-wrap {
         @apply inline-flex items-center;
         & > input[type="checkbox"] {
           @apply mr-0 ml-2;
@@ -3255,6 +3301,7 @@
 }
 @layer components {
   @layer card {
+
     #maincontent .network-status-table,
     #maincontent .md3e-network-card-grid {
       display: grid;
@@ -3263,6 +3310,7 @@
       gap: var(--space-md);
       width: 100%;
       min-width: 0;
+      max-width: min(100%, var(--md3e-content-wide-max-width));
       margin: 0 0 0.5rem;
 
       @media (max-width: 920px) {
@@ -3321,7 +3369,10 @@
     .ifacebox .ifacebox-body {
       min-width: 0;
     }
-
+  }
+}
+@layer components {
+  @layer card {
     .md3e-network-card-grid > .md3e-network-card,
     .network-status-table > .md3e-network-card {
       display: grid;
@@ -3487,7 +3538,10 @@
       font-weight: 650;
       line-height: var(--md-sys-typescale-title-small-line-height);
     }
-
+  }
+}
+@layer components {
+  @layer card {
     .md3e-port-card {
       display: grid;
       grid-template-rows: auto auto auto auto;
@@ -3813,6 +3867,8 @@
       to { opacity: 0; transform: scale(0.96) translateY(8px); }
     }
   }
+}
+@layer components {
 
   /* ── Sidebar Navigation Elements (shared by desktop sidebar & mobile panel) ── */
   .sidebar-sections {
@@ -4129,6 +4185,8 @@
       background: var(--sidebar-hover-bg);
     }
   }
+}
+@layer components {
   @layer overlay {
     .mobile-menu-overlay {
       @apply max-lg:invisible max-lg:fixed max-lg:inset-0 max-lg:z-60 max-lg:opacity-0 max-lg:transition-all max-lg:duration-300 lg:hidden;
@@ -4509,7 +4567,7 @@
       & .cbi-section-table-row[data-title] {
         @apply before:border-border before:table-cell before:px-3 before:py-3 before:align-middle before:text-base before:font-semibold before:content-[attr(data-title)] before:max-md:flex before:max-md:flex-[0_0_100%] before:max-md:px-3 before:max-md:py-2.5 before:max-md:text-sm before:md:border-b;
         &:not([data-title]),
-        &:has(td.cbi-section-table-titles) {
+        &.md3e-table-title-row {
           @apply before:content-none;
         }
       }
@@ -4526,7 +4584,6 @@
       & tr,
       & .tr {
         @apply max-md:border-border bg-transparent transition-[background-color] duration-200 ease-out max-md:flex max-md:flex-wrap max-md:border-b max-md:px-0 max-md:py-2;
-        @apply has-[.cbi-progressbar]:max-md:flex;
 
         &:not(.table-titles):not(.cbi-section-table-titles):not(.cbi-section-table-descr) {
           @apply max-md:border-0 max-md:px-3 max-md:py-3;
@@ -4565,20 +4622,7 @@
           @apply bg-transparent;
         }
 
-        [data-page="admin-network-network"] &.md3e-interface-row {
-          @media (max-width: 920px) {
-            display: grid !important;
-            grid-template-columns: minmax(0, 1fr);
-            gap: 0.6rem;
-            width: 100%;
-            padding: 0.78rem;
-            border-radius: 1.45rem;
-            background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 86%, var(--md-sys-color-secondary-container) 7%);
-            box-shadow:
-              inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-outline-variant) 28%, transparent),
-              inset 0 1px 0 color-mix(in oklab, var(--surface-highlight) 42%, transparent);
-          }
-        }
+
 
         & > .col-1 {
           @apply max-md:flex-[1_1_2rem] md:w-20 md:max-w-28;
@@ -4871,6 +4915,124 @@
           @apply w-1/3 max-md:flex-[0_0_33.333%];
         }
 
+
+
+      }
+    }
+
+    .cbi-section-table {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      overscroll-behavior-inline: contain;
+      scrollbar-gutter: stable;
+
+      .cbi-section-table-titles {
+        .cbi-section-table-cell {
+          @apply !w-auto;
+        }
+      }
+    }
+
+    [data-name="bridge-vlan"] > div {
+      @apply max-md:overflow-visible!;
+    }
+
+    @media (max-width: 920px) {
+      :where(
+        #maincontent,
+        #maincontent > .docs-content,
+        #view,
+        .cbi-map,
+        .cbi-section,
+        .cbi-section > div,
+        .cbi-value,
+        .cbi-value-title,
+        .cbi-value-field,
+        .cbi-value-field > *,
+        .cbi-value-field .control-group,
+        textarea,
+        pre,
+        code
+      ) {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+
+      pre, code {
+        white-space: pre-wrap !important;
+        word-break: break-all !important;
+        overflow-x: auto !important;
+      }
+
+      :where(
+        .cbi-input-text,
+        .cbi-input-password,
+        .cbi-input-select,
+        .cbi-dropdown,
+        input[type="text"],
+        input[type="password"],
+        input[type="search"],
+        input[type="number"],
+        input[type="url"],
+        input[type="email"],
+        textarea,
+        select,
+        #localtime,
+        .zonebadge.large,
+        .ifacebadge.large,
+        .cbi-dynlist .add-item > input
+      ) {
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+
+      :where(
+        .cbi-value-field .cbi-dropdown,
+        .cbi-value-field .cbi-input-select,
+        .cbi-value-field .cbi-input-text,
+        .cbi-value-field .control-group > *,
+        .cbi-section-create > *
+      ) {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      :where(
+        .cbi-section-create,
+        .cbi-value-field .control-group
+      ) {
+        flex-wrap: wrap;
+      }
+    }
+  }
+}
+@layer components {
+  @layer table {
+    .table,
+    table {
+      & tr,
+      & .tr {
+        [data-page="admin-network-network"] &.md3e-interface-row {
+          @media (max-width: 920px) {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.78rem;
+            border-radius: 1.45rem;
+            background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 86%, var(--md-sys-color-secondary-container) 7%);
+            box-shadow:
+              inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-outline-variant) 28%, transparent),
+              inset 0 1px 0 color-mix(in oklab, var(--surface-highlight) 42%, transparent);
+          }
+        }
+      }
+
+      & td,
+      & .td {
         [data-page="admin-network-network"] & {
           &[data-name="_ifacebox"],
           &[data-name="_ifacestat"],
@@ -5157,7 +5319,6 @@
             }
           }
         }
-
       }
     }
 
@@ -5175,85 +5336,6 @@
             inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-outline-variant) 28%, transparent),
             inset 0 1px 0 color-mix(in oklab, var(--surface-highlight) 42%, transparent);
         }
-      }
-
-      .cbi-section-table-titles {
-        .cbi-section-table-cell {
-          @apply !w-auto;
-        }
-      }
-    }
-
-    [data-name="bridge-vlan"] > div {
-      @apply max-md:overflow-visible!;
-    }
-
-    @media (max-width: 920px) {
-      :where(
-        #maincontent,
-        #maincontent > .docs-content,
-        #view,
-        .cbi-map,
-        .cbi-section,
-        .cbi-section > div,
-        .cbi-value,
-        .cbi-value-title,
-        .cbi-value-field,
-        .cbi-value-field > *,
-        .cbi-value-field .control-group,
-        textarea,
-        pre,
-        code
-      ) {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: 100% !important;
-      }
-
-      pre, code {
-        white-space: pre-wrap !important;
-        word-break: break-all !important;
-        overflow-x: auto !important;
-      }
-
-      :where(
-        .cbi-input-text,
-        .cbi-input-password,
-        .cbi-input-select,
-        .cbi-dropdown,
-        input[type="text"],
-        input[type="password"],
-        input[type="search"],
-        input[type="number"],
-        input[type="url"],
-        input[type="email"],
-        textarea,
-        select,
-        #localtime,
-        .zonebadge.large,
-        .ifacebadge.large,
-        .cbi-dynlist .add-item > input
-      ) {
-        min-width: 0 !important;
-        max-width: 100% !important;
-      }
-
-      :where(
-        .cbi-value-field .cbi-dropdown,
-        .cbi-value-field .cbi-input-select,
-        .cbi-value-field .cbi-input-text,
-        .cbi-value-field .control-group > *,
-        .cbi-section-create > *
-      ) {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      :where(
-        .cbi-section-create,
-        .cbi-value-field .control-group
-      ) {
-        flex-wrap: wrap;
       }
     }
   }
@@ -5302,11 +5384,14 @@
 
       & .cbi-value-field {
         @apply flex-1 p-0 font-medium;
+        min-width: 0;
+        max-width: min(100%, 46rem);
         font-size: var(--md-sys-typescale-body-large-size);
         line-height: var(--md-sys-typescale-body-large-line-height);
         color: var(--foreground);
         letter-spacing: 0;
         @media (max-width: 920px) {
+          max-width: 100%;
           font-size: var(--md-sys-typescale-body-medium-size);
           line-height: var(--md-sys-typescale-body-medium-line-height);
         }
@@ -5719,6 +5804,8 @@
       }
     }
   }
+}
+@layer components {
   @layer shell-pro {
     header {
       .header-content {
@@ -5772,6 +5859,12 @@
     }
 
     #maincontent {
+      --md3e-content-gutter: clamp(1rem, 1.5vw, 1.75rem);
+      --md3e-content-edge: clamp(1rem, 1.4vw, 1.5rem);
+      --md3e-content-max-width: 72rem;
+      --md3e-content-wide-max-width: min(92rem, calc(100vw - var(--nav-rail-width) - 3.5rem));
+      --md3e-content-form-max-width: 66rem;
+      --md3e-content-readable-width: 68ch;
       max-width: 104rem;
       gap: var(--space-md);
       padding-inline: var(--space-md);
@@ -5789,7 +5882,9 @@
       }
 
       & > .docs-content {
-        max-width: 72rem;
+        width: 100%;
+        max-width: min(100%, var(--md3e-content-max-width));
+        margin-inline: 0 auto;
         padding: var(--space-lg) var(--space-lg) var(--space-2xl);
         border-radius: var(--md-sys-shape-corner-extra-large);
         border: 0;
@@ -5828,7 +5923,7 @@
         body[data-page*="-network-"],
         body[data-page*="-firewall-"]
       ) & > .docs-content {
-        max-width: none;
+        max-width: min(100%, var(--md3e-content-wide-max-width));
       }
     }
 
@@ -6058,6 +6153,10 @@
       box-shadow: none;
     }
 
+  }
+}
+@layer components {
+  @layer shell-pro {
     .md3e-page-hero {
       @apply relative mb-8 overflow-hidden border shadow-2xl;
       padding: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
@@ -6126,12 +6225,24 @@
 
     #maincontent .cbi-map {
       gap: var(--space-lg);
-      max-width: none;
+      width: 100%;
+      max-width: min(100%, var(--md3e-content-form-max-width));
+      margin-inline: 0 auto;
+    }
+
+    :is(
+      body[data-page$="-overview"],
+      body[data-page*="-status-"],
+      body[data-page*="-network-"],
+      body[data-page*="-firewall-"]
+    ) #maincontent .cbi-map {
+      max-width: min(100%, var(--md3e-content-wide-max-width));
     }
 
     #maincontent .cbi-section {
       @apply relative border-0 shadow-none bg-transparent p-0 mb-6;
-      max-width: none;
+      width: 100%;
+      max-width: 100%;
       border: 0 !important;
       outline: none !important;
       box-shadow: none !important;
@@ -6181,6 +6292,7 @@
         @apply flex flex-col items-start gap-2 py-0 mb-6 border-0;
         background: transparent !important;
         margin-top: 0 !important;
+        max-width: min(100%, var(--md3e-content-form-max-width));
 
         &:last-child {
           margin-bottom: 0;
@@ -6205,7 +6317,7 @@
           font-weight: 500;
           letter-spacing: -0.01em;
 
-          &:has(.progress), &:has(.cbi-progressbar) {
+          &.md3e-value-field-progress {
             @apply w-full;
             font-size: var(--md-sys-typescale-headline-small-size);
             line-height: var(--md-sys-typescale-headline-small-line-height);
@@ -6231,15 +6343,17 @@
         }
 
         @media (min-width: 921px) {
-          &:not(:has(.progress)):not(:has(.cbi-progressbar)) {
+          &:not(.md3e-value-has-progress) {
             flex-direction: row;
             align-items: start;
-            gap: 1.5rem;
+            gap: clamp(1.25rem, 2vw, 2rem);
             & .cbi-value-title {
-              width: 11.5rem !important;
+              width: clamp(11.25rem, 18vw, 14rem) !important;
               margin-bottom: 0;
             }
             & .cbi-value-field {
+              min-width: 0;
+              max-width: min(100%, 46rem);
               font-size: var(--md-sys-typescale-body-large-size);
               line-height: var(--md-sys-typescale-body-large-line-height);
               font-weight: 500;
@@ -6251,7 +6365,10 @@
         }
       }
     }
-
+  }
+}
+@layer components {
+  @layer shell-pro {
     footer {
       max-width: 104rem;
       margin-inline: auto;
@@ -6543,7 +6660,10 @@
       cursor: pointer;
       appearance: none;
     }
-
+  }
+}
+@layer components {
+  @layer shell-pro {
     @media (max-width: 1180px) {
       header .header-context {
         display: none;
@@ -6566,7 +6686,7 @@
       #maincontent {
         display: block;
         max-width: none;
-        padding: 0 1.25rem 0 0;
+        padding: 0 var(--md3e-content-edge) 0 0;
       }
 
       #maincontent > .docs-sidebar {
@@ -6595,16 +6715,25 @@
       }
 
       #maincontent > .docs-content {
-        width: auto;
-        max-width: none;
+        width: calc(100% - var(--nav-rail-width) - var(--md3e-content-edge) - 1rem);
+        max-width: min(100%, var(--md3e-content-max-width));
         margin-left: calc(var(--nav-rail-width) + 1rem);
         min-height: 100vh;
-        padding: 1rem 1.25rem 2rem;
+        padding: 1rem var(--md3e-content-edge) 2rem;
         border-radius: 0;
         border: 0;
         box-shadow: none;
         position: relative;
         z-index: 0;
+      }
+
+      :is(
+        body[data-page$="-overview"],
+        body[data-page*="-status-"],
+        body[data-page*="-network-"],
+        body[data-page*="-firewall-"]
+      ) #maincontent > .docs-content {
+        max-width: min(100%, var(--md3e-content-wide-max-width));
       }
 
       .md3e-nav-shell {
@@ -6709,6 +6838,8 @@
       }
 
       body[data-layout-mode="desktop"] #maincontent > .docs-content {
+        width: calc(100% - var(--nav-rail-width) - 1.5rem);
+        max-width: min(100%, var(--md3e-content-max-width));
         margin-left: calc(var(--nav-rail-width) + 0.75rem);
         min-height: 100vh;
         border-radius: 0;
@@ -6717,6 +6848,15 @@
         padding: 1rem 0.9rem 2rem;
         position: relative;
         z-index: 0;
+      }
+
+      :is(
+        body[data-page$="-overview"],
+        body[data-page*="-status-"],
+        body[data-page*="-network-"],
+        body[data-page*="-firewall-"]
+      )[data-layout-mode="desktop"] #maincontent > .docs-content {
+        max-width: min(100%, var(--md3e-content-wide-max-width));
       }
 
       body[data-layout-mode="desktop"] #maincontent .sidebar-nav {
@@ -6746,6 +6886,12 @@
 
       #maincontent {
         gap: 0;
+        --md3e-content-gutter: clamp(0.45rem, 2.4vw, 0.75rem);
+        --md3e-content-edge: clamp(0.75rem, 2.6vw, 1rem);
+        --md3e-content-max-width: 100%;
+        --md3e-content-wide-max-width: 100%;
+        --md3e-content-form-max-width: 100%;
+        --md3e-content-readable-width: 100%;
         padding-inline: clamp(0.45rem, 2.4vw, 0.75rem);
         width: 100%;
         max-width: 100%;

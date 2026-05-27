@@ -1,0 +1,267 @@
+@layer components {
+  @layer button {
+    .cbi-page-actions > .cbi-button,
+    .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn) {
+      transform: none !important;
+      translate: none !important;
+      scale: none !important;
+      transition:
+        color 160ms var(--md-sys-motion-easing-standard),
+        background-color 160ms var(--md-sys-motion-easing-standard),
+        border-color 160ms var(--md-sys-motion-easing-standard),
+        box-shadow 160ms var(--md-sys-motion-easing-standard);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .cbi-page-actions > .cbi-button:hover,
+    .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn):hover {
+      border-color: transparent;
+      background: color-mix(in oklab, var(--md-comp-outlined-button-container-color) 88%, var(--md-sys-color-primary-container));
+      box-shadow: none;
+    }
+
+    .cbi-page-actions > .cbi-button:active,
+    .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn):active {
+      background: color-mix(in oklab, var(--md-comp-outlined-button-container-color) 76%, var(--md-sys-color-primary-container));
+    }
+
+    .cbi-page-actions > .cbi-dropdown {
+      @apply h-10! min-w-fit items-center rounded-full text-sm font-medium;
+      display: inline-grid;
+      grid-template-columns: max-content auto;
+      align-items: center;
+      column-gap: 0;
+      flex: 0 0 auto;
+      width: max-content;
+      max-width: none;
+      color: var(--md-comp-filled-button-label-text-color);
+      border-color: color-mix(in oklab, var(--md-comp-filled-button-container-color) 84%, transparent);
+      background: var(--md-comp-filled-button-container-color);
+      box-shadow: 0 18px 30px -24px color-mix(in oklab, var(--md-comp-filled-button-container-color) 28%, transparent);
+      white-space: nowrap;
+
+      &:focus,
+      &:focus-within {
+        outline: none !important;
+      }
+
+      & > ul {
+        @apply m-0 flex flex-none list-none flex-nowrap items-center gap-0 overflow-visible;
+        grid-column: 1;
+        grid-row: 1;
+        width: max-content;
+        max-width: none;
+      }
+
+      & > ul > li[display] {
+        @apply !flex items-center py-0 pl-4 pr-1.5;
+        flex: 0 0 auto;
+        width: max-content;
+        max-width: none;
+        min-height: 100%;
+        overflow: visible;
+        text-align: center;
+      }
+
+      & > ul > li[display] > label,
+      & > ul > li[display] > span,
+      & > ul > li[display] > a,
+      & > ul > li[display] label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: max-content;
+        color: inherit !important;
+        font-size: inherit !important;
+        line-height: 1;
+        white-space: nowrap;
+        overflow: visible !important;
+        text-overflow: unset !important;
+      }
+
+      & > ul > li[display] .hide-open {
+        display: inline !important;
+      }
+
+      & > ul > li[display] .hide-close {
+        display: none !important;
+      }
+
+      & > .open {
+        @apply flex items-center justify-center px-3 text-[0px] leading-none;
+        grid-column: 2;
+        grid-row: 1;
+        width: auto !important;
+        flex: 0 0 auto;
+        min-width: 2.75rem;
+        margin-left: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      & > .open::before,
+      & > .open::after {
+        content: none !important;
+      }
+
+      & > .more {
+        display: none !important;
+      }
+
+      & > div {
+        display: none !important;
+      }
+
+      &[open] > ul.dropdown {
+        top: calc(100% + 0.55rem) !important;
+        bottom: auto !important;
+        left: 0 !important;
+        right: auto !important;
+        margin-top: 0;
+        margin-bottom: 0;
+        max-height: none !important;
+        transform-origin: top left;
+      }
+
+      &[open] > .open,
+      & > .open:hover,
+      & > .open:focus,
+      & > .open:focus-visible {
+        background: transparent !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      @media (width < 48rem) {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        grid-template-columns: minmax(0, 1fr) auto;
+        color: var(--md-comp-filled-button-label-text-color);
+        border-color: color-mix(in oklab, var(--md-comp-filled-button-container-color) 84%, transparent);
+        background: var(--md-comp-filled-button-container-color);
+        box-shadow:
+          0 8px 16px -8px color-mix(in oklab, var(--md-comp-filled-button-container-color) 50%, transparent);
+
+        & > ul {
+          width: 100%;
+          min-width: 0;
+          max-width: none;
+          flex: 1 1 auto;
+        }
+
+        & > ul > li[display] {
+          width: 100%;
+          min-width: 0;
+          max-width: none;
+          justify-content: center;
+          text-align: center;
+          padding-left: 1rem;
+          padding-right: 0.5rem;
+        }
+
+        & > ul > li[display] > label,
+        & > ul > li[display] > span,
+        & > ul > li[display] > a,
+        & > ul > li[display] label {
+          min-width: 0;
+          justify-content: center;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+
+    .cbi-page-actions > .cbi-dropdown.cbi-button-apply.important,
+    .cbi-page-actions > .cbi-dropdown.btn.cbi-button-apply.important {
+      color: var(--md-comp-filled-button-label-text-color);
+      border-color: color-mix(in oklab, var(--md-comp-filled-button-container-color) 84%, transparent);
+      background: var(--md-comp-filled-button-container-color);
+      box-shadow:
+        0 18px 30px -24px color-mix(in oklab, var(--md-comp-filled-button-container-color) 28%, transparent);
+    }
+
+    @media (min-width: 48rem) {
+      .cbi-page-actions {
+        @apply z-50 flex items-center justify-center gap-2 w-fit mx-auto px-4 py-2.5 rounded-full border shadow-2xl;
+        --md3e-action-save-bg: color-mix(in oklab, var(--md-sys-color-secondary-container) 74%, var(--md-sys-color-surface-container-high));
+        --md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+        --md3e-action-save-hover: color-mix(in oklab, var(--md3e-action-save-bg) 82%, var(--md-sys-color-tertiary-container));
+        --md3e-action-save-ring: transparent;
+        --md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-error-container) 34%, var(--md-sys-color-secondary-container));
+        --md3e-action-reset-fg: color-mix(in oklab, var(--md-sys-color-on-error-container) 84%, var(--md-sys-color-on-secondary-container));
+        --md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 46%, var(--md-sys-color-secondary-container));
+        --md3e-action-reset-ring: transparent;
+        border-color: color-mix(in oklab, var(--border) 45%, transparent);
+        background: color-mix(in oklab, var(--surface-highlight) 76%, transparent);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow:
+          0 24px 48px -12px var(--expressive-shadow),
+          0 4px 12px -4px var(--expressive-shadow);
+        animation: preview-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        position: static;
+        bottom: auto;
+        width: fit-content;
+        max-width: min(100%, 32rem);
+        margin-block: 1rem 0;
+
+        @media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
+          backdrop-filter: blur(8px) saturate(1.04);
+          -webkit-backdrop-filter: blur(8px) saturate(1.04);
+        }
+
+        @media (prefers-reduced-transparency: reduce) {
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+        }
+
+        [data-darkmode="true"] & {
+          --md3e-action-save-bg: color-mix(in oklab, var(--md-sys-color-secondary-container) 64%, var(--md-sys-color-surface-container-highest));
+          --md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+          --md3e-action-save-hover: color-mix(in oklab, var(--md3e-action-save-bg) 72%, var(--md-sys-color-tertiary-container));
+          --md3e-action-save-ring: transparent;
+          --md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-error-container) 38%, var(--md-sys-color-surface-container-high));
+          --md3e-action-reset-fg: color-mix(in oklab, var(--md-sys-color-on-error-container) 88%, var(--md-sys-color-on-surface));
+          --md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 48%, var(--md-sys-color-surface-container-highest));
+          --md3e-action-reset-ring: transparent;
+        }
+
+        .cbi-button {
+          @apply h-10 px-5 rounded-full font-bold text-sm transition-all duration-300;
+          border: 1px solid transparent;
+        }
+
+        .cbi-button-reset {
+          color: var(--md3e-action-reset-fg);
+          background: var(--md3e-action-reset-bg);
+          box-shadow: none;
+        }
+
+        .cbi-button-save {
+          color: var(--md3e-action-save-fg);
+          background: var(--md3e-action-save-bg);
+          box-shadow: none;
+        }
+
+        .cbi-button-save:hover {
+          background: var(--md3e-action-save-hover);
+        }
+
+        .cbi-button-reset:hover {
+          background: var(--md3e-action-reset-hover);
+        }
+
+        .cbi-button-apply {
+          background: color-mix(in oklab, var(--md-sys-color-primary) 92%, var(--md-sys-color-tertiary));
+          color: var(--md-sys-color-on-primary);
+          box-shadow: 0 8px 16px -8px color-mix(in oklab, var(--md-sys-color-primary) 50%, transparent);
+        }
+      }
+    }
+  }
+}

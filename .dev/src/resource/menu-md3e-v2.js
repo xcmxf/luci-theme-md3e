@@ -5,6 +5,11 @@
 
 const MOBILE_LAYOUT_MAX_WIDTH = 920;
 const MOBILE_LAYOUT_QUERY = `(max-width: ${MOBILE_LAYOUT_MAX_WIDTH}px)`;
+const TAB_CONTAINER_SELECTOR = ".cbi-section-node-tabbed, .cbi-map-tabbed";
+const TAB_PANEL_SELECTOR =
+  ".cbi-map-tabbed > [data-tab-title], .cbi-section-node-tabbed > [data-tab-title]";
+const PAGE_ACTIONS_SELECTOR = ".cbi-page-actions";
+const FORM_CONTROL_SELECTOR = "input, select, textarea";
 
 return baseclass.extend({
   __init__() {
@@ -774,7 +779,6 @@ return baseclass.extend({
 
     return label.replace(/\s+/g, " ").trim();
   },
-
   teardownPageChrome() {
     const main = document.querySelector("#maincontent");
     const content = document.querySelector(".docs-content");
@@ -959,7 +963,6 @@ return baseclass.extend({
       this._pageOutlineObserver.observe(section.element),
     );
   },
-
   initPageChrome() {
     const content = document.querySelector(".docs-content");
     if (!content || content._md3ePageChromeInit) return;
@@ -1339,6 +1342,17 @@ return baseclass.extend({
           DOMTokenList.prototype.add.apply(statusToast.classList, classes);
 
         if (content) L.dom.content(statusToast, content);
+        if (statusToast.querySelector(".btn")) {
+          statusToast.classList.add("md3e-toast-has-close");
+          statusToast
+            .querySelector(".btn")
+            ?.parentElement?.classList.add("md3e-toast-close-wrap");
+        }
+        statusToast
+          .querySelectorAll("div:not(.cbi-checkbox) > input[type='checkbox']")
+          .forEach((checkbox) => {
+            checkbox.parentElement?.classList.add("md3e-alert-checkbox-wrap");
+          });
 
         if (!this.was_polling) {
           this.was_polling = request.poll.active();
@@ -1399,12 +1413,20 @@ return baseclass.extend({
       /* Dismiss on close button click */
       const btn = toast.querySelector(".btn");
       if (btn) {
+        toast.classList.add("md3e-toast-has-close");
+        btn.parentElement?.classList.add("md3e-toast-close-wrap");
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
           dismissToast(toast);
         });
       }
+
+      toast
+        .querySelectorAll("div:not(.cbi-checkbox) > input[type='checkbox']")
+        .forEach((checkbox) => {
+          checkbox.parentElement?.classList.add("md3e-alert-checkbox-wrap");
+        });
     };
 
     /* Watch for new toasts added to #maincontent */
@@ -1469,6 +1491,9 @@ return baseclass.extend({
 
       const items = Array.from(tabMenu.querySelectorAll("li"));
       if (!items.length) return;
+      const enableHoverIndicator =
+        window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+        window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
 
       let activeReady = false;
       const updateActiveIndicator = () => {
@@ -1567,15 +1592,18 @@ return baseclass.extend({
         });
       };
 
-      items.forEach((li) => {
-        const onMouseEnter = () => updateHoverIndicator(li);
-        li.addEventListener("mouseenter", onMouseEnter);
-        itemCleanup.push(() =>
-          li.removeEventListener("mouseenter", onMouseEnter),
-        );
-      });
-      const onMouseLeave = () => updateHoverIndicator(null);
-      tabMenu.addEventListener("mouseleave", onMouseLeave);
+      let onMouseLeave = null;
+      if (enableHoverIndicator) {
+        items.forEach((li) => {
+          const onMouseEnter = () => updateHoverIndicator(li);
+          li.addEventListener("mouseenter", onMouseEnter);
+          itemCleanup.push(() =>
+            li.removeEventListener("mouseenter", onMouseEnter),
+          );
+        });
+        onMouseLeave = () => updateHoverIndicator(null);
+        tabMenu.addEventListener("mouseleave", onMouseLeave);
+      }
 
       const observer = new MutationObserver(updateActiveIndicator);
       items.forEach((li) =>
@@ -1596,7 +1624,7 @@ return baseclass.extend({
         });
         observer.disconnect();
         itemCleanup.forEach((cleanup) => cleanup());
-        tabMenu.removeEventListener("mouseleave", onMouseLeave);
+        if (onMouseLeave) tabMenu.removeEventListener("mouseleave", onMouseLeave);
         if (hoverHideTimer) clearTimeout(hoverHideTimer);
         hoverHideTimer = null;
         hoverTarget = null;
@@ -1640,6 +1668,13 @@ return baseclass.extend({
     }, { childList: true, subtree: true });
   },
   initNavHover() {
+    if (
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||
+      !window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+    ) {
+      return;
+    }
+
     const nav = document.querySelector("#topmenu");
     if (!nav) return;
 
@@ -1705,13 +1740,13 @@ return baseclass.extend({
 
     if (
       !target.querySelector(
-        ".cbi-tabmenu, .cbi-section-node-tabbed, .cbi-map-tabbed",
+        `.cbi-tabmenu, ${TAB_CONTAINER_SELECTOR}`,
       )
     ) {
       this.watchForAddedElement(
         "_tabContentBootstrapObserver",
         target,
-        ".cbi-tabmenu, .cbi-section-node-tabbed, .cbi-map-tabbed",
+        `.cbi-tabmenu, ${TAB_CONTAINER_SELECTOR}`,
         () => this.initTabContentAnimation(),
       );
       return;
@@ -1719,22 +1754,9 @@ return baseclass.extend({
 
     this._tabContentAnimationInitialized = true;
     let animating = false;
-
-    const replayAnimation = (el, className) => {
-      if (!(el instanceof HTMLElement)) return;
-
-      el.classList.remove(className);
-      this.scheduleElementFrame(el, "_md3eReplayFrame", () => {
-        this.scheduleElementFrame(el, "_md3eReplayWriteFrame", () => {
-          el.classList.add(className);
-          el.addEventListener(
-            "animationend",
-            () => el.classList.remove(className),
-            { once: true },
-          );
-        });
-      });
-    };
+    const reduceMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
 
     /* ── Content blur animation (fade in / out) ── */
 
@@ -1743,6 +1765,7 @@ return baseclass.extend({
       (e) => {
         const link = e.target.closest(".cbi-tabmenu li a");
         if (!link || animating || e._tabAnimBypass) return;
+        if (reduceMotion || this.isMobileViewport()) return;
 
         const clickedLi = link.closest("li");
         if (clickedLi?.classList.contains("cbi-tab")) return;
@@ -1776,17 +1799,21 @@ return baseclass.extend({
       true,
     );
 
-    /* ── Container height animation (independent via ResizeObserver) ── */
+    this.initTabContentHeightAnimation(target);
+    this.initTabContentViewAnimation(target);
+    this.initTabContentPanelState(target);
+  },
+  initTabContentHeightAnimation(target) {
+    if (!target) return;
 
-    const reduceHeightMotion = () =>
-      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const shouldAnimateHeight = () =>
+      !this.isMobileViewport() &&
+      window.matchMedia?.("(hover: hover) and (pointer: fine)")?.matches &&
+      !window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     const maxAnimatedHeight = 720;
     const maxAnimatedDelta = 360;
-    const tabPanelSelector =
-      ".cbi-map-tabbed > [data-tab-title], .cbi-section-node-tabbed > [data-tab-title]";
-
     const syncTabPanelState = (scope = target) => {
-      this.forEachElementMatch(scope, tabPanelSelector, (panel) => {
+      this.forEachElementMatch(scope, TAB_PANEL_SELECTOR, (panel) => {
         const active = panel.getAttribute("data-tab-active") === "true";
         panel.classList.toggle("md3e-tab-panel-active", active);
         panel.classList.toggle("md3e-tab-panel-hidden", !active);
@@ -1804,7 +1831,7 @@ return baseclass.extend({
 
         if (oldH === undefined || oldH === newH) continue;
         if (
-          reduceHeightMotion() ||
+          !shouldAnimateHeight() ||
           Math.max(oldH, newH) > maxAnimatedHeight ||
           Math.abs(newH - oldH) > maxAnimatedDelta
         ) {
@@ -1844,15 +1871,32 @@ return baseclass.extend({
       c._htWatched = true;
       ro.observe(c);
     };
+    this.watchTabContentHeight = watch;
 
     this.forEachElementMatch(
       target,
-      ".cbi-section-node-tabbed, .cbi-map-tabbed",
+      TAB_CONTAINER_SELECTOR,
       watch,
     );
-    syncTabPanelState();
+  },
+  initTabContentViewAnimation(target) {
+    if (!target) return;
 
-    /* ── View load animation (blur-in after spinner) ── */
+    const replayAnimation = (el, className) => {
+      if (!(el instanceof HTMLElement)) return;
+
+      el.classList.remove(className);
+      this.scheduleElementFrame(el, "_md3eReplayFrame", () => {
+        this.scheduleElementFrame(el, "_md3eReplayWriteFrame", () => {
+          el.classList.add(className);
+          el.addEventListener(
+            "animationend",
+            () => el.classList.remove(className),
+            { once: true },
+          );
+        });
+      });
+    };
 
     const watchView = (v) => {
       if (v._viewWatched) return;
@@ -1872,6 +1916,22 @@ return baseclass.extend({
     const view = target.querySelector("#view");
     if (view) watchView(view);
 
+    this._watchTabContentView = watchView;
+    this._replayTabContentAnimation = replayAnimation;
+  },
+  initTabContentPanelState(target) {
+    if (!target) return;
+
+    const syncTabPanelState = (scope = target) => {
+      this.forEachElementMatch(scope, TAB_PANEL_SELECTOR, (panel) => {
+        const active = panel.getAttribute("data-tab-active") === "true";
+        panel.classList.toggle("md3e-tab-panel-active", active);
+        panel.classList.toggle("md3e-tab-panel-hidden", !active);
+      });
+    };
+
+    syncTabPanelState();
+
     const isTabContentMutation = (mutation) => {
       if (
         mutation.type === "attributes" &&
@@ -1886,10 +1946,8 @@ return baseclass.extend({
         (node) =>
           node.nodeType === 1 &&
           (node.id === "view" ||
-            node.matches?.(".cbi-section-node-tabbed, .cbi-map-tabbed") ||
-            node.querySelector?.(
-              ".cbi-section-node-tabbed, .cbi-map-tabbed, #view",
-            )),
+            node.matches?.(TAB_CONTAINER_SELECTOR) ||
+            node.querySelector?.(`${TAB_CONTAINER_SELECTOR}, #view`)),
       );
     };
 
@@ -1904,7 +1962,7 @@ return baseclass.extend({
           m.target.getAttribute("data-tab-active") === "true" &&
           m.target.hasAttribute("data-tab-title")
         ) {
-          replayAnimation(m.target, "tab-content-enter");
+          this._replayTabContentAnimation?.(m.target, "tab-content-enter");
           continue;
         }
 
@@ -1914,10 +1972,10 @@ return baseclass.extend({
           if (n.nodeType !== 1) continue;
           this.forEachElementMatch(
             n,
-            ".cbi-section-node-tabbed, .cbi-map-tabbed",
-            watch,
+            TAB_CONTAINER_SELECTOR,
+            (container) => this.watchTabContentHeight?.(container),
           );
-          if (n.id === "view") watchView(n);
+          if (n.id === "view") this._watchTabContentView?.(n);
         }
       }
     }, {
@@ -1928,6 +1986,14 @@ return baseclass.extend({
     });
   },
   initDescriptionPlacement() {
+    const setValueClass = (element, className, enabled) => {
+      if (!(element instanceof HTMLElement)) return;
+      if (element.classList.contains(className) === enabled) return;
+
+      element._md3eVcw = (element._md3eVcw || 0) + 1;
+      element.classList.toggle(className, enabled);
+    };
+
     const syncValueState = (row) => {
       if (!(row instanceof HTMLElement) || !row.classList.contains("cbi-value")) {
         return;
@@ -1955,16 +2021,24 @@ return baseclass.extend({
       const hasPortDropdown = Boolean(
         field?.querySelector(":scope > .cbi-dropdown:not(.btn):not(.cbi-button)"),
       );
+      const hasRichContent = Boolean(
+        row.querySelector(
+          ".cbi-value-description, textarea, select, .cbi-dropdown, .outline-select, .cbi-button",
+        ),
+      );
 
-      row.classList.toggle("md3e-value-dropdown-open", hasOpenDropdown);
-      field?.classList.toggle("md3e-value-field-dropdown-open", hasOpenDropdown);
-      row.classList.toggle("md3e-value-progress", hasProgress);
-      row.classList.toggle("md3e-value-custom-mount", !hasStandardLayout);
-      row.classList.toggle("md3e-value-port-dropdown", hasPortDropdown);
-      field?.classList.toggle("md3e-value-field-textarea", hasTextarea);
-      field?.classList.toggle("md3e-value-field-control", hasControl);
-      field?.classList.toggle("md3e-value-field-disabled-dropdown", hasDisabledDropdown);
-      field?.classList.toggle("md3e-value-field-localtime", hasLocalTime);
+      setValueClass(row, "md3e-value-dropdown-open", hasOpenDropdown);
+      setValueClass(row, "md3e-value-rich-content", hasRichContent);
+      setValueClass(row, "md3e-value-has-progress", hasProgress);
+      setValueClass(field, "md3e-value-field-dropdown-open", hasOpenDropdown);
+      setValueClass(field, "md3e-value-field-progress", hasProgress);
+      setValueClass(row, "md3e-value-progress", hasProgress);
+      setValueClass(row, "md3e-value-custom-mount", !hasStandardLayout);
+      setValueClass(row, "md3e-value-port-dropdown", hasPortDropdown);
+      setValueClass(field, "md3e-value-field-textarea", hasTextarea);
+      setValueClass(field, "md3e-value-field-control", hasControl);
+      setValueClass(field, "md3e-value-field-disabled-dropdown", hasDisabledDropdown);
+      setValueClass(field, "md3e-value-field-localtime", hasLocalTime);
     };
 
     const syncValueStates = (scope = document) => {
@@ -2008,9 +2082,18 @@ return baseclass.extend({
 
     const target = document.getElementById("maincontent") || document.body;
     const pendingScopes = new Set();
-
     this.observeDomMutations(target, "description-placement", (mutations) => {
       mutations.forEach((mutation) => {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "class" &&
+          mutation.target instanceof HTMLElement &&
+          mutation.target._md3eVcw
+        ) {
+          mutation.target._md3eVcw -= 1;
+          return;
+        }
+
         if (
           mutation.type === "attributes" &&
           mutation.target instanceof HTMLElement
@@ -2046,7 +2129,6 @@ return baseclass.extend({
       subtree: true,
     });
   },
-
   getCbiDropdownPanel(dropdown) {
     if (!(dropdown instanceof HTMLElement)) return null;
     return (
@@ -2129,6 +2211,7 @@ return baseclass.extend({
     outlineSelects.forEach((s) => {
       if (!s.isConnected) {
         this._openOutlineSelects?.delete(s);
+        if (this._activeOutlineSelect === s) this._activeOutlineSelect = null;
         return;
       }
       if (s === except) return;
@@ -2147,6 +2230,7 @@ return baseclass.extend({
     cbiDropdowns.forEach((d) => {
       if (!d.isConnected) {
         this._openCbiDropdowns?.delete(d);
+        if (this._activeCbiDropdown === d) this._activeCbiDropdown = null;
         return;
       }
       if (d === except) return;
@@ -2258,6 +2342,169 @@ return baseclass.extend({
       panel.style.bottom = "auto";
     }
   },
+  positionSelectPanel(anchor, panel) {
+    if (!(anchor instanceof HTMLElement) || !(panel instanceof HTMLElement)) {
+      return;
+    }
+
+    this.scheduleElementFrame(panel, "_md3ePositionFrame", () => {
+      this.positionDropdownPanel(anchor, panel);
+      panel
+        .querySelector(":scope > .outline-select-option.selected")
+        ?.scrollIntoView({ block: "nearest" });
+    });
+  },
+
+  syncCbiDropdownPanel(dropdown) {
+    if (!(dropdown instanceof HTMLElement)) return;
+    const panel = this.getCbiDropdownPanel(dropdown);
+    if (!(panel instanceof HTMLElement)) return;
+
+    if (dropdown.hasAttribute("open")) {
+      this._openCbiDropdowns.add(dropdown);
+      this._activeCbiDropdown = dropdown;
+      this.positionSelectPanel(dropdown, panel);
+    } else {
+      this._openCbiDropdowns.delete(dropdown);
+      if (this._activeCbiDropdown === dropdown) this._activeCbiDropdown = null;
+      this.resetDropdownPanel(panel);
+    }
+    this._syncDropdownViewportListeners?.();
+  },
+
+  cleanupSelect(select) {
+    select?._md3eOptionObserver?.disconnect();
+    if (select) select._md3eOptionObserver = null;
+  },
+
+  replaceSelect(sel) {
+    if (!(sel instanceof HTMLSelectElement)) return;
+    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) return;
+    if (sel.multiple || sel.size > 1) return;
+    if (sel._outlineReplaced || sel.closest(".outline-select")) return;
+
+    const opts = Array.from(sel.options);
+    if (!opts.length) return;
+    sel._outlineReplaced = true;
+
+    const wrap = document.createElement("div");
+    wrap.className = "outline-select";
+    wrap.tabIndex = 0;
+    if (sel.disabled) wrap.classList.add("disabled");
+
+    const trigger = document.createElement("div");
+    trigger.className = "outline-select-trigger";
+
+    const value = document.createElement("span");
+    value.className = "outline-select-value";
+    value.textContent = sel.options[sel.selectedIndex]?.text || "";
+
+    const chevron = document.createElement("span");
+    chevron.className = "outline-select-chevron";
+    trigger.append(value, chevron);
+
+    const panel = document.createElement("div");
+    panel.className = "outline-select-panel";
+
+    const close = () => {
+      if (!wrap.classList.contains("open")) return;
+      this._openOutlineSelects.delete(wrap);
+      if (this._activeOutlineSelect === wrap) this._activeOutlineSelect = null;
+      this.resetDropdownPanel(panel);
+      wrap.classList.remove("open");
+      this._syncDropdownViewportListeners?.();
+    };
+
+    const buildOptions = () => {
+      panel.textContent = "";
+      Array.from(sel.options).forEach((opt) => {
+        const item = document.createElement("div");
+        item.className =
+          "outline-select-option" +
+          (opt.index === sel.selectedIndex ? " selected" : "");
+        item.dataset.value = opt.value;
+        item.dataset.index = opt.index;
+        item.textContent = opt.text;
+        item.addEventListener("click", (event) => {
+          event.stopPropagation();
+          sel.selectedIndex = opt.index;
+          sel.dispatchEvent(new Event("change", { bubbles: true }));
+          value.textContent = opt.text;
+          panel
+            .querySelectorAll(".selected")
+            .forEach((option) => option.classList.remove("selected"));
+          item.classList.add("selected");
+          close();
+        });
+        panel.appendChild(item);
+      });
+    };
+
+    const open = () => {
+      if (wrap.classList.contains("open") || sel.disabled) return;
+      this.closeAllDropdowns(wrap);
+      this._openOutlineSelects.add(wrap);
+      this._activeOutlineSelect = wrap;
+      wrap.classList.add("open");
+      this.positionSelectPanel(wrap, panel);
+      this._syncDropdownViewportListeners?.();
+    };
+
+    buildOptions();
+    wrap.append(trigger, panel);
+    sel.style.display = "none";
+    sel.insertAdjacentElement("afterend", wrap);
+    wrap._md3eCloseOutlineSelect = close;
+
+    trigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      wrap.classList.contains("open") ? close() : open();
+    });
+
+    wrap.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        wrap.classList.contains("open") ? close() : open();
+        return;
+      }
+
+      if (event.key === "Escape") {
+        close();
+        return;
+      }
+
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+
+      event.preventDefault();
+      const items = Array.from(panel.querySelectorAll(".outline-select-option"));
+      const current = panel.querySelector(".outline-select-option.selected");
+      const index = items.indexOf(current);
+      const next =
+        event.key === "ArrowDown"
+          ? Math.min(index + 1, items.length - 1)
+          : Math.max(index - 1, 0);
+      items[next]?.click();
+    });
+
+    const optionObserver = new MutationObserver(() => {
+      if (!sel.isConnected || !wrap.isConnected) {
+        this.cleanupSelect(sel);
+        this._openOutlineSelects.delete(wrap);
+        if (this._activeOutlineSelect === wrap) this._activeOutlineSelect = null;
+        this._syncDropdownViewportListeners?.();
+        return;
+      }
+
+      value.textContent = sel.options[sel.selectedIndex]?.text || "";
+      buildOptions();
+    });
+    sel._md3eOptionObserver = optionObserver;
+    optionObserver.observe(sel, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+  },
   initCustomSelects() {
     if (this._customSelectsInitialized) return;
 
@@ -2275,229 +2522,125 @@ return baseclass.extend({
     this._customSelectsInitialized = true;
     this._openOutlineSelects = this._openOutlineSelects || new Set();
     this._openCbiDropdowns = this._openCbiDropdowns || new Set();
-
-    const schedulePanelPosition = (anchor, panel) => {
-      if (!(anchor instanceof HTMLElement) || !(panel instanceof HTMLElement)) {
-        return;
-      }
-
-      this.scheduleElementFrame(panel, "_md3ePositionFrame", () => {
-        this.positionDropdownPanel(anchor, panel);
-        panel
-          .querySelector(":scope > .outline-select-option.selected")
-          ?.scrollIntoView({ block: "nearest" });
-      });
-    };
-
-    const syncCbiDropdownPanel = (dropdown) => {
-      if (!(dropdown instanceof HTMLElement)) return;
-      const panel = this.getCbiDropdownPanel(dropdown);
-      if (!(panel instanceof HTMLElement)) return;
-
-      if (dropdown.hasAttribute("open")) {
-        this._openCbiDropdowns.add(dropdown);
-        schedulePanelPosition(dropdown, panel);
-      } else {
-        this._openCbiDropdowns.delete(dropdown);
-        this.resetDropdownPanel(panel);
-      }
-      this._syncDropdownViewportListeners?.();
-    };
-
-    const replace = (sel) => {
-      if (!(sel instanceof HTMLSelectElement)) return;
-      if (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768) return;
-      if (sel.multiple || sel.size > 1) return;
-      if (sel._outlineReplaced || sel.closest(".outline-select")) return;
-      sel._outlineReplaced = true;
-
-      const opts = Array.from(sel.options);
-      if (!opts.length) return;
-
-      const wrap = document.createElement("div");
-      wrap.className = "outline-select";
-      wrap.tabIndex = 0;
-      if (sel.disabled) wrap.classList.add("disabled");
-
-      const trigger = document.createElement("div");
-      trigger.className = "outline-select-trigger";
-
-      const val = document.createElement("span");
-      val.className = "outline-select-value";
-      val.textContent = sel.options[sel.selectedIndex]?.text || "";
-
-      const chevron = document.createElement("span");
-      chevron.className = "outline-select-chevron";
-
-      trigger.append(val, chevron);
-
-      const panel = document.createElement("div");
-      panel.className = "outline-select-panel";
-
-      const buildOptions = () => {
-        panel.innerHTML = "";
-        Array.from(sel.options).forEach((opt) => {
-          const item = document.createElement("div");
-          item.className =
-            "outline-select-option" +
-            (opt.index === sel.selectedIndex ? " selected" : "");
-          item.dataset.value = opt.value;
-          item.dataset.index = opt.index;
-          item.textContent = opt.text;
-          item.addEventListener("click", (e) => {
-            e.stopPropagation();
-            sel.selectedIndex = opt.index;
-            sel.dispatchEvent(new Event("change", { bubbles: true }));
-            val.textContent = opt.text;
-            panel
-              .querySelectorAll(".selected")
-              .forEach((o) => o.classList.remove("selected"));
-            item.classList.add("selected");
-            close();
-          });
-          panel.appendChild(item);
-        });
-      };
-
-      buildOptions();
-      wrap.append(trigger, panel);
-
-      sel.style.display = "none";
-      sel.insertAdjacentElement("afterend", wrap);
-
-      let isOpen = false;
-
-      const open = () => {
-        if (isOpen || sel.disabled) return;
-        this.closeAllDropdowns(wrap);
-        isOpen = true;
-        this._openOutlineSelects.add(wrap);
-        wrap.classList.add("open");
-        schedulePanelPosition(wrap, panel);
-        this._syncDropdownViewportListeners?.();
-      };
-
-      const close = () => {
-        if (!isOpen) return;
-        isOpen = false;
-        this._openOutlineSelects.delete(wrap);
-        this.resetDropdownPanel(panel);
-        wrap.classList.remove("open");
-        this._syncDropdownViewportListeners?.();
-      };
-
-      trigger.addEventListener("click", (e) => {
-        e.stopPropagation();
-        isOpen ? close() : open();
-      });
-
-      wrap._md3eCloseOutlineSelect = close;
-
-      wrap.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          isOpen ? close() : open();
-        } else if (e.key === "Escape") {
-          close();
-        } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-          e.preventDefault();
-          const items = Array.from(
-            panel.querySelectorAll(".outline-select-option"),
-          );
-          const cur = panel.querySelector(".outline-select-option.selected");
-          const idx = items.indexOf(cur);
-          const next =
-            e.key === "ArrowDown"
-              ? Math.min(idx + 1, items.length - 1)
-              : Math.max(idx - 1, 0);
-          if (items[next]) items[next].click();
-        }
-      });
-
-      // Sync if select changes externally
-      new MutationObserver(() => {
-        val.textContent = sel.options[sel.selectedIndex]?.text || "";
-        buildOptions();
-      }).observe(sel, { attributes: true, childList: true, subtree: true });
-    };
+    this._activeOutlineSelect = this._activeOutlineSelect || null;
+    this._activeCbiDropdown = this._activeCbiDropdown || null;
 
     const replaceAll = (scope = target) => {
-      this.forEachElementMatch(scope, "select", replace);
+      this.forEachElementMatch(scope, "select", (select) =>
+        this.replaceSelect(select),
+      );
     };
 
     replaceAll(target);
     target
       .querySelectorAll?.(".cbi-dropdown[open]")
-      .forEach(syncCbiDropdownPanel);
+      .forEach((dropdown) => this.syncCbiDropdownPanel(dropdown));
 
     if (!this._customSelectClickHandler) {
-      this._customSelectClickHandler = (e) => {
-        Array.from(this._openOutlineSelects || []).forEach((wrap) => {
-          if (!wrap.isConnected) {
-            this._openOutlineSelects.delete(wrap);
-            this._syncDropdownViewportListeners?.();
-            return;
-          }
-          if (!wrap.contains(e.target)) wrap._md3eCloseOutlineSelect?.();
-        });
+      this._customSelectClickHandler = (event) => {
+        const activeOutline = this._activeOutlineSelect;
+        if (activeOutline && !activeOutline.isConnected) {
+          this._openOutlineSelects.delete(activeOutline);
+          this._activeOutlineSelect = null;
+          this._syncDropdownViewportListeners?.();
+        } else if (activeOutline && !activeOutline.contains(event.target)) {
+          activeOutline._md3eCloseOutlineSelect?.();
+        }
 
-        const openBtn = e.target.closest(".cbi-dropdown > .open");
-        if (!openBtn) return;
+        const openButton = event.target.closest(".cbi-dropdown > .open");
+        if (!openButton) return;
 
-        const dropdown = openBtn.closest(".cbi-dropdown");
+        const dropdown = openButton.closest(".cbi-dropdown");
         if (!dropdown) return;
         this.closeAllDropdowns(dropdown);
+        this._activeCbiDropdown = dropdown;
         this.scheduleFrame("_customSelectClickFrame", () =>
-          syncCbiDropdownPanel(dropdown),
+          this.syncCbiDropdownPanel(dropdown),
         );
       };
       document.addEventListener("click", this._customSelectClickHandler);
     }
 
-    this.observeDomMutations(target, "custom-selects", (mutations) => {
-      const dropdowns = new Set();
-      const addedSelects = new Set();
+    this.observeCustomSelectMutations(target);
+    this.initSelectViewportListeners();
+  },
 
-      mutations.forEach((mutation) => {
-        if (mutation.type === "childList") {
-          mutation.addedNodes.forEach((node) => {
-            if (node.nodeType !== 1) return;
-            this.forEachElementMatch(node, "select", (select) => {
-              addedSelects.add(select);
+  observeCustomSelectMutations(target) {
+    this.observeDomMutations(
+      target,
+      "custom-selects",
+      (mutations) => {
+        const dropdowns = new Set();
+        const addedSelects = new Set();
+        let removedOutlineSelect = false;
+
+        mutations.forEach((mutation) => {
+          if (mutation.type === "childList") {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType !== 1) return;
+              this.forEachElementMatch(node, "select", (select) => {
+                addedSelects.add(select);
+              });
+            });
+            mutation.removedNodes.forEach((node) => {
+              if (node.nodeType !== 1) return;
+              removedOutlineSelect =
+                removedOutlineSelect ||
+                node.matches?.(".outline-select") ||
+                node.querySelector?.(".outline-select");
+              this.forEachElementMatch(node, "select", (select) =>
+                this.cleanupSelect(select),
+              );
+            });
+            return;
+          }
+
+          if (
+            mutation.type === "attributes" &&
+            mutation.target instanceof HTMLElement &&
+            mutation.target.matches(".cbi-dropdown")
+          ) {
+            dropdowns.add(mutation.target);
+          }
+        });
+
+        if (addedSelects.size) {
+          this.scheduleFrame("_customSelectAddedFrame", () => {
+            addedSelects.forEach((select) => {
+              if (select.isConnected) this.replaceSelect(select);
             });
           });
-          return;
         }
 
-        if (
-          mutation.type === "attributes" &&
-          mutation.target instanceof HTMLElement &&
-          mutation.target.matches(".cbi-dropdown")
-        ) {
-          dropdowns.add(mutation.target);
+          if (removedOutlineSelect) {
+            this._openOutlineSelects.forEach((wrap) => {
+              if (!wrap.isConnected) this._openOutlineSelects.delete(wrap);
+            });
+          if (
+            this._activeOutlineSelect &&
+            !this._activeOutlineSelect.isConnected
+          ) {
+            this._activeOutlineSelect = null;
+          }
+          this._syncDropdownViewportListeners?.();
         }
-      });
 
-      if (addedSelects.size) {
-        this.scheduleFrame("_customSelectAddedFrame", () => {
-          addedSelects.forEach((select) => {
-            if (select.isConnected) replace(select);
-          });
+        if (!dropdowns.size) return;
+
+        this.scheduleFrame("_customSelectDropdownFrame", () => {
+          dropdowns.forEach((dropdown) => this.syncCbiDropdownPanel(dropdown));
         });
-      }
+      },
+      {
+        childList: true,
+        attributes: true,
+        attributeFilter: ["open"],
+        subtree: true,
+      },
+    );
+  },
 
-      if (!dropdowns.size) return;
-
-      this.scheduleFrame("_customSelectDropdownFrame", () => {
-        dropdowns.forEach((dropdown) => syncCbiDropdownPanel(dropdown));
-      });
-    }, {
-      childList: true,
-      attributes: true,
-      attributeFilter: ["open"],
-      subtree: true,
-    });
-
+  initSelectViewportListeners() {
     const syncViewportListeners = () => {
       const hasOpen =
         Array.from(this._openOutlineSelects || []).some((wrap) => wrap.isConnected) ||
@@ -2525,12 +2668,12 @@ return baseclass.extend({
           if (!openSelects.length && !openDropdowns.length) return;
 
           openSelects.forEach((wrap) => {
-            schedulePanelPosition(
+            this.positionSelectPanel(
               wrap,
               wrap.querySelector(":scope > .outline-select-panel"),
             );
           });
-          openDropdowns.forEach((dropdown) => syncCbiDropdownPanel(dropdown));
+          openDropdowns.forEach((dropdown) => this.syncCbiDropdownPanel(dropdown));
         });
       };
     }
@@ -2795,63 +2938,121 @@ return baseclass.extend({
       });
     };
 
-    const markRowActionCells = (scope = target) => {
+    target.querySelectorAll(PAGE_ACTIONS_SELECTOR).forEach(enhance);
+    this.markRowActionCells(target);
+
+    this.observeDomMutations(target, "action-button-groups", (mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type !== "childList") continue;
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType !== 1) continue;
+          if (node.matches?.(PAGE_ACTIONS_SELECTOR)) enhance(node);
+          node.querySelectorAll?.(PAGE_ACTIONS_SELECTOR).forEach(enhance);
+          this.markRowActionCells(node);
+        }
+      }
+    }, {
+      childList: true,
+      subtree: true,
+    });
+  },
+  markRowActionCells(scope) {
+      const target = document.getElementById("maincontent") || document.body;
+      if (!scope) scope = target;
       const rows = new Set();
+      const touchedTables = new Set();
+      const tableSelector = "table, .table, .cbi-section-table";
+      const rowSelector = "tr, .tr, .cbi-section-table-row";
+      const cellSelector = "th, td, .th, .td, .cbi-section-table-cell";
+      const dataTitleCellSelector = "td[data-title], .td[data-title]";
+      const buttonSelector =
+        ".cbi-button, .btn, button, a.btn, input.btn, input[type='button'], input[type='submit']";
+      const rowStateSelector = [
+        rowSelector,
+        dataTitleCellSelector,
+        buttonSelector,
+        ".cbi-section-table-titles",
+        ".cbi-progressbar",
+        ".progress",
+      ].join(", ");
 
       if (scope instanceof HTMLElement) {
-        const row = scope.matches("tr, .tr")
+        const row = scope.matches(rowSelector)
           ? scope
-          : scope.closest("tr, .tr");
+          : scope.closest(rowSelector);
         if (row instanceof HTMLElement) rows.add(row);
       }
 
-      this.forEachElementMatch(scope, "tr, .tr, td, .td", (element) => {
+      this.forEachElementMatch(scope, rowStateSelector, (element) => {
         if (!(element instanceof HTMLElement)) return;
 
-        const row = element.matches("tr, .tr")
+        const row = element.matches(rowSelector)
           ? element
-          : element.closest("tr, .tr");
+          : element.closest(rowSelector);
         if (row instanceof HTMLElement) rows.add(row);
       });
 
       rows.forEach((row) => {
         const cells = Array.from(row.children).filter(
           (child) =>
-            child instanceof HTMLElement && child.matches("td, .td"),
+            child instanceof HTMLElement && child.matches(cellSelector),
         );
-        const buttonSelector = ".cbi-button, .btn, button, a.btn, input.btn";
+        const cellStates = [];
         let actionCount = 0;
+        let hasDataTitleCell = false;
 
         cells.forEach((cell) => {
           cell.classList.remove("md3e-row-action-cell", "md3e-row-actions");
-          cell
-            .querySelectorAll(":scope > .md3e-row-action-cluster")
+          const children = Array.from(cell.children).filter(
+            (child) => child instanceof HTMLElement,
+          );
+          children
+            .filter((child) => child.classList.contains("md3e-row-action-cluster"))
             .forEach((cluster) =>
               cluster.classList.remove("md3e-row-action-cluster"),
             );
+          const hasButtons = Boolean(cell.querySelector(buttonSelector));
+          const hasDataTitle = cell.matches(dataTitleCellSelector);
+          const actionClusters = hasButtons
+            ? children.filter(
+                (child) =>
+                  child.matches("div") &&
+                  child.querySelector(`:scope > :is(${buttonSelector})`),
+              )
+            : [];
+          const buttonCount = hasButtons
+            ? cell.querySelectorAll(buttonSelector).length
+            : 0;
+          hasDataTitleCell = hasDataTitleCell || hasDataTitle;
+          cell.classList.toggle("md3e-table-action-cell", hasButtons);
+          cell.classList.toggle("md3e-table-data-title-cell", hasDataTitle);
+          cellStates.push({ cell, actionClusters, buttonCount, hasButtons });
         });
 
-        for (let index = cells.length - 1; index >= 0; index -= 1) {
-          const cell = cells[index];
-          const actionClusters = Array.from(cell.children).filter(
-            (child) =>
-              child instanceof HTMLElement &&
-              child.matches("div") &&
-              child.querySelector(`:scope > :is(${buttonSelector})`),
-          );
+        row.classList.toggle(
+          "md3e-table-title-row",
+          Boolean(row.querySelector(".cbi-section-table-titles")),
+        );
+        row.classList.toggle(
+          "md3e-table-progress-row",
+          Boolean(row.querySelector(".cbi-progressbar, .progress")),
+        );
+
+        for (let index = cellStates.length - 1; index >= 0; index -= 1) {
+          const { cell, actionClusters, buttonCount, hasButtons } =
+            cellStates[index];
           actionClusters.forEach((cluster) =>
             cluster.classList.add("md3e-row-action-cluster"),
           );
 
-          const buttons = Array.from(cell.querySelectorAll(buttonSelector));
           const compactText =
             cell.textContent.trim().replace(/\s+/g, " ").length <= 32;
-          const isActionCell = buttons.length > 0 && compactText;
+          const isActionCell = hasButtons && compactText;
 
           cell.classList.toggle("md3e-row-action-cell", isActionCell);
           cell.classList.toggle(
             "md3e-row-actions",
-            isActionCell && buttons.length >= 2,
+            isActionCell && buttonCount >= 2,
           );
 
           if (!isActionCell) {
@@ -2862,33 +3063,25 @@ return baseclass.extend({
         }
 
         row.classList.toggle("md3e-has-row-actions", actionCount >= 2);
+        row.classList.toggle("md3e-table-data-title-row", hasDataTitleCell);
+
+        const table = row.closest(tableSelector);
+        if (table instanceof HTMLElement) touchedTables.add(table);
       });
-    };
 
-    target.querySelectorAll(".cbi-page-actions").forEach(enhance);
-    markRowActionCells(target);
-
-    this.observeDomMutations(target, "action-button-groups", (mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type !== "childList") continue;
-        for (const node of mutation.addedNodes) {
-          if (node.nodeType !== 1) continue;
-          if (node.matches?.(".cbi-page-actions")) enhance(node);
-          node.querySelectorAll?.(".cbi-page-actions").forEach(enhance);
-          markRowActionCells(node);
-        }
-      }
-    }, {
-      childList: true,
-      subtree: true,
-    });
+      touchedTables.forEach((table) => {
+        table.classList.toggle(
+          "md3e-table-has-data-title",
+          Boolean(table.querySelector(dataTitleCellSelector)),
+        );
+      });
   },
-
   initMobileActionGroups() {
     const target = document.getElementById("maincontent") || document.body;
+    const actionCache = new WeakMap();
 
     const syncDirtyClass = () => {
-      const anyDirty = target.querySelector(".cbi-page-actions[data-dirty='true']");
+      const anyDirty = target.querySelector(`${PAGE_ACTIONS_SELECTOR}[data-dirty='true']`);
       document.body.classList.toggle("mobile-page-actions-visible", Boolean(anyDirty));
     };
 
@@ -2901,6 +3094,11 @@ return baseclass.extend({
     };
 
     const getActionsForElement = (el) => {
+      const cachedActions = actionCache.get(el);
+      if (cachedActions?.some((action) => action.isConnected)) {
+        return cachedActions.filter((action) => action.isConnected);
+      }
+
       const scopes = [
         el.closest(".cbi-section"),
         el.closest(".cbi-map"),
@@ -2908,29 +3106,29 @@ return baseclass.extend({
       ].filter(Boolean);
 
       for (const scope of scopes) {
-        const actions = Array.from(scope.querySelectorAll(".cbi-page-actions"));
-        if (actions.length) return actions;
+        const actions = Array.from(scope.querySelectorAll(PAGE_ACTIONS_SELECTOR));
+        if (actions.length) {
+          actionCache.set(el, actions);
+          return actions;
+        }
       }
 
-      return Array.from(target.querySelectorAll(".cbi-page-actions"));
+      const fallbackActions = Array.from(target.querySelectorAll(PAGE_ACTIONS_SELECTOR));
+      actionCache.set(el, fallbackActions);
+      return fallbackActions;
     };
 
+    const isFormControl = (element) =>
+      element instanceof HTMLElement && element.matches(FORM_CONTROL_SELECTOR);
+
     target.addEventListener("input", (event) => {
-      if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLSelectElement ||
-        event.target instanceof HTMLTextAreaElement
-      ) {
+      if (isFormControl(event.target)) {
         setDirty(getActionsForElement(event.target), true);
       }
     }, true);
 
     target.addEventListener("change", (event) => {
-      if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLSelectElement ||
-        event.target instanceof HTMLTextAreaElement
-      ) {
+      if (isFormControl(event.target)) {
         setDirty(getActionsForElement(event.target), true);
       }
     }, true);
@@ -2938,7 +3136,7 @@ return baseclass.extend({
     target.addEventListener("click", (event) => {
       const btn = event.target.closest(".cbi-button-reset, .cbi-button-save, .cbi-button-apply, .btn.primary");
       if (btn) {
-        const actions = btn.closest(".cbi-page-actions");
+        const actions = btn.closest(PAGE_ACTIONS_SELECTOR);
         if (actions) {
           const resetDelay = btn.matches(".cbi-button-reset") ? 40 : 160;
           setTimeout(() => setDirty([actions], false), resetDelay);

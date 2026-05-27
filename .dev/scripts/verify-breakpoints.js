@@ -18,9 +18,12 @@ const generatedBreakpointFiles = [
   ".dev/src/resource/menu-md3e-v2.js",
 ];
 const tokenizedSourceFiles = [
-  ".dev/src/media/main/20-layout-shell.css",
+  ".dev/src/media/main/20-layout-theme-header.css",
+  ".dev/src/media/main/20-layout-content-shell.css",
   ".dev/src/media/main/23-table-layout.css",
-  ".dev/src/media/main/24-navigation-page-chrome.css",
+  ".dev/src/media/main/23-table-network-interfaces.css",
+  ".dev/src/media/main/24-desktop-nav-shell.css",
+  ".dev/src/media/main/24-responsive-shell.css",
   ".dev/src/public-md3e/components/50-tabs.css",
   ".dev/src/public-md3e/components/60-page-outline.css",
   ".dev/src/resource/menu-md3e-v2/00-preamble.js",
@@ -68,7 +71,11 @@ const generatedPatterns = new Map([
 ]);
 const tokenizedSourcePatterns = new Map([
   [
-    ".dev/src/media/main/20-layout-shell.css",
+    ".dev/src/media/main/20-layout-theme-header.css",
+    [`max-width: ${layoutBreakpointTokens.mobileMaxWidth}px`],
+  ],
+  [
+    ".dev/src/media/main/20-layout-content-shell.css",
     [
       `max-width: ${layoutBreakpointTokens.mobileMaxWidth}px`,
       `min-width: ${layoutBreakpointTokens.desktopMinWidth}px`,
@@ -79,7 +86,15 @@ const tokenizedSourcePatterns = new Map([
     [`max-width: ${layoutBreakpointTokens.mobileMaxWidth}px`],
   ],
   [
-    ".dev/src/media/main/24-navigation-page-chrome.css",
+    ".dev/src/media/main/23-table-network-interfaces.css",
+    [`max-width: ${layoutBreakpointTokens.mobileMaxWidth}px`],
+  ],
+  [
+    ".dev/src/media/main/24-desktop-nav-shell.css",
+    [`min-width: ${layoutBreakpointTokens.desktopMinWidth}px`],
+  ],
+  [
+    ".dev/src/media/main/24-responsive-shell.css",
     [
       `max-width: ${layoutBreakpointTokens.mobileMaxWidth}px`,
       `min-width: ${layoutBreakpointTokens.desktopMinWidth}px`,

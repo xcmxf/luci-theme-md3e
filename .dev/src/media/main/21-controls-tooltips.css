@@ -1,0 +1,46 @@
+@layer components {
+  @layer tooltip {
+    .cbi-tooltip {
+      @apply bg-tooltip-bg text-foreground border-border/60 absolute z-110 max-w-[13rem] rounded-md border px-2 py-2 text-xs leading-4 break-normal whitespace-normal opacity-0 scale-95 shadow-md pointer-events-none;
+      transform-origin: var(--tooltip-origin, center bottom);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out,
+        visibility 0ms linear 150ms;
+
+      &.error {
+        @apply border-error/40 bg-error text-error-foreground;
+      }
+      &.success {
+        @apply border-success/40 bg-success text-success-foreground;
+      }
+      &.info {
+        @apply border-info/40 bg-info text-info-foreground;
+      }
+      &.notice {
+        @apply border-warning/40 bg-warning text-warning-foreground;
+      }
+    }
+
+    .cbi-tooltip-container,
+    [data-tooltip] {
+      @apply relative inline-block cursor-help whitespace-nowrap underline decoration-current decoration-dotted underline-offset-2 transition-all duration-200;
+
+      & .cbi-tooltip {
+        @apply invisible scale-95 opacity-0 pointer-events-none;
+        transition:
+          opacity 150ms ease-out,
+          transform 150ms ease-out,
+          visibility 0ms linear 150ms;
+      }
+
+      &:hover .cbi-tooltip {
+        @apply visible scale-100 opacity-100;
+        transition:
+          opacity 200ms ease-out 300ms,
+          transform 200ms ease-out 300ms,
+          visibility 0ms linear 300ms;
+      }
+    }
+  }
+}

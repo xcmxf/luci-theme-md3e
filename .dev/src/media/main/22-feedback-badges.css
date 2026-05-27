@@ -1,0 +1,86 @@
+@layer components {
+  @layer badge {
+    .label {
+      @apply bg-default text-default-foreground rounded-full px-3 py-1 text-xs font-bold uppercase;
+
+      &.important {
+        @apply bg-info text-info-foreground;
+      }
+
+      &.warning {
+        @apply bg-error text-error-foreground;
+      }
+
+      &.success {
+        @apply bg-success text-success-foreground;
+      }
+
+      &.notice {
+        @apply bg-warning text-warning-foreground;
+      }
+    }
+
+    .zonebadge {
+      @apply border-secondary bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 overflow-visible rounded-full border px-1 py-1.5 text-sm font-medium shadow-sm transition-all duration-200 hover:shadow-md max-md:gap-1 max-md:text-xs;
+
+      &[style*="--zone-color-rgb"] {
+        @apply bg-[rgb(var(--zone-color-rgb),.7)]!;
+
+        & em {
+          @apply text-default-foreground;
+        }
+      }
+
+      .cbi-dropdown & {
+        @apply rounded-xl px-1 py-0.5;
+      }
+    }
+
+    .ifacebadge {
+      @apply border-border bg-label-surface text-default-foreground hover:border-border hover:bg-label-surface inline-flex cursor-default flex-wrap items-center gap-1.5 rounded-md border px-2 py-1.5 text-sm font-normal transition-all duration-200 hover:shadow-sm max-md:gap-1 max-md:px-2 max-md:py-1 max-md:text-xs;
+      min-width: 0;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 82%, var(--md-sys-color-secondary-container) 7%);
+      box-shadow: inset 0 1px 0 color-mix(in oklab, var(--surface-highlight) 24%, transparent);
+      font-variant-numeric: tabular-nums;
+
+      .cbi-dropdown &,
+      .cbi-tooltip & {
+        @apply flex-nowrap;
+      }
+
+      .zonebadge > &,
+      .cbi-dropdown & {
+        @apply rounded-md px-1.5 py-0;
+        & img {
+          @apply mr-1 h-4 w-4 object-contain;
+        }
+      }
+
+      & > img {
+        @apply h-4.5 w-4.5 shrink-0 self-center object-contain max-md:h-4 max-md:w-4;
+      }
+
+      & > span {
+        min-width: 0;
+
+        & > .nowrap {
+          @apply mb-1 inline-block text-sm max-md:text-xs;
+        }
+      }
+
+      &.ifacebadge-active {
+        @apply border-primary font-semibold;
+        color: var(--md-sys-color-on-primary-container);
+        background: color-mix(in oklab, var(--md-sys-color-primary-container) 72%, var(--md-sys-color-surface-container-lowest));
+        box-shadow:
+          inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-primary) 18%, transparent),
+          inset 0 1px 0 color-mix(in oklab, var(--surface-highlight) 36%, transparent);
+      }
+
+      &.large {
+        @apply min-w-[11rem] flex-1 px-2.5 py-2 max-md:min-w-0 max-md:px-2 max-md:py-1.5;
+      }
+    }
+  }
+}

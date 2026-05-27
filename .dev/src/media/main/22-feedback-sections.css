@@ -1,0 +1,166 @@
+@layer components {
+  @layer card {
+    .cbi-section {
+      @apply overflow-visible border-b-0 p-0;
+      margin: 0;
+
+      & > div {
+        @apply overflow-x-auto;
+      }
+
+      & + .cbi-section {
+        @apply border-t-0 pt-0;
+        margin-top: 0;
+      }
+
+      &[data-tab-title] {
+        @apply m-0 border-b-0 border-t-0 p-0;
+      }
+      &[data-tab-active="true"] {
+        @apply mb-0 pb-0;
+      }
+
+      &:last-child {
+        @apply border-b-0;
+      }
+
+      #maincontent & {
+        @apply shadow-none hover:shadow-none;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        scroll-margin-top: 6.75rem;
+        background: transparent;
+        box-shadow: none;
+
+        &:not([data-tab-title]) + .cbi-section:not([data-tab-title]) {
+          @apply border-t-0 pt-0;
+          margin-top: 0;
+        }
+
+        & > .cbi-title {
+          margin: 0;
+          padding: 0.15rem 0 0;
+          border-bottom: none;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        &[data-tab-title] {
+          @apply border-0 bg-transparent p-0 shadow-none;
+        }
+      }
+
+      & > .cbi-title {
+        @apply flex items-start justify-between gap-4;
+
+        & > h3 {
+          @apply mb-0 flex-1;
+
+          & .label[data-clickable] {
+            @apply text-primary;
+            @apply relative inline-flex size-8 cursor-pointer items-center justify-center p-0 text-[0px] leading-none before:size-4 before:bg-current before:transition-transform before:duration-300 hover:shadow-md active:scale-95 max-md:size-7;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--primary) 10%, var(--label-surface));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 14%, transparent);
+            font-size: 0;
+            line-height: 0;
+            letter-spacing: 0;
+            white-space: nowrap;
+            overflow: visible;
+          }
+
+          & span[data-indicator="poll-status"] {
+            @apply relative size-5 cursor-pointer text-[0px] before:absolute before:size-5 before:bg-current before:transition-transform before:duration-300 before:ease-out hover:before:scale-110 active:before:scale-95;
+
+            &[data-style="active"] {
+              @apply before:rotate-0 before:[mask:url('@assets/icons/arrow-right.svg')_center/cover_no-repeat];
+            }
+
+            &[data-style="inactive"] {
+              @apply before:rotate-90 before:[mask:url('@assets/icons/arrow-right.svg')_center/cover_no-repeat];
+            }
+          }
+        }
+      }
+
+      legend {
+        @apply font-medium;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        font-size: var(--md-sys-typescale-title-small-size);
+        line-height: var(--md-sys-typescale-title-small-line-height);
+        letter-spacing: 0.01em;
+        color: var(--primary);
+        background: color-mix(in srgb, var(--label-surface) 80%, transparent);
+      }
+
+      & .md3e-alert-checkbox-wrap {
+        @apply inline-flex items-center;
+        & > input[type="checkbox"] {
+          @apply mr-0 ml-2;
+        }
+      }
+
+      & h3 {
+        @apply text-foreground border-0 pb-0 max-md:mx-0;
+        font-size: var(--md-sys-typescale-headline-small-size);
+        line-height: var(--md-sys-typescale-headline-small-line-height);
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.55rem;
+      }
+
+      /* Unified stack rhythm for right-side content */
+      #maincontent & > * + * {
+        margin-top: var(--space-md);
+      }
+
+      #maincontent & > .cbi-title + :is(.cbi-map-descr, .cbi-section-descr) {
+        margin-top: 0.45rem;
+      }
+
+      #maincontent & > :is(.cbi-map-descr, .cbi-section-descr) + * {
+        margin-top: 1.15rem;
+      }
+
+      #maincontent & > .cbi-value + .cbi-value {
+        margin-top: 0;
+      }
+
+      #maincontent & > :is(.preview-grid, .table, table, .alert-message, .cbi-tabmenu, #tabmenu, .cbi-section-node-tabbed) {
+        margin-bottom: 0;
+      }
+
+      #maincontent & > .cbi-tabmenu + .cbi-section-node-tabbed,
+      #maincontent & > .cbi-section-node-tabbed + #tabmenu {
+        margin-top: var(--space-md);
+      }
+
+      & div[style*="display:grid"] {
+        @apply max-md:grid-cols-2! max-md:gap-3;
+      }
+
+      & .network-status-table {
+        @apply mb-2 flex flex-wrap items-start justify-start gap-2 max-md:gap-1.5;
+        min-width: 0;
+      }
+
+      & .cbi-section-create {
+        @apply mt-8 flex flex-wrap items-center gap-3 max-md:mx-0 max-md:mt-5 max-md:flex-col max-md:items-stretch max-md:gap-3;
+        padding: 1.25rem 1.5rem;
+        border-radius: var(--md-sys-shape-corner-extra-large);
+        border: none;
+        background: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 54%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-outline-variant) 22%, transparent);
+
+        & > div {
+          @apply flex-none max-md:w-full max-md:flex-1;
+        }
+      }
+    }
+
+  }
+}

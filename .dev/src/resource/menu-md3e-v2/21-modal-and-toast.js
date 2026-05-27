@@ -101,6 +101,17 @@
           DOMTokenList.prototype.add.apply(statusToast.classList, classes);
 
         if (content) L.dom.content(statusToast, content);
+        if (statusToast.querySelector(".btn")) {
+          statusToast.classList.add("md3e-toast-has-close");
+          statusToast
+            .querySelector(".btn")
+            ?.parentElement?.classList.add("md3e-toast-close-wrap");
+        }
+        statusToast
+          .querySelectorAll("div:not(.cbi-checkbox) > input[type='checkbox']")
+          .forEach((checkbox) => {
+            checkbox.parentElement?.classList.add("md3e-alert-checkbox-wrap");
+          });
 
         if (!this.was_polling) {
           this.was_polling = request.poll.active();
@@ -161,12 +172,20 @@
       /* Dismiss on close button click */
       const btn = toast.querySelector(".btn");
       if (btn) {
+        toast.classList.add("md3e-toast-has-close");
+        btn.parentElement?.classList.add("md3e-toast-close-wrap");
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
           dismissToast(toast);
         });
       }
+
+      toast
+        .querySelectorAll("div:not(.cbi-checkbox) > input[type='checkbox']")
+        .forEach((checkbox) => {
+          checkbox.parentElement?.classList.add("md3e-alert-checkbox-wrap");
+        });
     };
 
     /* Watch for new toasts added to #maincontent */

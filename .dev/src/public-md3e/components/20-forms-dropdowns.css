@@ -134,10 +134,8 @@ textarea {
   z-index: 120;
 }
 
-#maincontent .cbi-section:has(.outline-select.open, .cbi-dropdown[open]),
-#maincontent .cbi-section-node:has(.outline-select.open, .cbi-dropdown[open]),
-#maincontent .cbi-value:has(.outline-select.open, .cbi-dropdown[open]),
-#maincontent .cbi-value-field:has(.outline-select.open, .cbi-dropdown[open]) {
+#maincontent .cbi-value.md3e-value-dropdown-open,
+#maincontent .cbi-value-field.md3e-value-field-dropdown-open {
   position: relative;
   z-index: 160;
 }

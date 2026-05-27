@@ -23,6 +23,7 @@ function getSingleMatch(source, pattern, label) {
 
 const makefile = readProjectFile("Makefile");
 const header = readProjectFile("ucode/template/themes/md3e/header.ut");
+const footer = readProjectFile("ucode/template/themes/md3e/footer.ut");
 
 const packageVersion = getSingleMatch(
   makefile,
@@ -48,4 +49,45 @@ if (releaseCacheVersion !== expectedCacheVersion) {
   );
 }
 
-console.log(`release version ok: ${releaseCacheVersion}`);
+const requiredHeaderPatterns = [
+  {
+    pattern:
+      /const\s+asset_cache_version\s*=\s*`\$\{tokens\.asset_cache_version\s*\|\|\s*['"]0['"]\}-\$\{release_cache_version\}`;/,
+    message: "asset_cache_version must include release_cache_version",
+  },
+  {
+    pattern:
+      /const\s+icon_cache_version\s*=\s*`\$\{tokens\.icon_cache_version\s*\|\|\s*['"]0['"]\}-\$\{release_cache_version\}`;/,
+    message: "icon_cache_version must include release_cache_version",
+  },
+  {
+    pattern:
+      /href="\{\{\s*media\s*\}\}\/main\.css\?v=\{\{\s*asset_cache_version\s*\}\}"/,
+    message: "main.css must use asset_cache_version",
+  },
+  {
+    pattern:
+      /href="\{\{\s*media\s*\}\}\/components\.css\?v=\{\{\s*asset_cache_version\s*\}\}"/,
+    message: "components.css must use asset_cache_version",
+  },
+  {
+    pattern:
+      /src="\{\{\s*media\s*\}\}\/images\/\{\{\s*logo_png\s*\}\}\?v=\{\{\s*icon_cache_version\s*\}\}"/,
+    message: "template logo image src values must use icon_cache_version",
+  },
+];
+const errors = [];
+
+for (const { pattern, message } of requiredHeaderPatterns) {
+  if (!pattern.test(header)) errors.push(message);
+}
+
+if (!/L\.require\(['"]menu-md3e-v2['"]\)/.test(footer)) {
+  errors.push("footer must load menu-md3e-v2 through LuCI L.require");
+}
+
+if (errors.length) {
+  throw new Error(`release cache verification failed:\n${errors.join("\n")}`);
+}
+
+console.log(`release version ok: ${releaseCacheVersion}, cache links ok`);

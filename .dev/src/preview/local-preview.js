@@ -117,6 +117,7 @@ function initMobileMenu() {
     if (open && !isMobileViewport()) return;
     overlay.classList.toggle("mobile-menu-open", open);
     document.body.classList.toggle("mobile-menu-open", open);
+    document.documentElement.style.overflow = open ? "hidden" : "";
     document.body.style.overflow = open ? "hidden" : "";
     openButton.setAttribute("aria-expanded", String(open));
 
@@ -163,9 +164,90 @@ function initMobileMenu() {
   const media = window.matchMedia(mobileLayoutQuery);
   media.addEventListener("change", () => {
     syncLayoutMode();
+    initPreviewPageOutline();
     if (!media.matches && overlay.classList.contains("mobile-menu-open")) {
       close();
     }
+  });
+}
+
+function initPreviewPageOutline() {
+  const main = document.getElementById("maincontent");
+  const content = document.querySelector(".docs-content");
+  const map = content?.querySelector("#view .cbi-map");
+  if (!(main instanceof HTMLElement) || !(content instanceof HTMLElement) || !(map instanceof HTMLElement)) {
+    return;
+  }
+
+  if (isMobileViewport()) {
+    main.querySelector(":scope > .md3e-on-this-page")?.remove();
+    document.body.classList.remove("md3e-has-page-outline");
+    return;
+  }
+
+  const sections = Array.from(map.children)
+    .filter((node) => node instanceof HTMLElement && node.classList.contains("cbi-section"))
+    .map((section) => {
+      const title = section.querySelector(":scope > .cbi-title h3, :scope > h3");
+      const label = title?.textContent?.replace(/\s+/g, " ").trim();
+      return label ? { id: section.id, label, element: section } : null;
+    })
+    .filter(Boolean)
+    .slice(0, 8);
+
+  if (sections.length < 2) return;
+
+  let outline = main.querySelector(":scope > .md3e-on-this-page");
+  if (!(outline instanceof HTMLElement)) {
+    outline = document.createElement("aside");
+    outline.className = "md3e-on-this-page";
+    outline.setAttribute("aria-label", "On this page");
+    main.insertBefore(outline, content.nextSibling);
+  }
+
+  document.body.classList.add("md3e-has-page-outline");
+  outline.textContent = "";
+
+  const nav = document.createElement("nav");
+  nav.className = "md3e-on-this-page__nav";
+  const title = document.createElement("div");
+  title.className = "md3e-on-this-page__title";
+  title.textContent = "On this page";
+  const list = document.createElement("ol");
+  list.className = "md3e-on-this-page__list";
+  nav.append(title, list);
+  outline.append(nav);
+
+  const setActive = (id) => {
+    outline.dataset.md3eActiveSectionId = id;
+    outline.querySelectorAll(".md3e-on-this-page__link").forEach((link) => {
+      const active = link.getAttribute("href") === "#" + id;
+      link.classList.toggle("active", active);
+      if (active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
+  sections.forEach((section, index) => {
+    const item = document.createElement("li");
+    item.className = "md3e-on-this-page__item";
+    const link = document.createElement("a");
+    link.className = "md3e-on-this-page__link";
+    link.href = "#" + section.id;
+    link.textContent = section.label;
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      setActive(section.id);
+      history.replaceState(null, "", "#" + section.id);
+      section.element.scrollIntoView({ block: "start", behavior: "smooth" });
+      section.element.classList.add("md3e-outline-target-focus");
+      window.setTimeout(() => {
+        section.element.classList.remove("md3e-outline-target-focus");
+      }, 1400);
+    });
+    item.appendChild(link);
+    list.appendChild(item);
+    if (index === 0) setActive(section.id);
   });
 }
 
@@ -564,7 +646,59 @@ function initActionButtonGroups() {
     });
   };
 
+  const markTableState = (scope = target) => {
+    const rows = new Set();
+    const tableSelector = "table, .table, .cbi-section-table";
+    const rowSelector = "tr, .tr, .cbi-section-table-row";
+    const cellSelector = "th, td, .th, .td, .cbi-section-table-cell";
+    const dataTitleCellSelector = "td[data-title], .td[data-title]";
+    const buttonSelector =
+      ".cbi-button, .btn, button, a.btn, input.btn, input[type='button'], input[type='submit']";
+
+    const collectRows = (element) => {
+      if (!(element instanceof HTMLElement)) return;
+      const row = element.matches(rowSelector)
+        ? element
+        : element.closest(rowSelector);
+      if (row instanceof HTMLElement) rows.add(row);
+    };
+
+    collectRows(scope);
+    scope
+      .querySelectorAll?.(`${tableSelector}, ${rowSelector}, ${cellSelector}`)
+      .forEach(collectRows);
+
+    rows.forEach((row) => {
+      let hasDataTitleCell = false;
+      Array.from(row.children).forEach((cell) => {
+        if (!(cell instanceof HTMLElement) || !cell.matches(cellSelector)) return;
+        const hasButtons = Boolean(cell.querySelector(buttonSelector));
+        const hasDataTitle = cell.matches(dataTitleCellSelector);
+        hasDataTitleCell = hasDataTitleCell || hasDataTitle;
+        cell.classList.toggle("md3e-table-action-cell", hasButtons);
+        cell.classList.toggle("md3e-table-data-title-cell", hasDataTitle);
+      });
+
+      row.classList.toggle("md3e-table-data-title-row", hasDataTitleCell);
+      row.classList.toggle(
+        "md3e-table-title-row",
+        Boolean(row.querySelector(".cbi-section-table-titles")),
+      );
+      row.classList.toggle(
+        "md3e-table-progress-row",
+        Boolean(row.querySelector(".cbi-progressbar, .progress")),
+      );
+
+      const table = row.closest(tableSelector);
+      table?.classList.toggle(
+        "md3e-table-has-data-title",
+        Boolean(table.querySelector(dataTitleCellSelector)),
+      );
+    });
+  };
+
   target.querySelectorAll(".cbi-page-actions").forEach(enhance);
+  markTableState(target);
 }
 
 function initMobileActionGroups() {
@@ -847,6 +981,7 @@ function setPreviewAuthState(state) {
   localStorage.setItem(PREVIEW_AUTH_KEY, nextState);
 
   document.body.classList.remove("mobile-menu-open");
+  document.documentElement.style.overflow = "";
   document.body.style.overflow = "";
   overlay?.classList.remove("mobile-menu-open");
   openButton?.setAttribute("aria-expanded", "false");
@@ -959,6 +1094,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSidebarSections();
   initPreviewNavShell();
   initMobileMenu();
+  initPreviewPageOutline();
   initPreviewMobileDrawerSections();
   initActionButtonGroups();
   initMobileActionGroups();

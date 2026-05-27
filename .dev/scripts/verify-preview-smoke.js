@@ -12,6 +12,7 @@ const devRoot = path.resolve(scriptDir, "..");
 const projectRoot = path.resolve(devRoot, "..");
 const require = createRequire(import.meta.url);
 const previewHost = "127.0.0.1";
+const diagnosticsDir = path.join(devRoot, ".tmp-preview-smoke");
 const preferredPreviewPort =
   Number(process.env.MD3E_PREVIEW_SMOKE_PORT) || 4173;
 const viewportMatrix = [
@@ -120,6 +121,21 @@ function run(command, args) {
   if (result.status !== 0) {
     throw new Error(`${command} ${args.join(" ")} failed`);
   }
+}
+
+async function writeDiagnostics(page, viewportName, result, errors) {
+  fs.mkdirSync(diagnosticsDir, { recursive: true });
+  const basePath = path.join(diagnosticsDir, viewportName);
+  const payload = {
+    viewport: viewportName,
+    errors,
+    result,
+    url: page.url(),
+  };
+
+  fs.writeFileSync(`${basePath}.json`, JSON.stringify(payload, null, 2));
+  await page.screenshot({ path: `${basePath}.png`, fullPage: true });
+  console.error(`preview smoke diagnostics written: ${basePath}.json`);
 }
 
 async function runSmoke(playwrightModule, previewUrl) {
@@ -231,8 +247,6 @@ async function runSmoke(playwrightModule, previewUrl) {
         };
       });
 
-      await page.close();
-
       const expectedLayoutMode = viewport.width <= 920 ? "mobile" : "desktop";
       const errors = [];
       if (!/MD3E|Preview|LuCI|MD3/i.test(result.title)) {
@@ -276,9 +290,121 @@ async function runSmoke(playwrightModule, previewUrl) {
           `inactive panels affect layout: ${JSON.stringify(result.inactivePanelErrors)}`,
         );
       }
+      if (expectedLayoutMode === "mobile") {
+        const drawerResult = await page.evaluate(() => {
+          const button = document.querySelector("#mobile-menu-btn");
+          const overlay = document.querySelector("#mobile-menu-overlay");
+
+          if (
+            !(button instanceof HTMLElement) ||
+            !(overlay instanceof HTMLElement)
+          ) {
+            return { missing: true };
+          }
+
+          button.click();
+          const openState = {
+            overlayOpen: overlay.classList.contains("mobile-menu-open"),
+            bodyOpen: document.body.classList.contains("mobile-menu-open"),
+            expanded: button.getAttribute("aria-expanded"),
+            htmlOverflow: document.documentElement.style.overflow,
+          };
+          button.click();
+          const closedState = {
+            overlayOpen: overlay.classList.contains("mobile-menu-open"),
+            bodyOpen: document.body.classList.contains("mobile-menu-open"),
+            expanded: button.getAttribute("aria-expanded"),
+            htmlOverflow: document.documentElement.style.overflow,
+          };
+
+          return { openState, closedState };
+        });
+
+        if (drawerResult.missing) {
+          errors.push("mobile drawer controls are missing");
+        } else {
+          if (
+            !drawerResult.openState.overlayOpen ||
+            !drawerResult.openState.bodyOpen ||
+            drawerResult.openState.expanded !== "true" ||
+            drawerResult.openState.htmlOverflow !== "hidden"
+          ) {
+            errors.push(
+              `mobile drawer did not open cleanly: ${JSON.stringify(drawerResult.openState)}`,
+            );
+          }
+          if (
+            drawerResult.closedState.overlayOpen ||
+            drawerResult.closedState.bodyOpen ||
+            drawerResult.closedState.expanded !== "false" ||
+            drawerResult.closedState.htmlOverflow
+          ) {
+            errors.push(
+              `mobile drawer did not close cleanly: ${JSON.stringify(drawerResult.closedState)}`,
+            );
+          }
+        }
+      } else {
+        const outlineResult = await page.evaluate(() => {
+          const outline = document.querySelector(".md3e-on-this-page");
+          const links = Array.from(
+            document.querySelectorAll(".md3e-on-this-page__link"),
+          );
+          const secondLink = links[1];
+
+          if (!(outline instanceof HTMLElement) || links.length < 2) {
+            return {
+              missing: true,
+              linkCount: links.length,
+              hasOutlineClass: document.body.classList.contains(
+                "md3e-has-page-outline",
+              ),
+            };
+          }
+
+          secondLink.click();
+          const targetId = secondLink.getAttribute("href")?.slice(1);
+          const activeLink = document.querySelector(
+            ".md3e-on-this-page__link[aria-current='location']",
+          );
+          const target = targetId ? document.getElementById(targetId) : null;
+
+          return {
+            missing: false,
+            linkCount: links.length,
+            hasOutlineClass: document.body.classList.contains(
+              "md3e-has-page-outline",
+            ),
+            targetId,
+            activeHref: activeLink?.getAttribute("href") || null,
+            targetFocused:
+              target instanceof HTMLElement &&
+              target.classList.contains("md3e-outline-target-focus"),
+          };
+        });
+
+        if (outlineResult.missing) {
+          errors.push(
+            `desktop page outline is missing: ${JSON.stringify(outlineResult)}`,
+          );
+        } else if (
+          !outlineResult.hasOutlineClass ||
+          !outlineResult.targetId ||
+          outlineResult.activeHref !== "#" + outlineResult.targetId ||
+          !outlineResult.targetFocused
+        ) {
+          errors.push(
+            `desktop page outline interaction failed: ${JSON.stringify(outlineResult)}`,
+          );
+        }
+      }
       if (errors.length) {
+        await writeDiagnostics(page, viewport.name, result, errors);
+        await page.close();
         throw new Error(`${viewport.name} failed: ${errors.join("; ")}`);
       }
+
+      await page.close();
 
       console.log(
         `preview smoke ${viewport.name} ok: ${result.layoutMode}, trailingBlank=${result.trailingBlank}`,

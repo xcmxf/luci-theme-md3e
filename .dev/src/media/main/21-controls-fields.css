@@ -1,0 +1,210 @@
+@layer components {
+  @layer input {
+    input {
+      @apply disabled:cursor-not-allowed disabled:opacity-60 disabled:dark:opacity-50;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    .cbi-input-text,
+    .cbi-input {
+      @apply relative border px-4 py-3 text-sm font-normal transition-all duration-200 focus:outline-none;
+      color: var(--md-comp-filled-field-input-text-color);
+      border-radius: var(--md-sys-shape-corner-large);
+      border-color: var(--md-comp-filled-field-outline-color);
+      background: var(--md-comp-filled-field-container-color);
+      box-shadow:
+
+        0 10px 18px -18px var(--expressive-shadow);
+      font-family: var(--font-sans);
+      line-height: var(--md-sys-typescale-body-large-line-height);
+
+      &:focus {
+        border-color: var(--md-comp-filled-field-focus-outline-color);
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--md-sys-color-primary) 14%, transparent);
+      }
+
+      .table.cbi-section-table & {
+        @apply w-full;
+      }
+    }
+
+    .cbi-input-text {
+      @apply min-w-20 max-md:min-w-14;
+    }
+
+    #localtime {
+      @apply min-w-70;
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    /* Outline buttons for Local Time sync actions */
+    .cbi-value-field.md3e-value-field-localtime .control-group .cbi-button {
+      @apply h-9 text-xs font-normal shadow-sm;
+      color: var(--md-comp-tonal-button-label-text-color);
+      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 76%, transparent);
+      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 82%, transparent);
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      @apply focus:before:border-primary focus:before:ring-primary/20 checked:before:border-primary checked:before:bg-primary before:border-border before:bg-page-bg after:bg-input-checked hover:before:border-border relative mr-3 inline-block h-4 w-4 cursor-pointer appearance-none before:absolute before:top-0 before:left-0 before:h-4 before:w-4 before:border before:transition-all before:duration-200 after:absolute after:top-0.5 after:left-0.5 after:h-3 after:w-3 after:opacity-0 after:transition-opacity after:duration-200 checked:after:opacity-100 focus:before:ring-2 focus:before:outline-none disabled:cursor-not-allowed;
+    }
+
+    input[type="radio"] {
+      @apply before:rounded-full after:[mask:url('@assets/icons/radio.svg')_center/cover_no-repeat];
+    }
+
+    input[type="checkbox"] {
+      @apply before:rounded after:[mask:url('@assets/icons/check.svg')_center/cover_no-repeat];
+    }
+
+    .cbi-checkbox {
+      @apply relative inline-flex items-center;
+    }
+
+    /* Pill toggle for boolean form-field checkboxes */
+    .cbi-value > .cbi-value-field > input[type="checkbox"],
+    .cbi-value > .cbi-value-field > .cbi-checkbox > input[type="checkbox"] {
+      @apply relative mr-0 h-[21px] w-[42px] cursor-pointer appearance-none rounded-full border transition-all duration-200 active:scale-105;
+      border-color: color-mix(in oklab, var(--md-sys-color-outline) 76%, transparent);
+      background: var(--md-comp-switch-unselected-track-color);
+      box-shadow:
+
+        0 10px 18px -16px var(--expressive-shadow);
+
+      &::before {
+        @apply absolute top-[1px] left-[1px] h-[17px] w-[17px] rounded-full transition-transform duration-200 ease-in-out content-[''];
+        background: var(--md-comp-switch-unselected-handle-color);
+        box-shadow: 0 10px 20px -14px var(--expressive-shadow);
+        transform: translateX(1px);
+      }
+
+      &::after {
+        @apply hidden;
+      }
+
+      &:hover {
+        border-color: color-mix(in oklab, var(--md-sys-color-primary) 12%, var(--md-sys-color-outline));
+        background: color-mix(in oklab, var(--md-comp-switch-unselected-track-color) 92%, var(--md-sys-color-surface-container-high));
+        &::before {
+          background: color-mix(in oklab, var(--md-comp-switch-unselected-handle-color) 86%, white 8%);
+        }
+      }
+
+      &:checked {
+        border-color: color-mix(in oklab, var(--md-sys-color-primary) 18%, var(--md-sys-color-outline-variant));
+        background: var(--md-comp-switch-selected-track-color);
+        box-shadow: 0 14px 24px -18px color-mix(in oklab, var(--md-sys-color-primary) 20%, transparent);
+
+        &::before {
+          background: var(--md-comp-switch-selected-handle-color);
+          transform: translateX(20px);
+        }
+
+        &:hover {
+          background: color-mix(in oklab, var(--md-comp-switch-selected-track-color) 92%, var(--md-sys-color-primary-container));
+        }
+      }
+    }
+  }
+  @layer textarea {
+    textarea {
+      @apply text-foreground placeholder-muted-foreground/50 min-h-24 w-full resize-y overflow-y-auto border px-4 py-3 text-sm leading-relaxed transition-all duration-200 focus:outline-none;
+      border-radius: calc(var(--shape-field) + 0.15rem);
+      border-color: color-mix(in oklab, var(--border) 80%, transparent);
+      background: color-mix(in oklab, var(--panel-raised) 94%, transparent);
+      font-family: var(--font-sans);
+
+      &:focus {
+        border-color: color-mix(in oklab, var(--accent) 48%, var(--border));
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent);
+      }
+      &[disabled] {
+        @apply cursor-not-allowed opacity-60 dark:opacity-50;
+      }
+    }
+  }
+  @layer select {
+    select {
+      @apply text-foreground appearance-none h-11 border px-4 pr-10 text-sm font-medium transition-colors duration-200 focus:outline-none;
+      border-radius: var(--shape-field);
+      border-color: color-mix(in oklab, var(--border) 78%, transparent);
+      background-color: color-mix(in oklab, var(--panel-raised) 94%, transparent);
+      @apply bg-[url('@assets/icons/arrow-down.svg')] bg-size-[16px] bg-position-[right_0.75rem_center] bg-no-repeat dark:bg-[url('@assets/icons/arrow-down-dark.svg')];
+
+      &:focus {
+        border-color: color-mix(in oklab, var(--accent) 48%, var(--border));
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent);
+      }
+
+      &[disabled] {
+        @apply cursor-not-allowed opacity-60 dark:opacity-50;
+      }
+    }
+
+    /* Custom select replacement (JS-driven) */
+    .outline-select {
+      @apply relative inline-flex cursor-pointer outline-none;
+
+      &.disabled {
+        @apply pointer-events-none opacity-60 dark:opacity-50;
+      }
+    }
+
+    .outline-select-trigger {
+      @apply text-foreground flex h-11 items-center gap-2 border px-4 pr-8 text-sm font-medium transition-colors duration-200;
+      border-radius: var(--shape-field);
+      border-color: color-mix(in oklab, var(--border) 78%, transparent);
+      background-color: color-mix(in oklab, var(--panel-raised) 94%, transparent);
+      outline: 2px solid transparent;
+      outline-offset: 0;
+    }
+
+    .outline-select.open .outline-select-trigger {
+      outline-color: color-mix(in oklab, var(--accent) 22%, transparent);
+    }
+
+    .outline-select-value {
+      @apply truncate;
+    }
+
+    .outline-select-chevron {
+      @apply text-muted-foreground absolute right-2.5 top-1/2 -translate-y-1/2 transition-transform duration-200;
+
+      &::after {
+        content: "";
+        @apply block h-4 w-4;
+        background: currentColor;
+        mask: url("@assets/icons/arrow-down.svg") center / cover no-repeat;
+      }
+    }
+
+    .outline-select.open .outline-select-chevron {
+      @apply rotate-180;
+    }
+
+    .outline-select-panel {
+      @apply hidden w-max;
+
+      &.above {
+        @apply top-auto bottom-full mt-0 mb-1;
+      }
+
+      &.align-end {
+        left: auto !important;
+        right: 0 !important;
+        transform-origin: top right;
+      }
+
+      &.above.align-end {
+        transform-origin: bottom right;
+      }
+    }
+
+  }
+}

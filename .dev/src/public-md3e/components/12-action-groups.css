@@ -1,0 +1,120 @@
+#maincontent .cbi-page-actions > .md3e-action-group {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  min-height: 2.9rem;
+  padding: 0;
+  margin-left: 0.25rem;
+  border: 0;
+  border-radius: 1.45rem;
+  background: transparent;
+  box-shadow: 0 12px 22px -24px var(--expressive-shadow, rgb(0 0 0 / 0.22));
+  flex: 0 0 auto;
+  margin-right: 0;
+  overflow: hidden;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group:only-child {
+  margin-left: 0;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button {
+  position: relative;
+  min-height: 100%;
+  height: auto;
+  padding: 0 1.25rem;
+  border: 0;
+  border-radius: 0;
+  background: var(--_md3e-action-shell-bg);
+  box-shadow: none;
+  color: var(--_md3e-action-subtle-fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group:only-child > .cbi-button,
+#maincontent .cbi-page-actions > .cbi-button-save:only-child {
+  min-height: 2.9rem;
+  padding-inline: 1.5rem;
+  border-radius: 1.45rem;
+  margin: 0;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save {
+  background: var(--_md3e-action-save-bg);
+  color: var(--_md3e-action-save-fg);
+  box-shadow: none;
+}
+
+#maincontent .cbi-page-actions > .cbi-button-save:only-child {
+  background: var(--_md3e-action-save-bg);
+  color: var(--_md3e-action-save-fg);
+  box-shadow: none;
+}
+
+#maincontent .cbi-page-actions > .cbi-button-reset,
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset {
+  background: var(--_md3e-action-reset-bg);
+  color: var(--_md3e-action-reset-fg);
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:hover {
+    background: color-mix(in oklab, currentColor 8%, var(--_md3e-action-shell-bg));
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:hover {
+    background: var(--_md3e-action-save-hover);
+  }
+
+  #maincontent .cbi-page-actions > .cbi-button-reset:hover,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:hover {
+    background: var(--_md3e-action-reset-hover);
+  }
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:active,
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):active {
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):active {
+  background: var(--_md3e-action-primary-pressed);
+}
+
+#maincontent .cbi-page-actions > :is(.cbi-button, .btn, button, a.btn, input.btn),
+#maincontent .cbi-page-actions > :is(.cbi-button, .btn, button, a.btn, input.btn):hover,
+#maincontent .cbi-page-actions > :is(.cbi-button, .btn, button, a.btn, input.btn):active,
+#maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn, input.btn),
+#maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn, input.btn):hover,
+#maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn, button, a.btn, input.btn):active {
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.md3e-action-group > .cbi-button:focus-visible,
+:is(.md3e-split-button, [data-md3e-split-button]):focus-within,
+:is(.md3e-split-button, [data-md3e-split-button]) > .open:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md3e-comp-field-focus) 34%, transparent);
+  outline-offset: 2px;
+}
+
+:is(.md3e-split-button, [data-md3e-split-button]) > .open:focus-visible {
+  outline-offset: -2px;
+}

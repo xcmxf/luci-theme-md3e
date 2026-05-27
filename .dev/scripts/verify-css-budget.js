@@ -27,12 +27,12 @@ const sourcePartBudgets = [
   {
     label: "main CSS source part",
     root: ".dev/src/media/main",
-    maxBytes: 50 * 1024,
+    maxBytes: 28 * 1024,
   },
   {
     label: "public component CSS source part",
     root: ".dev/src/public-md3e/components",
-    maxBytes: 24 * 1024,
+    maxBytes: 14 * 1024,
   },
 ];
 const sourcePartReportLimit = 5;

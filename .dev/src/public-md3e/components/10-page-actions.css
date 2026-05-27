@@ -1,0 +1,80 @@
+#maincontent .cbi-page-actions {
+  --_md3e-action-shell-bg: color-mix(in oklab, var(--md-sys-color-surface-container) 88%, transparent);
+  --_md3e-action-shell-border: color-mix(in oklab, var(--md-sys-color-outline-variant) 28%, transparent);
+  --_md3e-action-divider: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 32%, transparent);
+  --_md3e-action-subtle-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 96%, transparent);
+  --_md3e-action-subtle-fg: color-mix(in oklab, var(--foreground) 84%, transparent);
+  --_md3e-action-primary-bg: color-mix(
+    in oklab,
+    var(--md-comp-filled-button-container-color, var(--md3e-comp-filled-bg, var(--md-sys-color-primary))) 92%,
+    var(--md-sys-color-tertiary)
+  );
+  --_md3e-action-primary-fg: var(--md-comp-filled-button-label-text-color, var(--md3e-comp-filled-fg, var(--md-sys-color-on-primary)));
+  --_md3e-action-primary-hover: color-mix(in oklab, var(--_md3e-action-primary-bg) 90%, var(--_md3e-action-primary-fg));
+  --_md3e-action-primary-pressed: color-mix(in oklab, var(--_md3e-action-primary-bg) 82%, var(--_md3e-action-primary-fg));
+  --_md3e-action-save-bg: color-mix(in oklab, var(--md-sys-color-secondary-container) 74%, var(--md-sys-color-surface-container-high));
+  --_md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+  --_md3e-action-save-hover: color-mix(in oklab, var(--_md3e-action-save-bg) 82%, var(--md-sys-color-tertiary-container));
+  --_md3e-action-save-ring: transparent;
+  --_md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-error-container) 34%, var(--md-sys-color-secondary-container));
+  --_md3e-action-reset-fg: color-mix(in oklab, var(--md-sys-color-on-error-container) 84%, var(--md-sys-color-on-secondary-container));
+  --_md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 46%, var(--md-sys-color-secondary-container));
+  --_md3e-action-reset-ring: transparent;
+  width: fit-content;
+  max-width: min(100%, 30rem);
+  margin-inline: auto;
+  margin-block: 1.25rem 0;
+  gap: 0.35rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 999px;
+  background: var(--_md3e-action-shell-bg);
+  box-shadow:
+    0 14px 28px -26px var(--expressive-shadow, rgb(0 0 0 / 0.18)),
+    inset 0 0 0 1px var(--_md3e-action-shell-border);
+  opacity: 1;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+@media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
+  #maincontent .cbi-page-actions {
+    backdrop-filter: blur(10px) saturate(1.04);
+    -webkit-backdrop-filter: blur(10px) saturate(1.04);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  #maincontent .cbi-page-actions {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+[data-darkmode="true"] #maincontent .cbi-page-actions {
+  --_md3e-action-shell-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 82%, transparent);
+  --_md3e-action-primary-bg: color-mix(in oklab, var(--md-sys-color-primary) 86%, var(--md-sys-color-tertiary));
+  --_md3e-action-primary-fg: var(--md-sys-color-on-primary);
+  --_md3e-action-save-bg: color-mix(in oklab, var(--md-sys-color-secondary-container) 64%, var(--md-sys-color-surface-container-highest));
+  --_md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+  --_md3e-action-save-hover: color-mix(in oklab, var(--_md3e-action-save-bg) 72%, var(--md-sys-color-tertiary-container));
+  --_md3e-action-save-ring: transparent;
+  --_md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-error-container) 38%, var(--md-sys-color-surface-container-high));
+  --_md3e-action-reset-fg: color-mix(in oklab, var(--md-sys-color-on-error-container) 88%, var(--md-sys-color-on-surface));
+  --_md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 48%, var(--md-sys-color-surface-container-highest));
+  --_md3e-action-reset-ring: transparent;
+}
+
+#maincontent .cbi-page-actions:hover,
+#maincontent .cbi-page-actions:focus-within,
+#maincontent .cbi-page-actions[data-dirty="true"] {
+  opacity: 1;
+}
+
+#maincontent .cbi-page-actions[data-dirty="true"] {
+  box-shadow:
+    0 18px 34px -28px var(--expressive-shadow, rgb(0 0 0 / 0.24)),
+    inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-primary, #6750a4) 22%, var(--_md3e-action-shell-border));
+}

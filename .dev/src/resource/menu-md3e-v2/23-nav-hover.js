@@ -1,4 +1,11 @@
   initNavHover() {
+    if (
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||
+      !window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+    ) {
+      return;
+    }
+
     const nav = document.querySelector("#topmenu");
     if (!nav) return;
 

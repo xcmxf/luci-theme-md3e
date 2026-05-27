@@ -1,0 +1,49 @@
+@layer components {
+  @layer tab {
+    #tabmenu {
+      @apply w-full;
+      margin-bottom: 0;
+    }
+
+    .tabs {
+      @apply relative inline-flex max-w-full items-center gap-1.5 overflow-x-auto p-1.5;
+      width: fit-content;
+      border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+      border-radius: 1.45rem;
+      background: color-mix(in oklab, var(--panel-raised) 92%, transparent);
+      box-shadow: 0 18px 30px -28px var(--expressive-shadow);
+
+      & a {
+        @apply text-muted-foreground hover:text-foreground block rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 hover:no-underline;
+      }
+
+      & > li.active {
+        @apply border-0;
+        & > a {
+          @apply text-primary font-semibold;
+          background: color-mix(in oklab, var(--accent) 44%, var(--panel-bg));
+          box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 42%, transparent);
+        }
+      }
+    }
+
+    .cbi-section-node-tabbed {
+      margin-top: 0;
+      overflow: visible !important;
+    }
+
+    .cbi-section-node {
+      @apply flex flex-col gap-0 pt-4;
+      overflow: visible !important;
+      padding: 1.85rem 2rem 2.2rem;
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      border: none;
+      background: color-mix(in oklab, var(--panel-raised) 92%, transparent);
+      box-shadow: 0 18px 48px -40px var(--expressive-shadow);
+
+      & > .cbi-value + .cbi-value {
+        @apply mt-6 border-t-0;
+      }
+    }
+  }
+}

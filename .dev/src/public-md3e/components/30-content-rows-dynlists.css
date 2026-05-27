@@ -51,7 +51,7 @@
   align-items: center;
 }
 
-#maincontent .cbi-value:has(.cbi-value-description, textarea, select, .cbi-dropdown, .outline-select, .cbi-button) {
+#maincontent .cbi-value.md3e-value-rich-content {
   padding-block: 0.85rem !important;
 }
 

@@ -1,0 +1,212 @@
+@layer components {
+  @layer shell-pro {
+    .md3e-page-hero {
+      @apply relative mb-8 overflow-hidden border shadow-2xl;
+      padding: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
+      border-radius: 2.2rem;
+      border: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+      background:
+        radial-gradient(circle at top left, color-mix(in oklab, var(--md-sys-color-primary-container) 62%, transparent) 0%, transparent 48%),
+        radial-gradient(circle at bottom right, color-mix(in oklab, var(--md-sys-color-secondary-container) 24%, transparent) 0%, transparent 42%),
+        linear-gradient(155deg, color-mix(in oklab, var(--surface-highlight) 76%, transparent), color-mix(in oklab, var(--panel-bg) 98%, transparent));
+      box-shadow:
+        0 22px 54px -44px var(--expressive-shadow),
+        inset 0 0 0 1px color-mix(in oklab, var(--surface-highlight) 26%, transparent);
+
+      &::before {
+        content: none;
+      }
+    }
+
+    .md3e-page-hero__intro {
+      @apply relative grid gap-3;
+      z-index: 1;
+    }
+
+    .md3e-page-hero__eyebrow {
+      @apply flex flex-wrap items-center gap-2;
+    }
+
+    .md3e-page-hero__path {
+      @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium;
+      color: var(--muted-foreground);
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-high) 78%, transparent);
+      box-shadow: none;
+    }
+
+    .md3e-page-hero__title {
+      @apply m-0;
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 2.4vw, 3rem);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      color: var(--foreground);
+      max-width: 14ch;
+    }
+
+    .md3e-page-hero__summary {
+      @apply m-0 max-w-[60ch] text-[0.98rem] leading-7;
+      color: var(--muted-foreground);
+    }
+
+    .md3e-page-hero__sections {
+      @apply relative z-[1] flex flex-wrap gap-2;
+    }
+
+    .md3e-page-chip {
+      @apply inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium no-underline;
+      color: var(--md-sys-color-on-surface-variant);
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-high) 78%, transparent);
+      box-shadow: none;
+
+      &:hover {
+        color: var(--foreground);
+        text-decoration: none;
+        background: color-mix(in oklab, var(--md-sys-color-secondary-container) 32%, var(--md-sys-color-surface-container-high));
+      }
+    }
+
+    #maincontent .cbi-map {
+      gap: var(--space-lg);
+      width: 100%;
+      max-width: min(100%, var(--md3e-content-form-max-width));
+      margin-inline: 0 auto;
+    }
+
+    :is(
+      body[data-page$="-overview"],
+      body[data-page*="-status-"],
+      body[data-page*="-network-"],
+      body[data-page*="-firewall-"]
+    ) #maincontent .cbi-map {
+      max-width: min(100%, var(--md3e-content-wide-max-width));
+    }
+
+    #maincontent .cbi-section {
+      @apply relative border-0 shadow-none bg-transparent p-0 mb-6;
+      width: 100%;
+      max-width: 100%;
+      border: 0 !important;
+      outline: none !important;
+      box-shadow: none !important;
+
+      &::before,
+      &::after {
+        content: none !important;
+      }
+
+      & > div {
+        @apply overflow-x-visible;
+      }
+
+      & > .cbi-title {
+        @apply flex flex-wrap items-start justify-between gap-4 mb-4;
+        padding-top: 0;
+        margin-left: var(--space-lg);
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          margin-left: var(--space-md);
+        }
+
+        h3 {
+          @apply m-0;
+          font-size: clamp(1.12rem, 1.04rem + 0.24vw, 1.34rem);
+          line-height: 1.35;
+          font-weight: 500;
+          letter-spacing: -0.01em;
+          text-transform: none;
+          color: color-mix(in oklab, var(--foreground) 82%, transparent);
+        }
+      }
+    }
+
+    #maincontent .cbi-section-node {
+      @apply flex flex-col gap-0 overflow-visible! p-6;
+      isolation: isolate;
+      border: none !important;
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 78%, var(--md-sys-color-surface-container-low)) !important;
+      border-radius: var(--md-sys-shape-corner-extra-large) !important;
+      box-shadow:
+        0 10px 30px -28px var(--expressive-shadow),
+        inset 0 1px 0 color-mix(in oklab, var(--surface-highlight) 50%, transparent),
+        inset 0 0 0 1px color-mix(in oklab, var(--md-sys-color-outline-variant) 10%, transparent) !important;
+
+      /* MD3 Expressive 3.0 Value Styling */
+      & .cbi-value {
+        @apply flex flex-col items-start gap-2 py-0 mb-6 border-0;
+        background: transparent !important;
+        margin-top: 0 !important;
+        max-width: min(100%, var(--md3e-content-form-max-width));
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        & .cbi-value-title {
+          @apply flex-none font-medium;
+          width: 100% !important;
+          padding: 0 !important;
+          margin-bottom: 0;
+          font-size: var(--md-sys-typescale-title-small-size);
+          line-height: var(--md-sys-typescale-title-small-line-height);
+          letter-spacing: 0.01em;
+          text-transform: none;
+          color: color-mix(in oklab, var(--foreground) 74%, transparent);
+        }
+
+        & .cbi-value-field {
+          @apply flex-none p-0 text-foreground;
+          font-size: var(--md-sys-typescale-title-large-size);
+          line-height: var(--md-sys-typescale-title-large-line-height);
+          font-weight: 500;
+          letter-spacing: -0.01em;
+
+          &.md3e-value-field-progress {
+            @apply w-full;
+            font-size: var(--md-sys-typescale-headline-small-size);
+            line-height: var(--md-sys-typescale-headline-small-line-height);
+          }
+
+          & small, & .text-muted {
+            @apply block text-sm tracking-normal mt-1;
+            font-weight: 400;
+            color: color-mix(in oklab, var(--foreground) 58%, transparent);
+          }
+
+          & .progress, & .cbi-progressbar {
+            @apply mt-6 h-4 overflow-hidden border-0;
+            background: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 55%, transparent);
+            border-radius: 20px;
+            & > .progress-bar, & > div {
+              @apply transition-all duration-1000 ease-out;
+              background: linear-gradient(90deg, var(--primary), var(--secondary));
+              border-radius: 20px;
+              box-shadow: 0 0 15px var(--primary-fixed-dim);
+            }
+          }
+        }
+
+        @media (min-width: __MD3E_DESKTOP_LAYOUT_MIN_WIDTH__px) {
+          &:not(.md3e-value-has-progress) {
+            flex-direction: row;
+            align-items: start;
+            gap: clamp(1.25rem, 2vw, 2rem);
+            & .cbi-value-title {
+              width: clamp(11.25rem, 18vw, 14rem) !important;
+              margin-bottom: 0;
+            }
+            & .cbi-value-field {
+              min-width: 0;
+              max-width: min(100%, 46rem);
+              font-size: var(--md-sys-typescale-body-large-size);
+              line-height: var(--md-sys-typescale-body-large-line-height);
+              font-weight: 500;
+              & .cbi-dropdown, & .cbi-input-select, & .cbi-input-text {
+                transform: none !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+:root {
+  /* Compatibility aliases for the existing selector graph */
+  --background: var(--md-sys-color-background);
+  --foreground: var(--md-sys-color-on-background);
+  --primary: var(--md-sys-color-primary);
+  --primary-foreground: var(--md-sys-color-on-primary);
+  --secondary: var(--md-sys-color-secondary);
+  --secondary-foreground: var(--md-sys-color-on-secondary);
+  --muted: var(--md-sys-color-surface-container);
+  --muted-foreground: var(--md-sys-color-on-surface-variant);
+  --sidebar-link: var(--md-comp-nav-item-inactive-label-text-color);
+  --sidebar-link-active: var(--md-comp-nav-item-active-label-text-color);
+  --sidebar-link-active-bg: var(--md-comp-nav-item-active-container-color);
+  --sidebar-hover-bg: var(--md-comp-nav-item-hover-container-color);
+  --eyebrow-color: color-mix(in oklab, var(--md-sys-color-primary) 38%, var(--md-sys-color-on-surface-variant));
+  --destructive: var(--md-sys-color-error-container);
+  --destructive-foreground: var(--md-sys-color-on-error-container);
+  --accent: var(--md-comp-tonal-button-container-color);
+  --accent-foreground: var(--md-comp-tonal-button-label-text-color);
+  --default: var(--md-sys-color-surface-container-high);
+  --default-foreground: var(--md-sys-color-on-surface);
+  --info: color-mix(in oklab, var(--md-sys-color-primary-container) 80%, var(--md-sys-color-surface));
+  --info-foreground: var(--md-sys-color-on-primary-container);
+  --warning: var(--md-sys-color-tertiary-container);
+  --warning-foreground: var(--md-sys-color-on-tertiary-container);
+  --success: color-mix(in oklab, var(--md-sys-color-secondary-container) 92%, var(--md-sys-color-surface));
+  --success-foreground: var(--md-sys-color-on-secondary-container);
+  --error: var(--md-sys-color-error-container);
+  --error-foreground: var(--md-sys-color-on-error-container);
+  --border: var(--md-sys-color-outline-variant);
+  --link: var(--md-sys-color-primary);
+  --input-checked: var(--md-sys-color-on-primary);
+  --card: var(--md-comp-card-container-color);
+  --input: var(--md-comp-filled-field-container-color);
+  --radius: 1.75rem;
+  --shape-panel: 2rem;
+  --shape-card: 1.5rem;
+  --shape-field: 1rem;
+  --label-surface: color-mix(in oklab, var(--md-sys-color-secondary-container) 46%, var(--md-sys-color-surface));
+  --terminal-bg: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 88%, black);
+  --terminal-foreground: var(--md-sys-color-surface-container-lowest);
+  --overlay-base: color-mix(in oklab, var(--md-sys-color-scrim) 90%, var(--md-sys-color-surface));
+  --progress-bar-start: color-mix(in oklab, var(--md-sys-color-primary) 88%, white 8%);
+  --progress-bar-end: color-mix(in oklab, var(--md-sys-color-tertiary) 56%, var(--md-sys-color-primary));
+  --header-bg: color-mix(in oklab, var(--md-sys-color-surface) 94%, transparent);
+  --header-interactive: var(--md-sys-color-surface-container-high);
+  --page-bg: var(--md-sys-color-surface);
+  --page-bg-image:
+    radial-gradient(circle at top left, color-mix(in oklab, var(--md-sys-color-primary-container) 28%, transparent), transparent 34%),
+    radial-gradient(circle at top right, color-mix(in oklab, var(--md-sys-color-secondary-container) 22%, transparent), transparent 28%);
+  --panel-bg: color-mix(in oklab, var(--md-sys-color-surface-container-low) 96%, transparent);
+  --panel-raised: color-mix(in oklab, var(--md-sys-color-surface-container) 96%, transparent);
+  --panel-sunken: var(--md-sys-color-surface-container-lowest);
+  --tooltip-bg: color-mix(in oklab, var(--md-sys-color-inverse-surface) 92%, var(--md-sys-color-surface));
+  --expressive-gradient-start: color-mix(in oklab, var(--md-sys-color-primary-container) 44%, transparent);
+  --expressive-gradient-end: color-mix(in oklab, var(--md-sys-color-secondary-container) 34%, transparent);
+  --expressive-gradient-third: color-mix(in oklab, var(--md-sys-color-tertiary-container) 28%, transparent);
+  --expressive-shadow: rgb(16 24 40 / 0.16);
+  --surface-highlight: rgb(255 255 255 / 0.74);
+  --nav-rail-width: 5.5rem;
+  --nav-rail-inline-pad: 0.55rem;
+  --nav-panel-width: clamp(15.25rem, 17vw, 17rem);
+  --nav-shell-gap: 0.85rem;
+  --nav-shell-width: calc(var(--nav-rail-width) + var(--nav-panel-width) + var(--nav-shell-gap));
+
+  --font-sans:
+    "Inter",
+    "Segoe UI Variable Text",
+    "SF Pro Text",
+    "PingFang SC",
+    "Microsoft YaHei",
+    "Noto Sans SC",
+    sans-serif;
+  --font-display:
+    "Inter",
+    "Segoe UI Variable Display",
+    "SF Pro Display",
+    "PingFang SC",
+    "Microsoft YaHei",
+    "Noto Sans SC",
+    sans-serif;
+  --font-serif: var(--font-display);
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+
+  --spacing: 0.25rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 2.5rem;
+  --container-max-width: 72rem;
+  --sidebar-pill-width: 13rem;
+
+}

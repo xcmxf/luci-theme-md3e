@@ -39,6 +39,9 @@
 
       const items = Array.from(tabMenu.querySelectorAll("li"));
       if (!items.length) return;
+      const enableHoverIndicator =
+        window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+        window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
 
       let activeReady = false;
       const updateActiveIndicator = () => {
@@ -137,15 +140,18 @@
         });
       };
 
-      items.forEach((li) => {
-        const onMouseEnter = () => updateHoverIndicator(li);
-        li.addEventListener("mouseenter", onMouseEnter);
-        itemCleanup.push(() =>
-          li.removeEventListener("mouseenter", onMouseEnter),
-        );
-      });
-      const onMouseLeave = () => updateHoverIndicator(null);
-      tabMenu.addEventListener("mouseleave", onMouseLeave);
+      let onMouseLeave = null;
+      if (enableHoverIndicator) {
+        items.forEach((li) => {
+          const onMouseEnter = () => updateHoverIndicator(li);
+          li.addEventListener("mouseenter", onMouseEnter);
+          itemCleanup.push(() =>
+            li.removeEventListener("mouseenter", onMouseEnter),
+          );
+        });
+        onMouseLeave = () => updateHoverIndicator(null);
+        tabMenu.addEventListener("mouseleave", onMouseLeave);
+      }
 
       const observer = new MutationObserver(updateActiveIndicator);
       items.forEach((li) =>
@@ -166,7 +172,7 @@
         });
         observer.disconnect();
         itemCleanup.forEach((cleanup) => cleanup());
-        tabMenu.removeEventListener("mouseleave", onMouseLeave);
+        if (onMouseLeave) tabMenu.removeEventListener("mouseleave", onMouseLeave);
         if (hoverHideTimer) clearTimeout(hoverHideTimer);
         hoverHideTimer = null;
         hoverTarget = null;

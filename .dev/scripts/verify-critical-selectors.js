@@ -21,37 +21,98 @@ function assertNotMatch(content, pattern, message) {
 }
 
 const headerTemplate = readProjectFile("ucode/template/themes/md3e/header.ut");
-const controlsCss = readProjectFile(
-  ".dev/src/media/main/21-controls-forms.css",
-);
-const layoutCss = readProjectFile(".dev/src/media/main/20-layout-shell.css");
-const actionGroupsJs = readProjectFile(
-  ".dev/src/resource/menu-md3e-v2/41-action-groups.js",
-);
+const controlsCss = [
+  ".dev/src/media/main/21-controls-theme-switcher.css",
+  ".dev/src/media/main/21-controls-buttons.css",
+  ".dev/src/media/main/21-controls-page-actions.css",
+  ".dev/src/media/main/21-controls-fields.css",
+  ".dev/src/media/main/21-controls-dropdown-base.css",
+  ".dev/src/media/main/21-controls-dropdown-panels.css",
+  ".dev/src/media/main/21-controls-split-button.css",
+  ".dev/src/media/main/21-controls-tooltips.css",
+]
+  .map(readProjectFile)
+  .join("\n");
+const layoutCss = [
+  ".dev/src/media/main/20-layout-theme-header.css",
+  ".dev/src/media/main/20-layout-content-shell.css",
+  ".dev/src/media/main/20-layout-footer-controls.css",
+]
+  .map(readProjectFile)
+  .join("\n");
+const actionGroupsJs = [
+  ".dev/src/resource/menu-md3e-v2/41-action-page-groups.js",
+  ".dev/src/resource/menu-md3e-v2/41-table-action-markers.js",
+  ".dev/src/resource/menu-md3e-v2/41-mobile-action-dirty.js",
+]
+  .map(readProjectFile)
+  .join("\n");
 const networkStatusCardsJs = readProjectFile(
   ".dev/src/resource/menu-md3e-v2/41-network-status-cards.js",
 );
 const bootstrapLayoutJs = readProjectFile(
   ".dev/src/resource/menu-md3e-v2/10-bootstrap-layout.js",
 );
-const customSelectsJs = readProjectFile(
-  ".dev/src/resource/menu-md3e-v2/32-custom-selects.js",
-);
-const tabContentMotionJs = readProjectFile(
-  ".dev/src/resource/menu-md3e-v2/24-tab-content-motion.js",
-);
+const customSelectsJs = [
+  ".dev/src/resource/menu-md3e-v2/32-custom-select-build.js",
+  ".dev/src/resource/menu-md3e-v2/33-custom-select-runtime.js",
+]
+  .map(readProjectFile)
+  .join("\n");
+const tabContentMotionJs = [
+  ".dev/src/resource/menu-md3e-v2/24-tab-content-click.js",
+  ".dev/src/resource/menu-md3e-v2/24-tab-content-height.js",
+  ".dev/src/resource/menu-md3e-v2/24-tab-content-view.js",
+  ".dev/src/resource/menu-md3e-v2/24-tab-content-state.js",
+]
+  .map(readProjectFile)
+  .join("\n");
 const pageOutlineSourceCss = readProjectFile(
   ".dev/src/public-md3e/components/60-page-outline.css",
 );
 const publicComponentsCss = readProjectFile(".dev/public/md3e/components.css");
-const statusCardsCss = readProjectFile(
-  ".dev/src/media/main/22-status-cards.css",
+const publicTabsCss = readProjectFile(
+  ".dev/src/public-md3e/components/50-tabs.css",
 );
-const tableLayoutCss = readProjectFile(
+const publicFormsDropdownsCss = readProjectFile(
+  ".dev/src/public-md3e/components/20-forms-dropdowns.css",
+);
+const publicContentRowsCss = readProjectFile(
+  ".dev/src/public-md3e/components/30-content-rows-dynlists.css",
+);
+const statusCardsCss = [
+  ".dev/src/media/main/22-status-card-shared.css",
+  ".dev/src/media/main/22-status-network-cards.css",
+  ".dev/src/media/main/22-status-port-cards.css",
+]
+  .map(readProjectFile)
+  .join("\n");
+const tableLayoutCss = [
   ".dev/src/media/main/23-table-layout.css",
-);
+  ".dev/src/media/main/23-table-network-interfaces.css",
+]
+  .map(readProjectFile)
+  .join("\n");
 const segmentedTabsCss = readProjectFile(
   ".dev/src/media/main/23-segmented-tabs.css",
+);
+const pageSectionsCss = readProjectFile(
+  ".dev/src/media/main/24-page-sections.css",
+);
+const feedbackCardsCss = [
+  ".dev/src/media/main/22-feedback-messages.css",
+  ".dev/src/media/main/22-feedback-sections.css",
+]
+  .map(readProjectFile)
+  .join("\n");
+const descriptionSplitButtonJs = [
+  ".dev/src/resource/menu-md3e-v2/30-description-placement.js",
+  ".dev/src/resource/menu-md3e-v2/30-split-button-dropdowns.js",
+]
+  .map(readProjectFile)
+  .join("\n");
+const modalToastJs = readProjectFile(
+  ".dev/src/resource/menu-md3e-v2/21-modal-and-toast.js",
 );
 
 assertIncludes(
@@ -147,19 +208,57 @@ assertNotMatch(
   "port status cards must not rely on .ifacebox:has(...) fallback selectors",
 );
 assertIncludes(
-  readProjectFile(
-    ".dev/src/resource/menu-md3e-v2/30-description-and-split-button.js",
-  ),
-  'field?.classList.toggle("md3e-value-field-localtime", hasLocalTime)',
+  descriptionSplitButtonJs,
+  'setValueClass(field, "md3e-value-field-localtime", hasLocalTime)',
   "localtime controls must get an explicit .md3e-value-field-localtime class",
 );
 assertIncludes(
-  readProjectFile(".dev/src/media/main/21-controls-forms.css"),
+  descriptionSplitButtonJs,
+  'setValueClass(row, "md3e-value-dropdown-open", hasOpenDropdown)',
+  "open dropdown rows must get an explicit .md3e-value-dropdown-open class",
+);
+assertIncludes(
+  descriptionSplitButtonJs,
+  'setValueClass(row, "md3e-value-rich-content", hasRichContent)',
+  "rich form rows must get an explicit .md3e-value-rich-content class",
+);
+assertIncludes(
+  descriptionSplitButtonJs,
+  'setValueClass(field, "md3e-value-field-dropdown-open", hasOpenDropdown)',
+  "open dropdown fields must get an explicit .md3e-value-field-dropdown-open class",
+);
+assertIncludes(
+  publicFormsDropdownsCss,
+  ".cbi-value.md3e-value-dropdown-open",
+  "public dropdown CSS must use the explicit .md3e-value-dropdown-open class",
+);
+assertIncludes(
+  publicFormsDropdownsCss,
+  ".cbi-value-field.md3e-value-field-dropdown-open",
+  "public dropdown CSS must use the explicit .md3e-value-field-dropdown-open class",
+);
+assertNotMatch(
+  publicFormsDropdownsCss,
+  /:has\(\.outline-select\.open,\s*\.cbi-dropdown\[open\]\)/,
+  "public dropdown stacking must not rely on :has(.outline-select.open, .cbi-dropdown[open])",
+);
+assertIncludes(
+  publicContentRowsCss,
+  ".cbi-value.md3e-value-rich-content",
+  "public content row CSS must use the explicit .md3e-value-rich-content class",
+);
+assertNotMatch(
+  publicContentRowsCss,
+  /\.cbi-value:has\(\.cbi-value-description,\s*textarea,\s*select,\s*\.cbi-dropdown,\s*\.outline-select,\s*\.cbi-button\)/,
+  "public content row spacing must not rely on .cbi-value:has(...)",
+);
+assertIncludes(
+  controlsCss,
   ".cbi-value-field.md3e-value-field-localtime",
   "localtime button CSS must use the explicit .md3e-value-field-localtime class",
 );
 assertNotMatch(
-  readProjectFile(".dev/src/media/main/21-controls-forms.css"),
+  controlsCss,
   /\.cbi-value-field:has\(#localtime\)/,
   "localtime button CSS must not rely on .cbi-value-field:has(#localtime)",
 );
@@ -220,9 +319,39 @@ assertIncludes(
   "row action button clusters must get an explicit marker class",
 );
 assertIncludes(
+  actionGroupsJs,
+  "md3e-table-action-cell",
+  "table action cells must get an explicit marker class",
+);
+assertIncludes(
+  actionGroupsJs,
+  "md3e-table-has-data-title",
+  "tables with data-title cells must get an explicit marker class",
+);
+assertIncludes(
+  actionGroupsJs,
+  "md3e-table-data-title-row",
+  "table rows with data-title cells must get an explicit marker class",
+);
+assertIncludes(
   tableLayoutCss,
   ".md3e-row-action-cluster",
   "row action button cluster CSS must use the explicit marker class",
+);
+assertIncludes(
+  publicTabsCss,
+  ".md3e-table-action-cell",
+  "public table action CSS must use the explicit .md3e-table-action-cell class",
+);
+assertIncludes(
+  publicTabsCss,
+  ".md3e-table-has-data-title",
+  "public table title CSS must use the explicit .md3e-table-has-data-title class",
+);
+assertIncludes(
+  publicTabsCss,
+  ".md3e-table-data-title-row",
+  "public table data-title CSS must use the explicit .md3e-table-data-title-row class",
 );
 assertIncludes(
   segmentedTabsCss,
@@ -259,15 +388,75 @@ assertNotMatch(
   />\s*div:has\(\s*>\s*:is\(\.cbi-button,\s*\.btn,\s*button,\s*a\.btn,\s*input\.btn\)\)/,
   "row action button cluster CSS must not rely on div:has(> button)",
 );
+assertNotMatch(
+  publicTabsCss,
+  /:has\(/,
+  "public table/tab CSS must not rely on :has() for table state",
+);
+assertIncludes(
+  descriptionSplitButtonJs,
+  'setValueClass(row, "md3e-value-has-progress", hasProgress)',
+  "progress value rows must get an explicit .md3e-value-has-progress class",
+);
+assertIncludes(
+  pageSectionsCss,
+  ".md3e-value-field-progress",
+  "page section progress field CSS must use an explicit progress class",
+);
+assertIncludes(
+  pageSectionsCss,
+  ".md3e-value-has-progress",
+  "page section row layout CSS must use an explicit progress class",
+);
+assertNotMatch(
+  pageSectionsCss,
+  /:has\(\.progress\)|:has\(\.cbi-progressbar\)/,
+  "page section progress layout must not rely on :has(.progress/.cbi-progressbar)",
+);
+assertIncludes(
+  modalToastJs,
+  "md3e-toast-has-close",
+  "toasts with close controls must get an explicit marker class",
+);
+assertIncludes(
+  modalToastJs,
+  "md3e-alert-checkbox-wrap",
+  "alert checkbox wrappers must get an explicit marker class",
+);
+assertIncludes(
+  feedbackCardsCss,
+  ".md3e-toast-has-close",
+  "toast close spacing CSS must use an explicit marker class",
+);
+assertIncludes(
+  feedbackCardsCss,
+  ".md3e-toast-close-wrap",
+  "toast close wrapper CSS must use an explicit marker class",
+);
+assertIncludes(
+  feedbackCardsCss,
+  ".md3e-alert-checkbox-wrap",
+  "alert checkbox CSS must use an explicit marker class",
+);
+assertNotMatch(
+  feedbackCardsCss,
+  /:has\(/,
+  "feedback card/toast CSS must not rely on :has()",
+);
 assertIncludes(
   customSelectsJs,
-  'this.observeDomMutations(target, "custom-selects"',
+  '"custom-selects"',
   "custom selects must subscribe to the shared mutation hub",
 );
 assertIncludes(
   customSelectsJs,
   'const method = hasOpen ? "addEventListener" : "removeEventListener"',
   "dropdown viewport listeners must be attached only while a dropdown is open",
+);
+assertIncludes(
+  customSelectsJs,
+  "this._activeOutlineSelect",
+  "custom select click handling must track the active outline select instead of scanning every click",
 );
 assertNotMatch(
   customSelectsJs,

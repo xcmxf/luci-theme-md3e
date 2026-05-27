@@ -1,0 +1,224 @@
+@layer components {
+  @layer message {
+    .alert-message {
+      @apply relative mt-0 mb-8 overflow-hidden border;
+      border-radius: 1.25rem;
+      padding: 1.25rem 1.5rem 1.25rem 3.5rem;
+      background: var(--md-sys-color-surface-container-high);
+      border-color: transparent;
+      color: var(--md-sys-color-on-surface-variant);
+      box-shadow: 0 12px 24px -16px var(--expressive-shadow);
+
+      @media (max-width: 767px) {
+        padding-left: 48px;
+        padding-right: 16px;
+        padding-top: 1.1rem;
+        padding-bottom: 1.1rem;
+      }
+
+      #maincontent > & {
+        --sileo-spring: linear(
+          0, 0.002 0.6%, 0.007 1.2%, 0.015 1.8%, 0.026 2.4%,
+          0.041 3.1%, 0.06 3.8%, 0.108 5.3%, 0.157 6.6%, 0.214 8%,
+          0.467 13.7%, 0.577 16.3%, 0.631 17.7%, 0.682 19.1%,
+          0.73 20.5%, 0.771 21.8%, 0.808 23.1%, 0.844 24.5%,
+          0.874 25.8%, 0.903 27.2%, 0.928 28.6%, 0.952 30.1%,
+          0.972 31.6%, 0.988 33.1%, 1.01 35.7%, 1.025 38.5%,
+          1.034 41.6%, 1.038 45%, 1.035 50.1%, 1.012 64.2%,
+          1.003 73%, 0.999 83.7%, 1
+        );
+
+        position: fixed;
+        top: calc(5rem + var(--toast-index, 0) * 4.5rem);
+        right: 1.5rem;
+        left: auto;
+        z-index: calc(50 - var(--toast-index, 0));
+        width: auto;
+        max-width: 420px;
+        margin: 0;
+        padding-left: 44px;
+        padding-right: 1rem;
+        box-shadow:
+          0 8px 20px rgba(0, 0, 0, 0.22),
+          0 0 0 1px oklch(1 0 0 / 0.06);
+        animation: sileo-toast-in 400ms var(--sileo-spring) both;
+        transition: top 300ms ease;
+
+        /* Center the ::before icon within padding-left area */
+        &::before {
+          left: 0.875rem;
+        }
+
+        /* Toasts with close button need extra right padding */
+        &.md3e-toast-has-close {
+          padding-right: 2.5rem;
+        }
+
+        /* X close button — dismiss wrapper is classless div (not .right) */
+        & > .md3e-toast-close-wrap {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          margin: 0;
+
+          & > .btn {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: 0;
+            border-radius: 9999px;
+            background: transparent;
+            color: inherit;
+            font-size: 0;
+            line-height: 0;
+            overflow: hidden;
+            opacity: 0.5;
+            cursor: pointer;
+            transition: opacity 150ms, background 150ms;
+
+            &::after {
+              content: "";
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 14px;
+              height: 14px;
+              background: currentColor;
+              mask-image: var(--md3e-icon-close-mask);
+              mask-size: contain;
+              mask-repeat: no-repeat;
+            }
+
+            &:hover {
+              opacity: 1;
+              background: oklch(0 0 0 / 0.1);
+            }
+          }
+        }
+
+        /* Exit animation */
+        &.toast-exit {
+          animation: sileo-toast-out 300ms var(--sileo-spring) forwards;
+        }
+
+        @media (max-width: 1179px) {
+          top: calc(8rem + var(--toast-index, 0) * 4.5rem);
+        }
+
+        @media (max-width: 767px) {
+          right: 0.75rem;
+          left: 0.75rem;
+          max-width: none;
+          top: calc(8rem + var(--toast-index, 0) * 2.5rem);
+          box-shadow: 0 8px 20px -16px var(--expressive-shadow);
+        }
+      }
+
+      &::before {
+        content: "";
+        @apply absolute left-5 top-1/2 block h-5 w-5 -translate-y-1/2 bg-current;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        /* Default: info circle icon */
+        mask-image: var(--md3e-icon-info-mask);
+      }
+
+      &.spinning {
+        padding-left: 44px !important;
+
+        &::before {
+          @apply animate-spin;
+          mask-image: url("@assets/icons/spinning.svg");
+        }
+      }
+
+      &.modal {
+        @apply static top-auto;
+        padding-left: 20px;
+
+        &:not(.spinning)::before {
+          @apply hidden;
+        }
+      }
+
+      .modal & {
+        @apply mb-0;
+        padding-left: 20px;
+
+        &:not(.spinning)::before {
+          @apply hidden;
+        }
+      }
+
+      .login-shell & {
+        @apply mb-0 rounded-full px-4 py-2.5 text-center text-sm max-md:px-3;
+        &::before {
+          @apply hidden;
+        }
+      }
+
+      &.success {
+        background: linear-gradient(135deg, color-mix(in oklab, var(--success) 18%, transparent), color-mix(in oklab, var(--surface-highlight) 45%, transparent));
+        color: var(--success-foreground);
+        &::before { mask-image: var(--md3e-icon-success-mask); }
+      }
+
+      &.info {
+        background: linear-gradient(135deg, color-mix(in oklab, var(--md-sys-color-primary-container) 24%, transparent), color-mix(in oklab, var(--surface-highlight) 45%, transparent));
+        color: var(--md-sys-color-primary);
+        border-color: color-mix(in oklab, var(--md-sys-color-primary) 15%, transparent);
+      }
+
+      &.warning,
+      &.notice {
+        background: linear-gradient(135deg, color-mix(in oklab, var(--md-sys-color-tertiary-container) 20%, transparent), color-mix(in oklab, var(--surface-highlight) 45%, transparent));
+        color: var(--md-sys-color-tertiary);
+        border-color: color-mix(in oklab, var(--md-sys-color-tertiary) 15%, transparent);
+
+        &::before {
+          /* Triangle warning icon */
+          mask-image: var(--md3e-icon-warning-mask);
+        }
+      }
+
+      &.error,
+      &.danger {
+        background: linear-gradient(135deg, color-mix(in oklab, var(--md-sys-color-error-container) 18%, transparent), color-mix(in oklab, var(--surface-highlight) 45%, transparent));
+        color: var(--md-sys-color-error);
+        border-color: color-mix(in oklab, var(--md-sys-color-error) 15%, transparent);
+
+        &::before {
+          /* X-circle icon */
+          mask-image: var(--md3e-icon-error-mask);
+        }
+      }
+
+      h4,
+      h5,
+      pre,
+      ul,
+      li,
+      p {
+        @apply border-0 bg-transparent text-inherit;
+      }
+
+      & h4 {
+        @apply mb-1.5 text-base font-bold tracking-tight text-foreground max-md:mb-1 max-md:text-sm;
+        line-height: 1.2;
+      }
+
+      & p {
+        @apply text-sm leading-relaxed max-md:text-sm;
+        color: color-mix(in oklab, var(--foreground) 76%, transparent);
+      }
+
+      & .right {
+        @apply mt-3 max-md:mt-2;
+      }
+    }
+
+  }
+}

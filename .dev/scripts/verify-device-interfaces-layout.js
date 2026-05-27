@@ -13,6 +13,7 @@ const routerUrl =
   process.env.MD3E_ROUTER_URL || "http://10.0.0.1/cgi-bin/luci/";
 const routerUser = process.env.MD3E_ROUTER_USER || "root";
 const routerPassword = process.env.MD3E_ROUTER_PASSWORD || "";
+const tempPlaywrightRoot = path.join(projectRoot, ".tmp-playwright");
 const chromeCandidates = [
   "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
@@ -31,12 +32,68 @@ function resolvePlaywright() {
   try {
     return require.resolve("playwright");
   } catch {
-    return null;
+    return installPlaywrightRuntime();
   }
 }
 
 function firstExisting(paths) {
   return paths.find((candidate) => fs.existsSync(candidate));
+}
+
+function installPlaywrightRuntime() {
+  if (process.env.MD3E_SKIP_PLAYWRIGHT_INSTALL === "1") return null;
+
+  fs.mkdirSync(tempPlaywrightRoot, { recursive: true });
+  const packageJsonPath = path.join(tempPlaywrightRoot, "package.json");
+  if (!fs.existsSync(packageJsonPath)) {
+    fs.writeFileSync(
+      packageJsonPath,
+      JSON.stringify(
+        {
+          private: true,
+          type: "commonjs",
+          dependencies: {},
+        },
+        null,
+        2,
+      ) + "\n",
+    );
+  }
+
+  console.log(
+    "Playwright runtime not found; installing local temporary runtime in .tmp-playwright",
+  );
+  const npm = "npm";
+  const result = spawnSync(
+    npm,
+    [
+      "install",
+      "--prefix",
+      tempPlaywrightRoot,
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "playwright@1.56.0",
+    ],
+    {
+      cwd: projectRoot,
+      stdio: "inherit",
+      shell: process.platform === "win32",
+    },
+  );
+
+  if (result.error) {
+    console.error("Playwright runtime install failed:", result.error);
+    return null;
+  }
+  if (result.status !== 0) return null;
+
+  const installedPath = path.join(
+    tempPlaywrightRoot,
+    "node_modules",
+    "playwright",
+  );
+  return fs.existsSync(installedPath) ? installedPath : null;
 }
 
 const playwrightModule = resolvePlaywright();
@@ -173,6 +230,126 @@ async function writeDiagnostics(page, label, details = {}) {
   await loginIfNeeded(page);
   await loginIfNeeded(mobilePage);
 
+  const checkMobileChrome = async (pathSuffix, label, options = {}) => {
+    const response = await mobilePage.goto(base + pathSuffix, {
+      waitUntil: "networkidle",
+      timeout: 30000,
+    });
+    if (options.optional && (!response || response.status() !== 200)) {
+      return {
+        unavailable: true,
+        status: response?.status() ?? null,
+        trailingBlank: 0,
+        inactivePanelCount: 0,
+      };
+    }
+    await mobilePage.waitForTimeout(800);
+    const result = await mobilePage.evaluate(() => {
+      const pageEnd = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+      );
+      const footerBottom = Math.round(
+        document.querySelector("footer")?.getBoundingClientRect().bottom || 0,
+      );
+      const docsBottom = Math.round(
+        document
+          .querySelector("#maincontent > .docs-content")
+          ?.getBoundingClientRect().bottom || 0,
+      );
+      const inactivePanels = Array.from(
+        document.querySelectorAll(
+          "#maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed) > [data-tab-title]:not([data-tab-active='true'])",
+        ),
+      ).map((panel) => {
+        const style = getComputedStyle(panel);
+        const rect = panel.getBoundingClientRect();
+        return {
+          id: panel.id || "",
+          height: Math.round(rect.height),
+          overflow: style.overflow,
+          marginBlockStart: style.marginBlockStart,
+          marginBlockEnd: style.marginBlockEnd,
+          paddingBlockStart: style.paddingBlockStart,
+          paddingBlockEnd: style.paddingBlockEnd,
+          pointerEvents: style.pointerEvents,
+          visibility: style.visibility,
+        };
+      });
+      const badInactivePanels = inactivePanels.filter(
+        (panel) =>
+          panel.height !== 0 ||
+          panel.overflow !== "hidden" ||
+          panel.marginBlockStart !== "0px" ||
+          panel.marginBlockEnd !== "0px" ||
+          panel.paddingBlockStart !== "0px" ||
+          panel.paddingBlockEnd !== "0px" ||
+          panel.pointerEvents !== "none" ||
+          panel.visibility !== "hidden",
+      );
+
+      return {
+        pageEnd,
+        footerBottom,
+        docsBottom,
+        trailingBlank: pageEnd - Math.max(footerBottom, docsBottom),
+        inactivePanelCount: inactivePanels.length,
+        badInactivePanels,
+        mobileOutlineCount: document.querySelectorAll(".md3e-on-this-page").length,
+        hasOutlineBodyClass: document.body.classList.contains(
+          "md3e-has-page-outline",
+        ),
+        bodyText: document.body.innerText || "",
+      };
+    });
+
+    if (!response || response.status() !== 200) {
+      await writeDiagnostics(mobilePage, "mobile-" + label + "-response", {
+        status: response?.status() ?? null,
+      });
+      throw new Error(label + " page did not return HTTP 200");
+    }
+    if (result.inactivePanelCount > 0 && result.badInactivePanels.length) {
+      await writeDiagnostics(
+        mobilePage,
+        "mobile-" + label + "-inactive-tab-panels",
+        result,
+      );
+      throw new Error(
+        label +
+          " page has inactive tab panels extending page layout: " +
+          JSON.stringify(result.badInactivePanels),
+      );
+    }
+    if (result.trailingBlank > 96) {
+      await writeDiagnostics(
+        mobilePage,
+        "mobile-" + label + "-trailing-blank",
+        result,
+      );
+      throw new Error(
+        label + " page trailing blank is too large: " + result.trailingBlank + "px",
+      );
+    }
+    if (result.mobileOutlineCount > 0 || result.hasOutlineBodyClass) {
+      await writeDiagnostics(
+        mobilePage,
+        "mobile-" + label + "-page-outline-present",
+        result,
+      );
+      throw new Error(
+        label +
+          " page should not render page outline: " +
+          JSON.stringify({
+            mobileOutlineCount: result.mobileOutlineCount,
+            hasOutlineBodyClass: result.hasOutlineBodyClass,
+          }),
+      );
+    }
+
+    return result;
+  };
+
   const response = await page.goto(base + "admin/network/network", {
     waitUntil: "domcontentloaded",
     timeout: 30000,
@@ -248,94 +425,30 @@ async function writeDiagnostics(page, label, details = {}) {
     throw new Error("Interfaces page ifacebox layout has " + result.badCount + " overflow/overlap issues");
   }
 
-  const mobileResponse = await mobilePage.goto(base + "admin/network/network", {
-    waitUntil: "networkidle",
-    timeout: 30000,
-  });
-  await mobilePage.waitForTimeout(1000);
-
-  const mobileResult = await mobilePage.evaluate(() => {
-    const pageEnd = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-    const footerBottom = Math.round(document.querySelector("footer")?.getBoundingClientRect().bottom || 0);
-    const docsBottom = Math.round(document.querySelector("#maincontent > .docs-content")?.getBoundingClientRect().bottom || 0);
-    const inactivePanels = Array.from(
-      document.querySelectorAll(
-        "#maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed) > [data-tab-title]:not([data-tab-active='true'])",
-      ),
-    ).map((panel) => {
-      const style = getComputedStyle(panel);
-      const rect = panel.getBoundingClientRect();
-      return {
-        id: panel.id || "",
-        height: Math.round(rect.height),
-        overflow: style.overflow,
-        marginBlockStart: style.marginBlockStart,
-        marginBlockEnd: style.marginBlockEnd,
-        paddingBlockStart: style.paddingBlockStart,
-        paddingBlockEnd: style.paddingBlockEnd,
-        pointerEvents: style.pointerEvents,
-        visibility: style.visibility,
-      };
+  const mobileResult = await checkMobileChrome(
+    "admin/network/network",
+    "network",
+  );
+  const extraMobilePages = [
+    ["admin/status/overview", "status-overview"],
+    ["admin/network/wireless", "wireless"],
+    ["admin/system/admin", "system-admin"],
+  ];
+  const extraResults = [];
+  for (const [pathSuffix, label] of extraMobilePages) {
+    const pageResult = await checkMobileChrome(pathSuffix, label, {
+      optional: true,
     });
-    const badInactivePanels = inactivePanels.filter(
-      (panel) =>
-        panel.height !== 0 ||
-        panel.overflow !== "hidden" ||
-        panel.marginBlockStart !== "0px" ||
-        panel.marginBlockEnd !== "0px" ||
-        panel.paddingBlockStart !== "0px" ||
-        panel.paddingBlockEnd !== "0px" ||
-        panel.pointerEvents !== "none" ||
-        panel.visibility !== "hidden",
-    );
-
-    return {
-      pageEnd,
-      footerBottom,
-      docsBottom,
-      trailingBlank: pageEnd - Math.max(footerBottom, docsBottom),
-      inactivePanelCount: inactivePanels.length,
-      badInactivePanels,
-      mobileOutlineCount: document.querySelectorAll(".md3e-on-this-page").length,
-      hasOutlineBodyClass: document.body.classList.contains(
-        "md3e-has-page-outline",
-      ),
-    };
-  });
-
-  if (!mobileResponse || mobileResponse.status() !== 200) {
-    await writeDiagnostics(mobilePage, "mobile-network-response", {
-      status: mobileResponse?.status() ?? null,
-    });
-    await browser.close();
-    throw new Error("Mobile Interfaces page did not return HTTP 200");
-  }
-  if (mobileResult.inactivePanelCount > 0 && mobileResult.badInactivePanels.length) {
-    await writeDiagnostics(mobilePage, "mobile-inactive-tab-panels", mobileResult);
-    await browser.close();
-    throw new Error(
-      "Mobile Interfaces page has inactive tab panels extending page layout: " +
-        JSON.stringify(mobileResult.badInactivePanels),
-    );
-  }
-  if (mobileResult.trailingBlank > 96) {
-    await writeDiagnostics(mobilePage, "mobile-trailing-blank", mobileResult);
-    await browser.close();
-    throw new Error(
-      "Mobile Interfaces page trailing blank is too large: " +
-        mobileResult.trailingBlank +
-        "px",
-    );
-  }
-  if (mobileResult.mobileOutlineCount > 0 || mobileResult.hasOutlineBodyClass) {
-    await writeDiagnostics(mobilePage, "mobile-page-outline-present", mobileResult);
-    await browser.close();
-    throw new Error(
-      "Mobile Interfaces page should not render page outline: " +
-        JSON.stringify({
-          mobileOutlineCount: mobileResult.mobileOutlineCount,
-          hasOutlineBodyClass: mobileResult.hasOutlineBodyClass,
-        }),
+    if (pageResult.unavailable) {
+      extraResults.push(label + ":unavailable");
+      continue;
+    }
+    extraResults.push(
+      label +
+        ":trailingBlank=" +
+        pageResult.trailingBlank +
+        ",inactivePanelCount=" +
+        pageResult.inactivePanelCount,
     );
   }
 
@@ -349,7 +462,10 @@ async function writeDiagnostics(page, label, details = {}) {
       ", inactivePanelCount=" +
       mobileResult.inactivePanelCount +
       ", mobileOutlineCount=" +
-      mobileResult.mobileOutlineCount,
+      mobileResult.mobileOutlineCount +
+      ", extraPages=[" +
+      extraResults.join("; ") +
+      "]",
   );
 
   await browser.close();

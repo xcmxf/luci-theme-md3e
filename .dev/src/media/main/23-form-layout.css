@@ -42,11 +42,14 @@
 
       & .cbi-value-field {
         @apply flex-1 p-0 font-medium;
+        min-width: 0;
+        max-width: min(100%, 46rem);
         font-size: var(--md-sys-typescale-body-large-size);
         line-height: var(--md-sys-typescale-body-large-line-height);
         color: var(--foreground);
         letter-spacing: 0;
         @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          max-width: 100%;
           font-size: var(--md-sys-typescale-body-medium-size);
           line-height: var(--md-sys-typescale-body-medium-line-height);
         }

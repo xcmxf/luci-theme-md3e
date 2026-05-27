@@ -6,14 +6,14 @@ import { fileURLToPath } from "node:url";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const devRoot = path.resolve(scriptDir, "..");
-const sourcePath = path.join(
-  devRoot,
-  "src",
-  "resource",
-  "menu-md3e-v2",
-  "13-page-outline.js",
-);
-const source = fs.readFileSync(sourcePath, "utf-8");
+const sourcePaths = [
+  "13-page-outline-collect.js",
+  "14-page-outline-render.js",
+  "15-page-outline-observe.js",
+].map((file) => path.join(devRoot, "src", "resource", "menu-md3e-v2", file));
+const source = sourcePaths
+  .map((sourcePath) => fs.readFileSync(sourcePath, "utf-8"))
+  .join("\n");
 const errors = [];
 
 const requiredAnchors = [
@@ -31,6 +31,43 @@ const requiredAnchors = [
   "if (!visibleSectionIds.has(targetId)) return;",
   "visibleSections.forEach((section) =>",
 ];
+
+const requiredFiles = new Map([
+  [
+    "13-page-outline-collect.js",
+    [
+      "getPageOutlineSections(map)",
+      "hasPageOutlineBodyContent(section, titleNode)",
+    ],
+  ],
+  [
+    "14-page-outline-render.js",
+    [
+      "teardownPageChrome()",
+      "syncPageOutline(sections)",
+      "this._pageOutlineObserver = new IntersectionObserver",
+    ],
+  ],
+  [
+    "15-page-outline-observe.js",
+    [
+      "initPageChrome()",
+      "this._pageChromeMutationDisconnect = this.observeDomMutations",
+    ],
+  ],
+]);
+
+for (const [file, anchors] of requiredFiles) {
+  const fileSource = fs.readFileSync(
+    path.join(devRoot, "src", "resource", "menu-md3e-v2", file),
+    "utf-8",
+  );
+  for (const anchor of anchors) {
+    if (!fileSource.includes(anchor)) {
+      errors.push(`${file} is missing page outline anchor: ${anchor}`);
+    }
+  }
+}
 
 for (const anchor of requiredAnchors) {
   if (!source.includes(anchor)) {
