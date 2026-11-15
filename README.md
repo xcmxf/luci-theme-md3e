@@ -10,7 +10,7 @@ A [Material 3 Expressive](https://m3.material.io/)-inspired theme for OpenWrt Lu
 
 ## Install
 
-1. Download `luci-theme-md3e` from [GitHub Releases](https://github.com/xcmxf/luci-theme/releases) or [build from source](.dev/docs/DEVELOPMENT.md#local-openwrt-sdk).
+1. Download `luci-theme-md3e` from [GitHub Releases](https://github.com/xcmxf/luci-theme-md3e/releases) or [build from source](.dev/docs/DEVELOPMENT.md#local-openwrt-sdk).
 2. Upload and install the package in LuCI via **System → Software → Upload Package…**.
 3. Select **MD3E** under **System → System → Language and Style → Design** and click **Save & Apply**.
 
