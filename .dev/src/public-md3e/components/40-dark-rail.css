@@ -138,11 +138,15 @@ body[data-layout-mode="desktop"] .md3e-rail-logo:active::before {
 }
 
 [data-darkmode="true"] body[data-layout-mode="desktop"] .md3e-rail-logo::before {
-  background: color-mix(in oklab, var(--md-sys-color-primary-fixed, #d8e2ff) 88%, transparent);
+  background: color-mix(in oklab, var(--md-sys-color-secondary-container, #3e4759) 64%, var(--md-sys-color-surface-container-high, #272a30));
+}
+
+[data-darkmode="true"] body[data-layout-mode="desktop"] .md3e-rail-logo img {
+  filter: brightness(1.18) saturate(1.08);
 }
 
 @media (hover: hover) {
   [data-darkmode="true"] body[data-layout-mode="desktop"] .md3e-rail-logo:hover::before {
-    background: var(--md-sys-color-primary-fixed, #d8e2ff);
+    background: color-mix(in oklab, var(--md-sys-color-secondary-container, #3e4759) 84%, var(--md-sys-color-surface-container-highest, #32353a));
   }
 }
