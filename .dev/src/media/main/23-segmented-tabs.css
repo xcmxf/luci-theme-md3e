@@ -1,0 +1,384 @@
+@layer components {
+  @layer segmented {
+    #maincontent #tabmenu,
+    #maincontent .cbi-tabmenu {
+      max-width: 100%;
+      margin: 0 auto 1.25rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: thin;
+      text-align: center;
+    }
+
+    #maincontent #tabmenu {
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      outline: 0;
+    }
+
+    #maincontent #tabmenu::-webkit-scrollbar,
+    #maincontent .cbi-tabmenu::-webkit-scrollbar {
+      height: 0.42rem;
+    }
+
+    #maincontent #tabmenu::-webkit-scrollbar-thumb,
+    #maincontent .cbi-tabmenu::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: color-mix(in oklab, var(--md-sys-color-outline, #79747e) 34%, transparent);
+    }
+
+    #maincontent #tabmenu::-webkit-scrollbar-track,
+    #maincontent .cbi-tabmenu::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs) {
+      @apply relative inline-flex max-w-full items-center;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 0.25rem;
+      box-sizing: border-box;
+      padding: 0.32rem 0.34rem;
+      min-height: 48px;
+      --_md3e-tab-track-bg: linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--md-sys-color-surface-container-high, #ece6f0) 78%, transparent),
+        color-mix(in oklab, var(--md-sys-color-surface-container, #f3edf7) 92%, transparent)
+      );
+      --_md3e-tab-active-bg: color-mix(
+        in oklab,
+        var(--md-sys-color-secondary-container) 94%,
+        var(--md-sys-color-surface-container-lowest) 6%
+      );
+      width: fit-content;
+      align-self: flex-start;
+      border: 0;
+      border-radius: 1.8rem;
+      background: var(--_md3e-tab-track-bg);
+      box-shadow: none;
+
+      /* M3 Expressive sliding capsule active indicator */
+      &::before {
+        content: "";
+        position: absolute;
+        left: var(--tab-active-left, 0);
+        top: var(--tab-active-top, 4px);
+        width: var(--tab-active-width, 0);
+        height: var(--tab-active-height, calc(100% - 8px));
+        border-radius: 999px;
+        background: var(--_md3e-tab-active-bg);
+        box-shadow: none;
+        pointer-events: none;
+        z-index: 1;
+        transition:
+          left 240ms var(--md-sys-motion-easing-emphasized),
+          top 240ms var(--md-sys-motion-easing-emphasized),
+          width 240ms var(--md-sys-motion-easing-emphasized),
+          height 240ms var(--md-sys-motion-easing-emphasized);
+      }
+
+      &.tab-active-jump::before {
+        transition: none !important;
+      }
+
+      & li {
+        @apply relative z-10 m-0 flex min-w-fit shrink-0 list-none;
+        padding: 0;
+        border: 0;
+        background: transparent;
+
+        & > :is(a, button) {
+          display: inline-flex;
+          box-sizing: border-box;
+          min-height: 2.34rem;
+          height: 2.34rem;
+          align-items: center;
+          justify-content: center;
+          padding: 0 0.85rem;
+          border: 0;
+          border-radius: 999px;
+          color: color-mix(in oklab, var(--md-sys-color-on-surface, #1d1b20) 78%, transparent);
+          background: transparent;
+          box-shadow: none;
+          font-size: var(--md-sys-typescale-title-small-size, 0.875rem);
+          font-weight: 520;
+          line-height: 1;
+          white-space: nowrap;
+          text-decoration: none;
+          cursor: pointer;
+          transition:
+            color 0.2s ease,
+            background-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+          &:focus-visible {
+            outline: 2px solid color-mix(in oklab, var(--md-sys-color-primary) 54%, transparent);
+            outline-offset: 2px;
+          }
+        }
+
+        &:is(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button),
+        & > :is(a, button):is([aria-current]:not([aria-current="false"]), [aria-selected="true"], [data-tab-active="true"], .active) {
+          font-weight: 600;
+          color: var(--md-sys-color-on-secondary-fixed, #141b2c) !important;
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+
+        [data-darkmode="true"] &:is(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button),
+        [data-darkmode="true"] & > :is(a, button):is([aria-current]:not([aria-current="false"]), [aria-selected="true"], [data-tab-active="true"], .active) {
+          color: var(--md-sys-color-on-secondary-container, #dbe2f9) !important;
+        }
+      }
+    }
+
+    #maincontent #tabmenu > .tabs {
+      display: inline-flex;
+      width: max-content;
+      max-width: none;
+      margin-inline: auto;
+    }
+
+    #maincontent .cbi-tabmenu:not(.md3e-secondary-tabs) {
+      display: flex;
+      width: max-content;
+      max-width: 100%;
+      margin-inline: auto;
+    }
+
+    @media (hover: hover) {
+      :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs) > li:not(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button):not([aria-current]:not([aria-current="false"]), [aria-selected="true"], [data-tab-active="true"], .active):hover {
+        color: var(--md-sys-color-on-surface, #1d1b20);
+        background: color-mix(in oklab, currentColor 7%, transparent) !important;
+      }
+
+      :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs) > li:is(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button):hover,
+      :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs) > li > :is(a, button):is([aria-current]:not([aria-current="false"]), [aria-selected="true"], [data-tab-active="true"], .active):hover {
+        color: var(--md-sys-color-on-secondary-container, #1d192b) !important;
+        background: color-mix(in oklab, var(--md-sys-color-on-secondary-container) 6%, transparent) !important;
+      }
+    }
+
+    @media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
+      #maincontent #tabmenu > .tabs,
+      #maincontent .cbi-tabmenu:not(.md3e-secondary-tabs) {
+        backdrop-filter: blur(12px) saturate(1.04);
+        -webkit-backdrop-filter: blur(12px) saturate(1.04);
+      }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+      #maincontent #tabmenu > .tabs,
+      #maincontent .cbi-tabmenu:not(.md3e-secondary-tabs) {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+    }
+
+    :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs):not([style*="--tab-active-width"]) :is(li:is(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button), li > :is(a, button):is([aria-current]:not([aria-current="false"]), [aria-selected="true"], [data-tab-active="true"], .active)) {
+      background: var(--_md3e-tab-active-bg) !important;
+      color: var(--md-sys-color-on-secondary-container, #1d192b) !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs)::before {
+        transition: none !important;
+      }
+    }
+
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      #maincontent #tabmenu,
+      #maincontent .cbi-tabmenu {
+        margin-inline: auto;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        text-align: center;
+      }
+
+      #maincontent #tabmenu {
+        padding-bottom: 0;
+      }
+
+      :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs) {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-block: 0.28rem;
+        min-width: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-gutter: stable;
+      }
+
+      #maincontent #tabmenu > .tabs {
+        width: max-content;
+        max-width: none;
+        min-width: max-content;
+      }
+
+      #maincontent .cbi-tabmenu:not(.md3e-secondary-tabs) {
+        width: fit-content;
+        max-width: 100%;
+      }
+
+      :is(.cbi-tabmenu, #tabmenu > .tabs, #tabmenu .tabs) li > :is(a, button) {
+        min-height: 2.25rem;
+        height: 2.25rem;
+        padding-inline: 0.72rem;
+      }
+    }
+
+    :is(#maincontent, .md3e-native-editor) .cbi-tabmenu.md3e-secondary-tabs {
+      display: inline-flex;
+      width: auto;
+      max-width: 100%;
+      min-height: 0;
+      margin: 0 0 0.75rem;
+      padding: 0.25rem;
+      gap: 2px;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      border: 0 !important;
+      border-radius: var(--md-sys-shape-corner-full) !important;
+      background: var(--md-sys-color-surface-container) !important;
+      box-shadow: none !important;
+
+      &::before {
+        content: none !important;
+      }
+
+      & > li {
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+      }
+
+      & > li > :is(a, button) {
+        height: 2.125rem;
+        min-height: 2.125rem;
+        padding-inline: 0.9rem;
+        border: 0 !important;
+        border-radius: 8px;
+        background: var(--md-sys-color-surface-container-high);
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.8125rem;
+        font-weight: 500;
+        white-space: nowrap;
+        transition:
+          border-radius var(--md-sys-motion-spatial-fast-duration, 220ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+          background-color var(--md-sys-motion-effects-fast-duration, 150ms) ease,
+          color var(--md-sys-motion-effects-fast-duration, 150ms) ease;
+      }
+
+      & > li > :is(a, button):active {
+        border-radius: 4px;
+      }
+
+      & > li:not(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button):hover {
+        background: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 88%, var(--md-sys-color-on-surface) 12%) !important;
+      }
+
+      & > li:is(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button) {
+        border-radius: 12px;
+        color: var(--md-sys-color-on-secondary-container) !important;
+        background: var(--md-sys-color-secondary-container) !important;
+        box-shadow: none !important;
+        font-weight: 600;
+      }
+
+      & > li:first-child > :is(a, button),
+      & > li:first-child > :is(a, button):active,
+      & > li:first-child:is(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button) {
+        border-start-start-radius: 1.0625rem;
+        border-end-start-radius: 1.0625rem;
+      }
+
+      & > li:last-child > :is(a, button),
+      & > li:last-child > :is(a, button):active,
+      & > li:last-child:is(.cbi-tab, .active, [aria-selected="true"], [data-tab-active="true"]) > :is(a, button) {
+        border-start-end-radius: 1.0625rem;
+        border-end-end-radius: 1.0625rem;
+      }
+    }
+
+    #modal_overlay > .modal.md3e-native-editor .cbi-tabmenu.md3e-secondary-tabs {
+      margin: 0 0 0.75rem;
+    }
+
+    /* Hidden LuCI tab panes must not reserve their old section spacing. */
+    #maincontent :is(.cbi-section, .cbi-tabcontainer)[data-tab-active="false"],
+    #maincontent :is(.cbi-section, .cbi-tabcontainer)[style*="visibility: hidden"],
+    #maincontent :is(.cbi-section, .cbi-tabcontainer)[style*="display: none"] {
+      margin-block: 0 !important;
+      padding-block: 0 !important;
+      overflow: hidden !important;
+    }
+
+    [data-tab-title] {
+      @apply invisible h-0 overflow-hidden;
+      opacity: 0;
+    }
+    [data-tab-active="true"] {
+      @apply visible h-auto overflow-visible;
+      opacity: 1;
+      transition: opacity 150ms ease-in-out;
+    }
+    #maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed, #map > [data-initialized="true"], [data-tab-group]) > [data-tab]:not([data-tab-active="true"]),
+    #maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed) > .md3e-tab-panel-hidden,
+    #maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed) > [data-tab-title]:not([data-tab-active="true"]) {
+      height: 0 !important;
+      min-height: 0 !important;
+      max-height: 0 !important;
+      margin-block: 0 !important;
+      padding-block: 0 !important;
+      overflow: hidden !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      box-shadow: none !important;
+    }
+    #maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed) > .md3e-tab-panel-active,
+    #maincontent :is(.cbi-map-tabbed, .cbi-section-node-tabbed) > [data-tab-title][data-tab-active="true"] {
+      max-height: none !important;
+      overflow: visible !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
+
+    @keyframes tab-content-in {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .tab-content-enter {
+      animation: tab-content-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes tab-content-out {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+    }
+    .tab-content-exit {
+      animation: tab-content-out 150ms cubic-bezier(0.7, 0, 0.84, 0) both;
+    }
+    .tab-height-anim {
+      transition: height 350ms cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+  }
+}

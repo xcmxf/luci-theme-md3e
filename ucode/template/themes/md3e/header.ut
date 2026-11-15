@@ -1,0 +1,333 @@
+{%
+	import { getuid, getspnam } from 'luci.core';
+	import { cursor } from 'uci';
+	import { access } from 'fs';
+
+	const boardinfo = ubus.call('system', 'board');
+	const uci = cursor();
+	const tokens = uci.get_all('md3e', 'theme') || {};
+	const release_cache_version = '1.1.0-1';
+	const icon_cache_version = `${tokens.icon_cache_version || '0'}-${release_cache_version}`;
+	const asset_cache_version = `${tokens.asset_cache_version || '0'}-${release_cache_version}`;
+	let logo_png = tokens.logo_png || 'logo.svg';
+	if (logo_png == 'logo.png' && !access((http.getenv('DOCUMENT_ROOT') || '/www') + media + '/images/logo.png'))
+		logo_png = 'logo.svg';
+	const home_url = dispatcher.build_url();
+	const mobile_layout_max_width = 920;
+	const desktop_layout_min_width = mobile_layout_max_width + 1;
+
+	http.prepare_content('text/html; charset=UTF-8');
+-%}
+
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}" data-md3e-asset-version="{{ entityencode(asset_cache_version, true) }}" class="{{ blank_page ? 'md3e-login-root' : '' }}">
+	<head>
+		<meta charset="utf-8">
+		<title>{{ striptags(`${dispatched?.title ?  `${_(dispatched.title)} - ` : ''}${boardinfo.hostname ?? '?'}`) }}</title>
+		<script>
+			const themeStorageKey = 'md3e.theme';
+			const themeSourceStorageKey = 'md3e.theme.source';
+			const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+			const validThemes = ['light', 'dark', 'device'];
+
+			const readThemeStorage = (key) => {
+				try {
+					return localStorage.getItem(key);
+				}
+				catch (e) {
+					return null;
+				}
+			};
+
+			const writeThemeStorage = (key, value) => {
+				try {
+					localStorage.setItem(key, value);
+				}
+				catch (e) {}
+			};
+
+			const getThemePreference = (theme = readThemeStorage(themeStorageKey), trustExplicit = false) => {
+				if (!validThemes.includes(theme))
+					return 'device';
+
+				if (!trustExplicit && (theme === 'light' || theme === 'dark') && readThemeStorage(themeSourceStorageKey) !== 'manual')
+					return 'device';
+
+				return theme;
+			};
+
+			const getThemeSource = () => readThemeStorage(themeSourceStorageKey) === 'manual' ? 'manual' : 'device';
+
+			const syncThemeAttributes = (isDark, mode) => {
+				document.documentElement.setAttribute('data-darkmode', String(isDark));
+				document.documentElement.setAttribute('data-theme-mode', mode);
+
+				if (document.body) {
+					document.body.setAttribute('data-darkmode', String(isDark));
+					document.body.setAttribute('data-theme-mode', mode);
+				}
+			};
+
+			const setTheme = (theme, source = 'device') => {
+				const current = getThemePreference(theme, source === 'manual');
+				const isDark = current === 'dark' || (current === 'device' && themeMedia.matches);
+
+				document.documentElement.classList.add('theme-transition');
+				syncThemeAttributes(isDark, current);
+				writeThemeStorage(themeStorageKey, current);
+				writeThemeStorage(themeSourceStorageKey, source === 'manual' ? 'manual' : 'device');
+				window.dispatchEvent(new CustomEvent('md3e:themechange', {
+					detail: { theme: current, isDark: isDark }
+				}));
+				setTimeout(() => document.documentElement.classList.remove('theme-transition'), 500);
+			};
+
+			const syncToggle = () => {
+				const isDark = document.documentElement.getAttribute('data-darkmode') === 'true';
+				document.querySelectorAll('.theme-toggle').forEach(btn => {
+					btn.classList.toggle('is-dark', isDark);
+				});
+
+				const current = getThemePreference();
+				document.querySelectorAll('.theme-switcher').forEach(switcher => {
+					switcher.dataset.activeTheme = current;
+				});
+				document.querySelectorAll('.theme-switcher .theme-option').forEach(opt => {
+					const active = opt.dataset.theme === current;
+					opt.classList.toggle('active', active);
+					const input = opt.querySelector('input[type="radio"]');
+					if (input) {
+						input.checked = active;
+						if (active) input.setAttribute('checked', 'checked');
+						else input.removeAttribute('checked');
+					}
+				});
+
+			};
+
+			setTheme(getThemePreference(), getThemeSource());
+
+			const syncDeviceTheme = () => {
+				if (getThemePreference() === 'device')
+					setTheme('device'), syncToggle();
+			};
+
+			if (themeMedia.addEventListener)
+				themeMedia.addEventListener('change', syncDeviceTheme);
+			else if (themeMedia.addListener)
+				themeMedia.addListener(syncDeviceTheme);
+
+			document.addEventListener('DOMContentLoaded', () => {
+				syncThemeAttributes(
+					document.documentElement.getAttribute('data-darkmode') === 'true',
+					getThemePreference()
+				);
+				syncToggle();
+
+				document.querySelectorAll('.theme-toggle').forEach(btn => {
+					btn.addEventListener('click', () => {
+						const isDark = document.documentElement.getAttribute('data-darkmode') === 'true';
+						setTheme(isDark ? 'light' : 'dark', 'manual');
+						syncToggle();
+					});
+				});
+
+				document.querySelectorAll('.theme-switcher .theme-option').forEach(opt => {
+					opt.addEventListener('click', () => (setTheme(opt.dataset.theme, 'manual'), syncToggle()));
+				});
+
+				const updateNavbarOpacity = () => {
+					const overlay = document.getElementById('header-blur-overlay');
+					if (overlay) {
+						overlay.setAttribute('data-is-opaque', window.scrollY > 50 ? 'true' : 'false');
+					}
+				};
+				window.addEventListener('scroll', updateNavbarOpacity, { passive: true });
+				updateNavbarOpacity();
+			});
+		</script>
+		<style>html{background-color:#eef1f8}html[data-darkmode="true"]{background-color:#111318}</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+		<meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
+		<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+		<meta name="color-scheme" content="light dark">
+		<meta name="view-transition" content="same-origin">
+		<style>
+			@media (min-width: {{ desktop_layout_min_width }}px) {
+				#maincontent > .docs-sidebar,
+				#maincontent > .docs-sidebar .docs-sidebar-shell,
+				#maincontent > .docs-sidebar .docs-sidebar-nav,
+				#maincontent > .docs-sidebar #sidebar-nav-host {
+					width: var(--nav-rail-width) !important;
+					min-width: var(--nav-rail-width) !important;
+					max-width: var(--nav-rail-width) !important;
+				}
+
+				#maincontent > .docs-content {
+					margin-left: calc(var(--nav-rail-width) + 1rem);
+					position: relative;
+					z-index: 0;
+				}
+			}
+
+			@media (max-width: {{ mobile_layout_max_width }}px) {
+				body[data-layout-mode="desktop"] #maincontent > .docs-sidebar,
+				body[data-layout-mode="desktop"] #maincontent > .docs-sidebar .docs-sidebar-shell,
+				body[data-layout-mode="desktop"] #maincontent > .docs-sidebar .docs-sidebar-nav,
+				body[data-layout-mode="desktop"] #maincontent > .docs-sidebar #sidebar-nav-host {
+					width: var(--nav-rail-width) !important;
+					min-width: var(--nav-rail-width) !important;
+					max-width: var(--nav-rail-width) !important;
+				}
+
+				body[data-layout-mode="desktop"] #maincontent > .docs-content {
+					margin-left: calc(var(--nav-rail-width) + 0.75rem) !important;
+					position: relative;
+					z-index: 0;
+				}
+			}
+		</style>
+		<link rel="stylesheet" href="{{ media }}/main.css?v={{ asset_cache_version }}">
+		<link rel="stylesheet" href="{{ media }}/components.css?v={{ asset_cache_version }}">
+		<link rel="icon" href="{{ media }}/images/{{ logo_png }}?v={{ icon_cache_version }}" sizes="32x32">
+		{% if (node?.css): %}
+		<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
+		{% endif %}
+		{% if (css): %}
+		<style title="text/css">{{ css }}</style>
+		{% endif %}
+		{% if (length(tokens)): %}
+		<style>
+			:root {
+				{% for (let key in tokens): %}
+				{% if (index(key, 'light_') == 0 || index(key, 'struct_') == 0): %}
+				--{{ replace(substr(key, index(key, 'light_') == 0 ? 6 : 7), '_', '-') }}: {{ tokens[key] }};
+				{% endif %}
+				{% endfor %}
+			}
+			[data-darkmode="true"] {
+				{% for (let key in tokens): %}
+				{% if (index(key, 'dark_') == 0): %}
+				--{{ replace(substr(key, 5), '_', '-') }}: {{ tokens[key] }};
+				{% endif %}
+				{% endfor %}
+			}
+		</style>
+		{% endif %}
+		<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+		<script src="{{ resource }}/cbi.js"></script>
+	</head>
+
+	<body class="lang_{{ dispatcher.lang }} {{ blank_page ? 'md3e-login-page' : '' }} {{ entityencode(striptags(node?.title ?? ''), true) }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
+		{% if (!blank_page):
+			const pageTitle = dispatched?.title ?? node?.title ?? "Overview";
+		%}
+		<a class="md3e-skip-link" href="#md3e-workspace">{{ _("Skip to content") }}</a>
+		<header>
+			<div id="header-blur-overlay" class="header-blur-overlay" data-is-opaque="false"></div>
+			<div class="header-content">
+				<div class="header-brand-wrap">
+					<a class="brand" href="{{ home_url }}"><img class="brand-logo" src="{{ media }}/images/{{ logo_png }}?v={{ icon_cache_version }}" alt="" width="24" height="24"><span class="brand-text">{{ striptags(boardinfo.hostname ?? '?') }}</span></a>
+					<div class="header-context">
+						<span class="header-context-eyebrow">{{ _('Router workspace') }}</span>
+						<span class="header-context-value">{{ striptags(boardinfo.model ?? _('OpenWrt control surface')) }}</span>
+					</div>
+				</div>
+				<div class="header-spacer"></div>
+				<div class="header-actions">
+					<button class="theme-toggle" id="theme-toggle" aria-label="{{ _('Toggle dark mode') }}">
+						{% include('themes/md3e/icon_theme_sun') %}
+						{% include('themes/md3e/icon_theme_moon') %}
+					</button>
+					<a class="header-logout-btn" href="{{ dispatcher.build_url('admin/logout') }}">
+						{% include('themes/md3e/icon_logout') %}
+						{{ _('Logout') }}
+					</a>
+				</div>
+			</div>
+			{% include('themes/md3e/mobile_topbar', {
+				in_dialog: false, brand_url: home_url, brand_label: striptags(boardinfo.hostname ?? '?'),
+				brand_src: `${media}/images/${logo_png}?v=${icon_cache_version}`
+			}) %}
+		</header>
+
+		<dialog class="mobile-menu-overlay" id="mobile-menu-overlay" aria-label="{{ _("Primary navigation") }}" data-mobile-view="menu">
+			{% include('themes/md3e/mobile_topbar', {
+				in_dialog: true, brand_url: home_url, brand_label: striptags(boardinfo.hostname ?? '?'),
+				brand_src: `${media}/images/${logo_png}?v=${icon_cache_version}`
+			}) %}
+			<div class="mobile-nav">
+				<div class="mobile-nav-list" id="mobile-nav-list"></div>
+				<div class="mobile-nav-footer">
+					<div class="mobile-nav-footer-indicators-slot" id="mobile-indicators-slot"></div>
+					<button type="button" class="theme-toggle mobile-nav-footer-btn" aria-label="{{ _('Toggle dark mode') }}">
+						{% include('themes/md3e/icon_theme_sun') %}
+						{% include('themes/md3e/icon_theme_moon') %}
+					</button>
+					<a class="mobile-nav-footer-btn mobile-nav-footer-btn--logout" aria-label="{{ _('Logout') }}" href="{{ dispatcher.build_url('admin/logout') }}">
+						{% include('themes/md3e/icon_logout') %}
+					</a>
+				</div>
+			</div>
+			<div class="md3e-mobile-page-search" data-md3e-view="search">
+				<form class="md3e-mobile-search-form" role="search" aria-label="{{ _('Search pages') }}">
+					<input id="mobile-page-search" type="search" aria-label="{{ _('Search pages') }}" placeholder="{{ _('Search pages') }}" autocomplete="off" maxlength="120">
+				</form>
+				<p class="md3e-mobile-search-status" role="status"></p>
+				<ul class="md3e-mobile-search-results"></ul>
+			</div>
+		</dialog>
+
+		<div id="maincontent">
+			<aside class="docs-sidebar" id="sidebar">
+				<div class="docs-sidebar-shell">
+					<div class="docs-sidebar-nav" id="sidebar-nav-host"></div>
+					<div class="docs-sidebar-tools">
+						<div class="sidebar-indicators-slot" id="sidebar-indicators-slot">
+							<div id="indicators" class="sidebar-indicators"></div>
+						</div>
+						<button class="theme-toggle sidebar-tool sidebar-tool-toggle" aria-label="{{ _('Toggle dark mode') }}">
+							{% include('themes/md3e/icon_theme_sun') %}
+							{% include('themes/md3e/icon_theme_moon') %}
+						</button>
+						<a class="sidebar-tool sidebar-tool-logout" href="{{ dispatcher.build_url('admin/logout') }}" aria-label="{{ _('Logout') }}" title="{{ _('Logout') }}">
+							{% include('themes/md3e/icon_logout') %}
+						</a>
+					</div>
+				</div>
+			</aside>
+			<main class="docs-content" id="md3e-workspace" tabindex="-1">
+
+			<h1 class="sr-only"{% if (view == "status/processes"): %} id="md3e-processes-title"{% endif %}>{{ entityencode(striptags(_(pageTitle))) }}</h1>
+
+			{% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
+				<aside class="md3e-persistent-notice" aria-labelledby="md3e-password-notice">
+					<div>
+						<strong id="md3e-password-notice">{{ _("No password set!") }}</strong>
+						<p>{{ _("There is no password set on this router. Please configure a root password to protect the web interface.") }}</p>
+					</div>
+					{% if (dispatcher.lookup("admin/system/admin")): %}
+						<a class="btn" href="{{ dispatcher.build_url("admin/system/admin") }}">{{ _("Go to password configuration...") }}</a>
+					{% endif %}
+				</aside>
+			{% endif %}
+
+			{% if (boardinfo.rootfs_type == "initramfs"): %}
+				<div class="alert-message warning">
+					<h4>{{ _('System running in recovery (initramfs) mode.') }}</h4>
+					<p>{{ _('No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade') }}</p>
+					{% if (dispatcher.lookup("admin/system/flash")): %}
+					  <div class="right"><a class="btn" href="{{ dispatcher.build_url("admin/system/flash") }}">{{ _('Go to firmware upgrade...') }}</a></div>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			<noscript>
+				<div class="alert-message warning">
+					<h4>{{ _('JavaScript required!') }}</h4>
+					<p>{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</p>
+				</div>
+			</noscript>
+
+			<nav id="tabmenu" aria-label="{{ _("Page navigation") }}" style="display:none"></nav>
+		{% endif %}

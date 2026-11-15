@@ -1,0 +1,297 @@
+@layer components {
+  @layer form {
+    .cbi-input-invalid,
+    .cbi-value-error {
+      @apply !border-error/70 focus:!ring-error/40;
+    }
+
+    .cbi-value {
+      @apply relative items-start py-0;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      display: flex;
+      flex-direction: row;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.md3e-value-dropdown-open {
+        z-index: 90;
+        isolation: isolate;
+        margin-bottom: max(9rem, 22vh);
+      }
+
+      & .cbi-value-title {
+        @apply flex-none font-medium;
+        width: 13rem !important;
+        padding: 0 !important;
+        font-size: var(--md-sys-typescale-title-small-size);
+        line-height: var(--md-sys-typescale-title-small-line-height);
+        letter-spacing: 0.01em;
+        text-transform: none;
+        color: color-mix(in oklab, var(--foreground) 72%, transparent);
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          width: auto !important;
+          margin-bottom: 0.35rem;
+        }
+      }
+
+      & .cbi-value-field {
+        @apply flex-1 p-0 font-medium;
+        min-width: 0;
+        max-width: min(100%, 46rem);
+        font-size: var(--md-sys-typescale-body-large-size);
+        line-height: var(--md-sys-typescale-body-large-line-height);
+        color: var(--foreground);
+        letter-spacing: 0;
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          max-width: 100%;
+          font-size: var(--md-sys-typescale-body-medium-size);
+          line-height: var(--md-sys-typescale-body-medium-line-height);
+        }
+
+        /* Modern Progress/Stats */
+        & .progress, & .cbi-progressbar {
+          @apply mt-4;
+          height: 14px;
+          border-radius: 999px;
+          border: none;
+          background: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 65%, transparent);
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+          overflow: hidden;
+          & > .progress-bar, & > div {
+            @apply h-full transition-all duration-700 ease-out;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 999px;
+            box-shadow: 0 0 12px var(--primary-fixed-dim);
+          }
+        }
+      }
+
+      /* Stack vertically for data-heavy items or mobile */
+      &.md3e-value-progress {
+        @apply flex-col items-stretch gap-2;
+        & .cbi-value-title {
+          width: 100% !important;
+        }
+        & .cbi-value-field {
+          font-size: var(--md-sys-typescale-title-large-size);
+          line-height: var(--md-sys-typescale-title-large-line-height);
+        }
+      }
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.35rem;
+        & .cbi-value-title {
+          width: 100% !important;
+        }
+        & .cbi-value-field {
+          font-size: var(--md-sys-typescale-body-large-size);
+          line-height: var(--md-sys-typescale-body-large-line-height);
+        }
+      }
+      & + .cbi-value {
+        margin-top: 0 !important;
+      }
+
+      &.hidden {
+        @apply hidden;
+      }
+
+      & > .cbi-value-title {
+        @apply text-left;
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      & .cbi-value-description {
+        @apply mt-1 block max-w-[58ch] wrap-break-word;
+        font-size: var(--md-sys-typescale-body-small-size);
+        line-height: var(--md-sys-typescale-body-small-line-height);
+        color: color-mix(in oklab, var(--foreground) 60%, transparent);
+      }
+
+      & > .cbi-value-field {
+        @apply max-w-full min-w-0 justify-self-stretch text-right;
+        grid-column: 2;
+
+        &.md3e-value-field-dropdown-open {
+          position: relative;
+          z-index: 91;
+          overflow: visible;
+        }
+
+        @media (width < 48rem) {
+          justify-self: stretch;
+          text-align: left;
+          grid-row: auto;
+          grid-column: auto;
+        }
+
+        &.md3e-value-field-textarea {
+          @apply justify-self-stretch text-left;
+        }
+
+        &.md3e-value-field-control {
+          font-size: var(--md-sys-typescale-body-medium-size);
+          line-height: var(--md-sys-typescale-body-medium-line-height);
+          font-weight: 400;
+          color: color-mix(in oklab, var(--foreground) 88%, transparent);
+          letter-spacing: 0;
+          text-align: left;
+        }
+
+        &.md3e-value-field-disabled-dropdown {
+          @apply cursor-not-allowed;
+        }
+
+        /* Fallback for descriptions not yet moved by JS */
+        & .cbi-value-description {
+          @apply mt-1 text-xs leading-snug wrap-break-word;
+          color: color-mix(in oklab, var(--foreground) 60%, transparent);
+        }
+      }
+
+      & > .cbi-section,
+      & > .cbi-tblsection {
+        @apply w-full;
+        grid-column: 1 / -1;
+      }
+
+      /* Custom mount-point widgets (no standard title/field) span full width */
+      &.md3e-value-custom-mount > :first-child {
+        grid-column: 1 / -1;
+        flex: 1 1 100%;
+        inline-size: 100%;
+        max-inline-size: 100%;
+      }
+
+      &.md3e-value-custom-mount .right {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.5rem;
+        inline-size: 100%;
+        margin-top: 0.75rem;
+      }
+    }
+
+    @media (width >= 48rem) {
+      #maincontent :not(.md3e-tonal-settings) > .cbi-value.md3e-value-port-dropdown > .cbi-value-field,
+      #maincontent .cbi-value[data-name="Port" i] > .cbi-value-field,
+      #maincontent .cbi-value[data-name$="Port" i] > .cbi-value-field,
+      #maincontent .cbi-value[data-field$=".Port"] > .cbi-value-field {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        text-align: left;
+      }
+
+      #maincontent .cbi-value.md3e-value-port-dropdown > .cbi-value-field > .cbi-dropdown:not(.btn):not(.cbi-button) {
+        width: auto !important;
+        max-width: min(18rem, 100%);
+      }
+
+
+    }
+
+    .cbi-value.md3e-value-progress {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      column-gap: 2rem;
+      row-gap: 0.7rem;
+      padding: 1rem 1.1rem;
+      border-bottom: 0;
+      border-radius: 1.25rem;
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-high) 54%, transparent);
+      box-shadow: none;
+
+      & > .cbi-value-title {
+        grid-column: 1;
+        grid-row: 1;
+        width: fit-content;
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      & > .cbi-value-field {
+        grid-column: 2;
+        grid-row: 1;
+        width: 100%;
+        max-width: none;
+        justify-self: stretch;
+        text-align: left;
+        font-size: var(--md-sys-typescale-title-medium-size);
+        line-height: var(--md-sys-typescale-title-medium-line-height);
+      }
+
+      @media (max-width: 640px) {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-block: 1rem;
+
+        & > .cbi-value-title,
+        & > .cbi-value-field {
+          width: 100%;
+        }
+        & > .cbi-value-title {
+           margin-bottom: 0.5rem;
+        }
+      }
+    }
+
+    .cbi-dynlist {
+      @apply flex w-full flex-row flex-wrap items-start gap-2;
+
+      & .item {
+        @apply border-border/80 bg-panel-bg pointer-events-auto relative inline-flex grow cursor-move items-center gap-2 overflow-hidden rounded-xl border py-2 pr-9 pl-3.5 text-left font-mono text-sm leading-snug shadow-sm transition-all duration-200 select-text max-md:py-1.5 max-md:pr-8 max-md:pl-3;
+        flex-basis: auto;
+        &::after {
+          @apply bg-muted text-muted-foreground absolute top-1/2 -translate-y-1/2 right-2 inline-flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-xl text-sm font-medium;
+          --tw-content: '\00D7';
+          content: var(--tw-content);
+        }
+
+        &.dragging {
+          @apply scale-95 cursor-grabbing opacity-50 shadow-2xl;
+        }
+
+        &.drag-over {
+          @apply border-primary/60 bg-primary/5 ring-primary/30 scale-105 shadow-lg ring-2;
+        }
+
+        & > span,
+        & > code {
+          @apply pointer-events-none w-full rounded-lg font-mono leading-relaxed break-all;
+        }
+      }
+
+      & .placeholder {
+        @apply break-all;
+      }
+
+      & .add-item {
+        @apply inline-flex w-full items-center gap-1.5 rounded-none border-0 bg-transparent p-0 transition-all duration-200;
+
+        & > input {
+          @apply min-w-61 flex-1;
+        }
+
+        & > .cbi-button {
+          @apply inline-flex h-6! w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-muted p-0 text-sm font-medium text-muted-foreground shadow-none transition-colors duration-150 hover:bg-primary/10 hover:text-primary active:scale-95;
+        }
+      }
+    }
+  }
+}

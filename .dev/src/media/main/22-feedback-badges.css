@@ -1,0 +1,181 @@
+@layer components {
+  @layer badge {
+    .label {
+      @apply bg-default text-default-foreground rounded-full px-3 py-1 text-xs font-bold uppercase;
+
+      &.important {
+        @apply bg-info text-info-foreground;
+      }
+
+      &.warning {
+        @apply bg-error text-error-foreground;
+      }
+
+      &.success {
+        @apply bg-success text-success-foreground;
+      }
+
+      &.notice {
+        @apply bg-warning text-warning-foreground;
+      }
+    }
+
+    .zonebadge {
+      @apply border-secondary bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 overflow-visible rounded-full border px-1 py-1.5 text-sm font-medium shadow-sm transition-all duration-200 hover:shadow-md max-md:gap-1 max-md:text-xs;
+
+      &[style*="--zone-color-rgb"] {
+        @apply bg-[rgb(var(--zone-color-rgb),.7)]!;
+
+        & em {
+          @apply text-default-foreground;
+        }
+      }
+
+      .cbi-dropdown & {
+        @apply rounded-xl px-1 py-0.5;
+      }
+    }
+
+    .ifacebadge {
+      @apply border-border bg-label-surface text-default-foreground hover:border-border hover:bg-label-surface inline-flex cursor-default flex-wrap items-center gap-1.5 rounded-md border px-2 py-1.5 text-sm font-normal transition-all duration-200 hover:shadow-sm max-md:gap-1 max-md:px-2 max-md:py-1 max-md:text-xs;
+      min-width: 0;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 82%, var(--md-sys-color-secondary-container) 7%);
+      box-shadow: none;
+      font-variant-numeric: tabular-nums;
+
+      .cbi-dropdown &,
+      .cbi-tooltip & {
+        @apply flex-nowrap;
+      }
+
+      .zonebadge > &,
+      .cbi-dropdown & {
+        @apply rounded-md px-1.5 py-0;
+        & img {
+          @apply mr-1 h-4 w-4 object-contain;
+        }
+      }
+
+      & > img {
+        @apply h-4.5 w-4.5 shrink-0 self-center object-contain max-md:h-4 max-md:w-4;
+      }
+
+      & > span {
+        min-width: 0;
+
+        & > .nowrap {
+          @apply mb-1 inline-block text-sm max-md:text-xs;
+        }
+      }
+
+      &.ifacebadge-active {
+        @apply border-primary font-semibold;
+        color: var(--md-sys-color-on-primary-container);
+        background: color-mix(in oklab, var(--md-sys-color-primary-container) 72%, var(--md-sys-color-surface-container-lowest));
+        box-shadow: none;
+      }
+
+      &.large {
+        @apply min-w-[11rem] flex-1 px-2.5 py-2 max-md:min-w-0 max-md:px-2 max-md:py-1.5;
+      }
+    }
+
+    /* Global M3 monochrome vector icon replacement for legacy LuCI /resources/icons/ */
+    img[src*="/luci-static/resources/icons/"]:is([src*="ethernet"], [src*="port_"], [src*="bridge"], [src*="vlan"], [src*="switch"], [src*="wifi.svg"], [src*="wifi_disabled"], [src*="tunnel"], [src*="wireguard"], [src*="alias"], [src*="vrf"], [src*="signal-"]) {
+      content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'/%3E");
+      inline-size: 1.25rem;
+      block-size: 1.25rem;
+      display: inline-block;
+      flex: none;
+      object-fit: contain;
+      background-color: currentColor !important;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    img[src*="/luci-static/resources/icons/"]:is([src*="_disabled.svg"], [src*="port_down.svg"], [src*="port_pse_down.svg"], [src*="signal-none.svg"], [src*="signal-000-000.svg"]) {
+      opacity: 0.55;
+    }
+
+    img[src*="/luci-static/resources/icons/ethernet"], img[src*="/luci-static/resources/icons/port_"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M3 5h18v10h-4l-2 4H9l-2-4H3zM8 8v3m4-3v3m4-3v3'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M3 5h18v10h-4l-2 4H9l-2-4H3zM8 8v3m4-3v3m4-3v3'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/bridge"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M5 4h5v5H5zM14 15h5v5h-5zM10 6.5h4a2.5 2.5 0 0 1 2.5 2.5v6M7.5 9v6a2.5 2.5 0 0 0 2.5 2.5h4'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M5 4h5v5H5zM14 15h5v5h-5zM10 6.5h4a2.5 2.5 0 0 1 2.5 2.5v6M7.5 9v6a2.5 2.5 0 0 0 2.5 2.5h4'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/vlan"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M12 3l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 16l9 5 9-5'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M12 3l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 16l9 5 9-5'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/switch"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M3 7h18v10H3zM7 12h.01M11 12h.01M15 12h.01M18 11v2'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M3 7h18v10H3zM7 12h.01M11 12h.01M15 12h.01M18 11v2'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/wifi.svg"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M5 12.55a11 11 0 0 1 14.08 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01M2 8.82a15 15 0 0 1 20 0'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M5 12.55a11 11 0 0 1 14.08 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01M2 8.82a15 15 0 0 1 20 0'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/wifi_disabled"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M2 2l20 20M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01M5 12.55a11 11 0 0 1 5.17-2.39M16.71 10.16a11 11 0 0 1 2.29 2.39'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M2 2l20 20M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01M5 12.55a11 11 0 0 1 5.17-2.39M16.71 10.16a11 11 0 0 1 2.29 2.39'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/tunnel"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 19V11a8 8 0 0 1 16 0v8M9 19v-5a3 3 0 0 1 6 0v5M2 19h20'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 19V11a8 8 0 0 1 16 0v8M9 19v-5a3 3 0 0 1 6 0v5M2 19h20'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/wireguard"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3zM9.5 11.5h5v3.5h-5z'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3zM9.5 11.5h5v3.5h-5z'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/alias"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/vrf"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9a9 9 0 0 1-9 9'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9a9 9 0 0 1-9 9'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/signal-075-100"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4M9 20v-8M14 20v-12M19 20v-16'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4M9 20v-8M14 20v-12M19 20v-16'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/signal-050-075"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4M9 20v-8M14 20v-12'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4M9 20v-8M14 20v-12'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/signal-025-050"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4M9 20v-8'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4M9 20v-8'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/signal-000-025"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20v-4'/%3E%3C/svg%3E");
+    }
+
+    img[src*="/luci-static/resources/icons/signal-none"], img[src*="/luci-static/resources/icons/signal-000-000"] {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20h16M4 16l16-12'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M4 20h16M4 16l16-12'/%3E%3C/svg%3E");
+    }
+
+  }
+}

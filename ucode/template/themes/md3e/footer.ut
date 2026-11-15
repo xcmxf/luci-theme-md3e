@@ -1,0 +1,55 @@
+		{% if (!blank_page): %}
+			</main>
+		</div><!-- #maincontent -->
+			<footer>
+				<span>
+					Powered by
+					<a href="https://github.com/openwrt/luci" target="_blank" rel="noreferrer">
+						{{ version.luciname }} ({{ version.luciversion }})</a>
+					/
+					<a href="{{ entityencode(version.disturl ?? '#', true) }}" target="_blank" rel="noreferrer">
+						{{ version.distname }} {{ version.distversion }} ({{ version.distrevision }})</a>
+					{% if (lua_active): %}
+						/ {{ _('Lua compatibility mode active') }}
+					{% endif %}
+				</span>
+				<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
+			</footer>
+		<script>
+			(() => {
+				const themeVersion = encodeURIComponent(document.documentElement.dataset.md3eAssetVersion);
+				const requireTheme = (load) => {
+					const resourceVersion = L.env.resource_version;
+					// LuCI constructs the request URL synchronously in require().
+					L.env.resource_version = [resourceVersion, themeVersion].filter(Boolean).join('-');
+					try {
+						return load();
+					} finally {
+						L.env.resource_version = resourceVersion;
+					}
+				};
+
+				const menu = requireTheme(() => L.require('md3e.menu-md3e-v2'));
+				menu.catch(console.warn);
+				{% const isOverview = view == 'status/overview' || length(ctx?.request_path) == 0 || join('/', ctx?.request_path ?? []) in ['admin/status', 'admin/status/overview']; %}
+				{% if (isOverview): %}
+				requireTheme(() => L.require('md3e.md3e-overview')).catch(console.warn);
+				{% else %}
+				if (document.body?.dataset.page === 'admin-status-overview' || document.body?.dataset.page === 'admin-status')
+					requireTheme(() => L.require('md3e.md3e-overview')).catch(console.warn);
+				{% endif %}
+				{% if (view == 'status/processes'): %}
+				menu.then(() => requireTheme(() => L.require('md3e.md3e-processes'))).catch(console.warn);
+				{% elif (view in ['network/interfaces', 'network/dhcp', 'network/dns', 'network/routes', 'network/wireless', 'network/switch', 'network/diagnostics', 'status/syslog', 'status/dmesg', 'status/nftables', 'status/iptables', 'status/channel_analysis', 'status/routes', 'status/routesj'] || index(view ?? '', 'system/') == 0 || index(view ?? '', 'firewall/') == 0 || index(view ?? '', 'status/realtime') == 0 || index(view ?? '', 'attendedsysupgrade') == 0): %}
+				menu.then(() => requireTheme(() => L.require('md3e.md3e-management'))).catch(console.warn);
+				{% else %}
+				if (document.body?.dataset.page === "admin-status-processes")
+					menu.then(() => requireTheme(() => L.require("md3e.md3e-processes"))).catch(console.warn);
+				else if (document.body?.dataset.page && /^admin-(?:network-network$|network-firewall|network-dhcp|network-dns|network-routes|network-wireless$|network-switch$|network-diagnostics$|status-realtime-|status-channel_analysis$|status-iptables$|status-nftables|status-routes|status-logs(?:-|$)|system-|attendedsysupgrade)/.test(document.body.dataset.page))
+					menu.then(() => requireTheme(() => L.require('md3e.md3e-management'))).catch(console.warn);
+				{% endif %}
+			})();
+		</script>
+		{% endif %}
+	</body>
+</html>

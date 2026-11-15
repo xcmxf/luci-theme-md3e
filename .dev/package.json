@@ -1,0 +1,31 @@
+{
+  "name": "luci-theme-md3e",
+  "description": "Material Design 3 Expressive-inspired OpenWrt LuCI theme built with Vite and TailwindCSS",
+  "type": "module",
+  "scripts": {
+    "assemble": "node scripts/assemble-sources.js",
+    "assemble:check": "node scripts/assemble-sources.js --check",
+    "dev": "npm run assemble && vite",
+    "build": "npm run assemble && node scripts/clean.js && vite build",
+    "clean": "node scripts/clean.js",
+    "deploy:device-static": "node scripts/deploy-device-static.js",
+    "format": "prettier --write package.json tsconfig.json vite.config.ts scripts/*.js src/shared/*.js docs/*.md",
+    "format:check": "prettier --check package.json tsconfig.json vite.config.ts scripts/*.js src/shared/*.js docs/*.md",
+    "report:asset-sizes": "node scripts/report-asset-sizes.js"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.4",
+    "@types/node": "26.6.6",
+    "lightningcss": "1.33.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.0",
+    "tailwindcss": "4.3.4",
+    "terser": "^5.43.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.6"
+  },
+  "packageManager": "pnpm@12.16.1+sha512.091d1dee7927575661b25dab3c2ae31cafc1c54d6b71ed6a6600cf0c1cb10434a447eae14015f1b23e2e6bedeed79df94a932e2164d2832280dce3fb32f656d1",
+  "engines": {
+    "node": ">=26 <27"
+  }
+}

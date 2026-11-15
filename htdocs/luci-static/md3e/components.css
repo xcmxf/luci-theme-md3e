@@ -1,0 +1,1772 @@
+/* Reusable MD3E component surfaces built on top of the theme token system. */
+
+:root {
+  --md3e-comp-duration: 0.22s;
+  --md3e-comp-ease: cubic-bezier(0.2, 0.82, 0.2, 1);
+  --md3e-comp-card-radius: clamp(1.1rem, 1rem + 0.35vw, 1.45rem);
+  --md3e-comp-card-padding: clamp(1rem, 0.95rem + 0.35vw, 1.3rem);
+  --md3e-comp-button-radius: var(--md-sys-shape-corner-full, 999px);
+  --md3e-comp-field-radius: var(--md-sys-shape-corner-large, 1.1rem);
+  --md3e-comp-card-bg: var(--md-comp-card-container-color, var(--md-sys-color-surface-container-low, #f1f1f7));
+  --md3e-comp-card-bg-high: var(--md-comp-card-container-color-high, var(--md-sys-color-surface-container, #ececf2));
+  --md3e-comp-card-border: var(--md-comp-card-outline-color, var(--md-sys-color-outline-variant, #c4c6d0));
+  --md3e-comp-field-bg: var(--md-comp-filled-field-container-color, var(--md-sys-color-surface-container-highest, #ececf2));
+  --md3e-comp-field-border: var(--md-comp-filled-field-outline-color, var(--md-sys-color-outline-variant, #c4c6d0));
+  --md3e-comp-field-focus: var(--md-comp-filled-field-focus-outline-color, var(--md-sys-color-primary, #445e91));
+  --md3e-comp-filled-bg: var(--md-comp-filled-button-container-color, var(--md-sys-color-primary, #445e91));
+  --md3e-comp-filled-fg: var(--md-comp-filled-button-label-text-color, var(--md-sys-color-on-primary, #fff));
+  --md3e-comp-tonal-bg: var(--md-comp-tonal-button-container-color, var(--md-sys-color-secondary-container, #dbe2f9));
+  --md3e-comp-tonal-fg: var(--md-comp-tonal-button-label-text-color, var(--md-sys-color-on-secondary-container, #3f4759));
+  --md3e-comp-outlined-bg: var(--md-comp-outlined-button-container-color, var(--md-sys-color-surface-container-high, #ececf2));
+  --md3e-comp-outlined-fg: var(--md-comp-outlined-button-label-text-color, var(--md-sys-color-primary, #445e91));
+  --md3e-comp-outlined-border: var(--md-comp-outlined-button-outline-color, var(--md-sys-color-outline-variant, #c4c6d0));
+
+  /* MD3E motion */
+  --md-sys-motion-spatial-fast-duration: 417ms;
+  --md-sys-motion-spatial-fast-easing: linear(0, 0.02522, 0.09118, 0.18466, 0.29439, 0.41107, 0.52737, 0.63778, 0.73844, 0.8269, 0.9019, 0.96316, 1.01109, 1.04668, 1.07126, 1.08635, 1.09356, 1.09449, 1.09064, 1.08337, 1.07388, 1.06316, 1.05205, 1.04116, 1.03098, 1.02181, 1.01385, 1.00718, 1.00181, 0.99768, 0.99468, 0.99267, 0.99151, 0.99104, 0.99112, 0.99161, 0.99239, 0.99333, 0.99437, 0.99542, 0.99644, 0.99737, 0.9982, 0.99892, 0.99951, 0.99997, 1.00033, 1.00058, 1.00074, 1.00083, 1);
+  --md-sys-motion-spatial-medium-duration: 533ms;
+  --md-sys-motion-spatial-medium-easing: linear(0, 0.0121, 0.04433, 0.09135, 0.14867, 0.21261, 0.28018, 0.34897, 0.41711, 0.48317, 0.5461, 0.60514, 0.65983, 0.70989, 0.75522, 0.79585, 0.83191, 0.86362, 0.89123, 0.91504, 0.93538, 0.95255, 0.9669, 0.97873, 0.98835, 0.99603, 1.00205, 1.00664, 1.01003, 1.01241, 1.01396, 1.01483, 1.01515, 1.01505, 1.01463, 1.01396, 1.01312, 1.01216, 1.01113, 1.01007, 1.00902, 1.00807, 1.0071, 1.00619, 1.00534, 1.00457, 1.00387, 1.00323, 1.00267, 1.00217, 1.00174, 1.00137, 1.00105, 1.00078, 1.00055, 1.00036, 1.00021, 1.00008, 0.99999, 0.99991, 0.99986, 0.99982, 0.99979, 0.99978, 1);
+  --md-sys-motion-effects-fast-duration: 225ms;
+  --md-sys-motion-effects-fast-easing: linear(0, 0.09439, 0.27432, 0.45584, 0.60862, 0.72647, 0.8128, 0.87391, 0.91613, 0.94478, 0.96394, 0.97662, 0.98493, 0.99034, 0.99383, 0.99608, 0.99752, 0.99843, 0.99901, 0.99938, 0.99961, 0.99976, 0.99985, 0.99991, 0.99994, 0.99996, 0.99998, 1);
+  --md-sys-motion-spatial-fast: 417ms cubic-bezier(.18, .89, .32, 1.28);
+  --md-sys-motion-effects-fast: 225ms cubic-bezier(.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --md-sys-motion-spatial-fast-duration: 0ms;
+    --md-sys-motion-spatial-medium-duration: 0ms;
+    --md-sys-motion-effects-fast-duration: 0ms;
+    --md-sys-motion-spatial-fast: 0s;
+    --md-sys-motion-effects-fast: 0s;
+  }
+}
+
+@supports (color: color-mix(in oklab, black, white)) {
+  :root {
+    --md3e-comp-card-bg: color-mix(in oklab, var(--md3e-comp-card-bg) 94%, transparent);
+    --md3e-comp-card-bg-high: color-mix(in oklab, var(--md3e-comp-card-bg-high) 96%, transparent);
+    --md3e-comp-card-border: color-mix(in oklab, var(--md3e-comp-card-border) 54%, transparent);
+    --md3e-comp-field-bg: color-mix(in oklab, var(--md3e-comp-field-bg) 95%, transparent);
+    --md3e-comp-field-border: color-mix(in oklab, var(--md3e-comp-field-border) 60%, transparent);
+    --md3e-comp-outlined-border: color-mix(in oklab, var(--md3e-comp-outlined-border) 72%, transparent);
+  }
+}
+
+/* Dark mode page background: solid M3 surface, no ambient gradient. */
+html[data-darkmode="true"],
+html[data-darkmode="true"] body,
+[data-darkmode="true"] #maincontent {
+  --page-bg: #111318;
+  --page-bg-image: none;
+  background-color: #111318 !important;
+  background-image: none !important;
+}
+
+html[data-darkmode="true"] #maincontent > .docs-content {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html[data-darkmode="true"] #maincontent :is(.md3e-card, .cbi-section-node) {
+  background-image: none !important;
+}
+
+.md3e-card,
+.cbi-section-node,
+#maincontent .cbi-page-actions {
+  border: 0;
+  background: var(--md3e-comp-card-bg);
+  box-shadow: none;
+}
+
+.md3e-card {
+  display: grid;
+  gap: 0.9rem;
+  padding: var(--md3e-comp-card-padding);
+  border-radius: var(--md3e-comp-card-radius);
+}
+
+.md3e-card--high,
+.cbi-section-node {
+  background: var(--md3e-comp-card-bg-high);
+}
+
+.md3e-card--interactive {
+  transition:
+    transform var(--md3e-comp-duration) var(--md3e-comp-ease),
+    border-color var(--md3e-comp-duration) ease,
+    background-color var(--md3e-comp-duration) ease,
+    box-shadow var(--md3e-comp-duration) var(--md3e-comp-ease);
+}
+
+@media (hover: hover) {
+  .md3e-card--interactive:hover {
+    transform: translateY(-1px);
+    box-shadow: none;
+  }
+
+  .cbi-section-node:hover {
+    box-shadow: none;
+  }
+}
+
+.md3e-card__eyebrow {
+  font-size: var(--md-sys-typescale-label-small-size, 0.72rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground, var(--md-sys-color-on-surface-variant, #5c6270));
+}
+
+.md3e-card__title {
+  font-family: var(--font-display, var(--font-sans));
+  font-size: var(--md-sys-typescale-title-large-size, 1.15rem);
+  line-height: var(--md-sys-typescale-title-large-line-height, 1.35);
+  letter-spacing: 0;
+  color: var(--foreground, var(--md-sys-color-on-surface, #1a1b20));
+}
+
+.md3e-card__body,
+.md3e-card__meta {
+  color: var(--muted-foreground, var(--md-sys-color-on-surface-variant, #5c6270));
+}
+
+:where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) {
+  --_md3e-button-bg: var(--md3e-comp-tonal-bg);
+  --_md3e-button-fg: var(--md3e-comp-tonal-fg);
+  --_md3e-button-border: var(--md3e-comp-card-border);
+  --_md3e-button-shadow:
+    0 18px 30px -26px var(--expressive-shadow, rgb(0 0 0 / 0.2));
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.72rem 1.15rem;
+  border: 1px solid var(--_md3e-button-border);
+  border-radius: var(--md3e-comp-button-radius);
+  background: var(--_md3e-button-bg);
+  box-shadow: var(--_md3e-button-shadow);
+  color: var(--_md3e-button-fg);
+  font-family: var(--font-sans);
+  font-size: var(--md-sys-typescale-label-large-size, 0.92rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: var(--md-sys-typescale-label-large-tracking, 0.01em);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform var(--md3e-comp-duration) var(--md3e-comp-ease),
+    border-color var(--md3e-comp-duration) ease,
+    background-color var(--md3e-comp-duration) ease,
+    box-shadow var(--md3e-comp-duration) var(--md3e-comp-ease),
+    color var(--md3e-comp-duration) ease;
+  cursor: pointer;
+}
+
+:where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) svg {
+  flex: none;
+}
+
+.md3e-button--filled,
+.btn.primary,
+.cbi-button-apply,
+.cbi-button-reload {
+  --_md3e-button-bg: var(--md3e-comp-filled-bg);
+  --_md3e-button-fg: var(--md3e-comp-filled-fg);
+  --_md3e-button-border: var(--md3e-comp-filled-bg);
+  --_md3e-button-shadow:
+    0 18px 30px -24px color-mix(in oklab, var(--md3e-comp-filled-bg) 28%, transparent);
+}
+
+.md3e-button--tonal,
+a.btn,
+.cbi-button-neutral,
+.cbi-button-positive,
+.cbi-button-fieldadd,
+.cbi-button-save,
+.cbi-page-actions .btn:not(.primary) {
+  --_md3e-button-bg: var(--md3e-comp-tonal-bg);
+  --_md3e-button-fg: var(--md3e-comp-tonal-fg);
+  --_md3e-button-border: var(--md3e-comp-card-border);
+}
+
+.md3e-button--outlined {
+  --_md3e-button-bg: var(--md3e-comp-outlined-bg);
+  --_md3e-button-fg: var(--md3e-comp-outlined-fg);
+  --_md3e-button-border: var(--md3e-comp-outlined-border);
+}
+
+.md3e-button--danger,
+.cbi-button-negative,
+.cbi-section-remove .cbi-button,
+.cbi-button-reset,
+.cbi-button-remove {
+  --_md3e-button-bg: var(--md-sys-color-error-container, #ffd9d6);
+  --_md3e-button-fg: var(--md-sys-color-on-error-container, #5d120f);
+  --_md3e-button-border: color-mix(in oklab, var(--md-sys-color-error, #ba1a1a) 22%, var(--md3e-comp-card-border));
+}
+
+.md3e-button--text {
+  --_md3e-button-bg: transparent;
+  --_md3e-button-fg: var(--foreground, var(--md-sys-color-on-surface, #1a1b20));
+  --_md3e-button-border: transparent;
+  --_md3e-button-shadow: none;
+}
+
+@media (hover: hover) {
+  :where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn):hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 22px 34px -28px var(--expressive-shadow, rgb(0 0 0 / 0.22));
+  }
+}
+
+:where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn):active {
+  transform: translateY(0);
+  box-shadow:
+    0 12px 20px -20px var(--expressive-shadow, rgb(0 0 0 / 0.18));
+}
+
+:where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn):focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md3e-comp-field-focus) 32%, transparent);
+  outline-offset: 2px;
+}
+
+:where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn)[disabled],
+:where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn).disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+#maincontent .cbi-page-actions {
+  --_md3e-action-shell-bg: transparent;
+  --_md3e-action-shell-border: transparent;
+  --_md3e-action-divider: transparent;
+  --_md3e-action-subtle-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 96%, transparent);
+  --_md3e-action-subtle-fg: color-mix(in oklab, var(--foreground) 84%, transparent);
+  --_md3e-action-primary-bg: color-mix(
+    in oklab,
+    var(--md-comp-filled-button-container-color, var(--md3e-comp-filled-bg, var(--md-sys-color-primary))) 92%,
+    var(--md-sys-color-tertiary)
+  );
+  --_md3e-action-primary-fg: var(--md-comp-filled-button-label-text-color, var(--md3e-comp-filled-fg, var(--md-sys-color-on-primary)));
+  --_md3e-action-primary-hover: color-mix(in oklab, var(--_md3e-action-primary-bg) 90%, var(--_md3e-action-primary-fg));
+  --_md3e-action-primary-pressed: color-mix(in oklab, var(--_md3e-action-primary-bg) 82%, var(--_md3e-action-primary-fg));
+  --_md3e-action-save-bg: var(--md-sys-color-secondary-container);
+  --_md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+  --_md3e-action-save-hover: color-mix(in oklab, var(--md-sys-color-secondary-container) 86%, var(--md-sys-color-on-secondary-container) 14%);
+  --_md3e-action-save-ring: transparent;
+  --_md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 76%, transparent);
+  --_md3e-action-reset-fg: var(--md-sys-color-on-surface-variant);
+  --_md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 36%, var(--md-sys-color-surface-container-high));
+  --_md3e-action-reset-ring: transparent;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  margin-block: 1.25rem 0;
+  position: relative;
+  z-index: 10;
+  padding: 0;
+  gap: 0.625rem;
+  border-radius: 0;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group {
+  order: 1;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-apply-split, .md3e-split-button, [data-md3e-split-button]) {
+  order: 2;
+}
+
+[data-darkmode="true"] #maincontent .cbi-page-actions {
+  --_md3e-action-primary-bg: color-mix(in oklab, var(--md-sys-color-primary) 88%, var(--md-sys-color-tertiary));
+  --_md3e-action-primary-fg: var(--md-sys-color-on-primary);
+  --_md3e-action-save-bg: var(--md-sys-color-secondary-container);
+  --_md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+  --_md3e-action-save-hover: color-mix(in oklab, var(--md-sys-color-secondary-container) 84%, var(--md-sys-color-on-secondary-container) 16%);
+  --_md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 82%, transparent);
+  --_md3e-action-reset-fg: var(--md-sys-color-on-surface-variant);
+  --_md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 42%, var(--md-sys-color-surface-container-high));
+}
+
+#maincontent .cbi-page-actions:hover,
+#maincontent .cbi-page-actions:focus-within,
+#maincontent .cbi-page-actions[data-dirty="true"] {
+  opacity: 1;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  min-width: clamp(11.5rem, 18vw, 14rem);
+  min-height: 2.9rem;
+  height: 2.9rem;
+  padding: 0;
+  overflow: visible;
+  border-radius: 1.45rem;
+  border: 0;
+  background: var(--_md3e-action-primary-bg);
+  box-shadow:
+    0 14px 26px -24px color-mix(in oklab, var(--_md3e-action-primary-bg) 34%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--_md3e-action-primary-fg) 12%, transparent);
+  color: var(--_md3e-action-primary-fg);
+  margin-left: 0 !important;
+  isolation: isolate;
+  position: relative;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+#maincontent .cbi-page-actions:not([data-dirty="true"]) > :is(.md3e-split-button, [data-md3e-split-button]) {
+  background: var(--_md3e-action-primary-bg);
+  box-shadow:
+    0 12px 22px -22px color-mix(in oklab, var(--_md3e-action-primary-bg) 32%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--_md3e-action-primary-fg) 10%, transparent);
+  color: var(--_md3e-action-primary-fg);
+}
+
+#maincontent .cbi-page-actions[data-dirty="true"] > :is(.md3e-split-button, [data-md3e-split-button]) {
+  background: var(--_md3e-action-primary-bg);
+  box-shadow:
+    0 16px 30px -22px color-mix(in oklab, var(--_md3e-action-primary-bg) 42%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--_md3e-action-primary-fg) 12%, transparent);
+  color: var(--_md3e-action-primary-fg);
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > ul {
+  width: 100%;
+  min-width: 0;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100%;
+  margin: 0;
+  padding: 0 1.25rem 0 1.5rem;
+  border-radius: 1.45rem 0 0 1.45rem;
+  text-align: center;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display],
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > label,
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > span,
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > a {
+  color: inherit !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open {
+  display: grid;
+  place-items: center;
+  width: 3rem !important;
+  min-width: 3rem;
+  min-height: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 0.92rem !important;
+  line-height: 1 !important;
+  color: inherit;
+  border: 0;
+  border-radius: 0 1.45rem 1.45rem 0;
+  background: color-mix(in oklab, currentColor 8%, transparent);
+  box-shadow: none !important;
+  position: relative;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  transition: background-color 0.16s ease;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > .open {
+  background: color-mix(in oklab, currentColor 14%, transparent);
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 1px;
+  background: color-mix(in oklab, currentColor 38%, transparent);
+}
+
+@media (hover: hover) {
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):hover {
+    background: var(--_md3e-action-primary-hover);
+    box-shadow:
+      0 16px 32px -22px color-mix(in oklab, var(--_md3e-action-primary-bg) 42%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, var(--_md3e-action-primary-fg) 16%, transparent);
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display]:hover {
+    background: color-mix(in oklab, currentColor 8%, transparent);
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open:hover {
+    background: color-mix(in oklab, currentColor 16%, transparent);
+  }
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] {
+  z-index: 50;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.preview {
+  position: absolute;
+  inset: auto;
+  display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  height: 0 !important;
+  margin: 0;
+  padding: 0;
+  overflow: hidden !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 1;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown {
+  top: calc(100% + 0.6rem) !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: 0 !important;
+  margin: 0;
+  padding: 0.25rem !important;
+  z-index: 40;
+  transform-origin: top right;
+  min-width: 10.5rem;
+  width: max-content;
+  max-width: min(18rem, calc(100vw - 1rem));
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-high, #ececf2) 96%, transparent) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0.85rem !important;
+  border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 38%, transparent) !important;
+  box-shadow: 0 12px 24px -20px rgb(0 0 0 / 0.18) !important;
+  display: grid !important;
+  gap: 0.125rem;
+  overflow: auto;
+  color: var(--foreground) !important;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown.above {
+  top: auto !important;
+  bottom: calc(100% + 0.6rem) !important;
+  transform-origin: bottom right;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown > li {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  justify-content: stretch;
+  gap: 0.55rem;
+  width: auto;
+  margin: 0 !important;
+  padding: 0.125rem 0.25rem !important;
+  text-align: left;
+  white-space: normal;
+  min-height: 0;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--md-sys-color-on-surface) !important;
+  border-radius: 0 !important;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown > li::before {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-left: 0.45rem;
+  opacity: 0;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown > li[selected] {
+  color: var(--md-sys-color-on-secondary-container) !important;
+  background: transparent !important;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown > li[selected]::before {
+  opacity: 1;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown > li > * {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-height: 2rem;
+  padding: 0.36rem 0.72rem 0.36rem 0;
+  color: inherit !important;
+  font-size: 0.86rem !important;
+  font-weight: 500 !important;
+  line-height: 1.15 !important;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: visible;
+  border-radius: 0.55rem;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown > li[selected] > * {
+  background: color-mix(in oklab, var(--md-sys-color-secondary-container) 44%, transparent);
+}
+
+@media (hover: hover) {
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button])[open] > ul.dropdown > li:hover > * {
+    background: color-mix(in oklab, currentColor 10%, transparent) !important;
+  }
+}
+#maincontent .cbi-page-actions > .md3e-action-group {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3px;
+  min-height: 2.75rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  flex: 0 0 auto;
+  overflow: visible;
+  order: 1;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset {
+  order: 1;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save {
+  order: 2;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+#maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+#maincontent .cbi-page-actions > .cbi-button-reset {
+  position: relative;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 1.125rem;
+  border: 0 !important;
+  border-radius: 1.375rem !important;
+  box-shadow: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition:
+    border-radius var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    padding-inline var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    background-color var(--md-sys-motion-effects-fast-duration, 225ms) ease,
+    color var(--md-sys-motion-effects-fast-duration, 225ms) ease;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+}
+
+/* Leading in connected group (Reset, order: 1): outer-left 22px (1.375rem), inner-right 8px (0.5rem) */
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child) {
+  border-radius: 1.375rem 0.5rem 0.5rem 1.375rem !important;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):active {
+  border-radius: 1.375rem 0.25rem 0.25rem 1.375rem !important;
+  padding-inline: 1.375rem;
+}
+
+/* Trailing in connected group (Save, order: 2): inner-left 8px (0.5rem), outer-right 22px (1.375rem) */
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child) {
+  border-radius: 0.5rem 1.375rem 1.375rem 0.5rem !important;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):active {
+  border-radius: 0.25rem 1.375rem 1.375rem 0.25rem !important;
+  padding-inline: 1.375rem;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:only-child:active,
+#maincontent .cbi-page-actions > .cbi-button-save:only-child:active,
+#maincontent .cbi-page-actions > .cbi-button-reset:only-child:active {
+  border-radius: 0.75rem !important;
+  padding-inline: 1.375rem;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save,
+#maincontent .cbi-page-actions > .cbi-button-save:only-child {
+  background: var(--_md3e-action-save-bg) !important;
+  color: var(--_md3e-action-save-fg) !important;
+}
+
+#maincontent .cbi-page-actions > .cbi-button-reset,
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset {
+  background: var(--_md3e-action-reset-bg) !important;
+  color: var(--_md3e-action-reset-fg) !important;
+}
+
+@media (hover: hover) {
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:hover,
+  #maincontent .cbi-page-actions > .cbi-button-save:only-child:hover {
+    background: var(--_md3e-action-save-hover) !important;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):hover {
+    border-radius: 0.75rem 1.375rem 1.375rem 0.75rem !important;
+  }
+
+  #maincontent .cbi-page-actions > .cbi-button-reset:hover,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:hover {
+    background: var(--_md3e-action-reset-hover) !important;
+    color: var(--md-sys-color-on-error-container) !important;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):hover {
+    border-radius: 1.375rem 0.75rem 0.75rem 1.375rem !important;
+  }
+}
+
+.md3e-action-group > .cbi-button:focus-visible,
+:is(.md3e-split-button, [data-md3e-split-button]):focus-within,
+:is(.md3e-split-button, [data-md3e-split-button]) > .open:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md3e-comp-field-focus) 34%, transparent);
+  outline-offset: 2px;
+}
+
+:is(.md3e-split-button, [data-md3e-split-button]) > .open:focus-visible {
+  outline-offset: -2px;
+}
+@media not all and (min-width: 48rem) {
+  #maincontent .cbi-page-actions {
+    width: 100%;
+    max-width: 100%;
+    margin-block: 1rem 0;
+    margin-inline: 0;
+    padding: 0;
+    gap: 0.5rem;
+    border-radius: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group {
+    order: 1;
+    flex: 0 0 auto;
+    width: auto;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 3px;
+    margin: 0;
+    padding: 0;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn) {
+    flex: 0 0 auto;
+    min-width: 0;
+    height: 2.75rem;
+    min-height: 2.75rem;
+    padding-inline: 0.875rem;
+    justify-content: center;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button], .md3e-apply-split) {
+    order: 2;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 2.75rem;
+    height: 2.75rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.75rem 0 1rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open {
+    width: 2.75rem !important;
+    min-width: 2.75rem;
+  }
+}
+#maincontent .cbi-page-actions > .md3e-apply-split {
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr) 2.75rem;
+  gap: 3px;
+  position: relative;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  order: 2;
+}
+
+.md3e-apply-split > .cbi-dropdown[hidden],
+.md3e-apply-menu[hidden] {
+  display: none !important;
+}
+
+.md3e-apply-split:has(> [aria-expanded="true"]) {
+  z-index: 50;
+}
+
+#maincontent .md3e-apply-split > :is(.md3e-apply-primary, .md3e-apply-toggle) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  height: 2.75rem;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0 1.125rem;
+  border: 0;
+  box-shadow: none;
+  color: var(--_md3e-action-primary-fg);
+  background: var(--_md3e-action-primary-bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  white-space: nowrap;
+  gap: 0.4rem;
+  transition:
+    border-radius var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    padding-inline var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    background-color var(--md-sys-motion-effects-fast-duration, 225ms) ease;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-primary {
+  border-radius: 1.375rem 0.5rem 0.5rem 1.375rem !important;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-primary:enabled:active {
+  border-radius: 1.375rem 0.875rem 0.875rem 1.375rem !important;
+  padding-inline: 1.3rem;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-toggle {
+  padding: 0;
+  border-radius: 0.5rem 1.375rem 1.375rem 0.5rem !important;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-toggle:enabled:active,
+#maincontent .md3e-apply-split > .md3e-apply-toggle[aria-expanded="true"] {
+  border-radius: 1.375rem !important;
+}
+
+.md3e-apply-toggle::after {
+  content: "";
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.md3e-apply-toggle[aria-expanded="true"]::after {
+  transform: translateY(2px) rotate(225deg);
+}
+
+@media (hover: hover) {
+  #maincontent .md3e-apply-split > button:enabled:hover {
+    background: var(--_md3e-action-primary-hover);
+  }
+}
+
+#maincontent .md3e-apply-split > button:enabled:active,
+#maincontent .md3e-apply-split > .md3e-apply-toggle[aria-expanded="true"] {
+  background: var(--_md3e-action-primary-pressed);
+}
+
+#maincontent .md3e-apply-split:disabled > button {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: default;
+}
+
+.md3e-apply-menu {
+  position: absolute;
+  z-index: 1;
+  inline-size: max-content;
+  min-inline-size: 10rem;
+  padding: 0.375rem;
+  overflow: auto;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 16px;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  box-shadow: 0 12px 32px -18px var(--expressive-shadow);
+}
+
+#maincontent .md3e-apply-menu > button {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.875rem;
+  margin: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  text-align: start;
+}
+
+#maincontent .md3e-apply-menu > button:is(:hover, :focus-visible) {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border-radius: 12px;
+}
+
+#maincontent .md3e-apply-split > button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+}
+
+#maincontent .md3e-apply-menu > button:focus-visible,
+#maincontent .cbi-page-actions:has(> .md3e-apply-split) > .md3e-action-group > button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: -3px;
+}
+.md3e-button-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.md3e-field {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.md3e-field__label,
+.cbi-value > .cbi-value-title {
+  color: var(--foreground, var(--md-sys-color-on-surface, #1a1b20));
+  letter-spacing: 0;
+}
+
+.md3e-field__hint,
+.cbi-value .cbi-value-description {
+  color: var(--muted-foreground, var(--md-sys-color-on-surface-variant, #5c6270));
+}
+
+:where(
+  .md3e-field__control,
+  input[type="text"],
+  input[type="password"],
+  input[type="search"],
+  input[type="number"],
+  input[type="url"],
+  input[type="email"],
+  textarea,
+  .cbi-input-text,
+  .cbi-input-password,
+  .cbi-input-user,
+  .cbi-input-select,
+  .outline-select-trigger
+) {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.88rem 1rem;
+  border: 1px solid var(--md3e-comp-field-border);
+  border-radius: var(--md3e-comp-field-radius);
+  background: var(--md3e-comp-field-bg);
+  box-shadow:
+    0 14px 24px -24px var(--expressive-shadow, rgb(0 0 0 / 0.2));
+  color: var(--md-comp-filled-field-input-text-color, var(--md-sys-color-on-surface, #1a1b20));
+  font-family: var(--font-sans);
+  font-size: var(--md-sys-typescale-body-large-size, 0.98rem);
+  line-height: var(--md-sys-typescale-body-large-line-height, 1.45);
+  transition:
+    border-color var(--md3e-comp-duration) ease,
+    background-color var(--md3e-comp-duration) ease,
+    box-shadow var(--md3e-comp-duration) var(--md3e-comp-ease),
+    color var(--md3e-comp-duration) ease;
+}
+
+textarea.md3e-field__control,
+textarea {
+  min-height: 7.75rem;
+  resize: vertical;
+}
+
+:where(
+  .md3e-field__control,
+  input[type="text"],
+  input[type="password"],
+  input[type="search"],
+  input[type="number"],
+  input[type="url"],
+  input[type="email"],
+  textarea,
+  .cbi-input-text,
+  .cbi-input-password,
+  .cbi-input-user,
+  .cbi-input-select,
+  .outline-select-trigger
+)::placeholder {
+  color: color-mix(in oklab, currentColor 52%, transparent);
+}
+
+:where(
+  .md3e-field__control,
+  input[type="text"],
+  input[type="password"],
+  input[type="search"],
+  input[type="number"],
+  input[type="url"],
+  input[type="email"],
+  textarea,
+  .cbi-input-text,
+  .cbi-input-password,
+  .cbi-input-user,
+  .cbi-input-select
+):focus-visible,
+.outline-select:focus-within .outline-select-trigger,
+.cbi-dropdown[open] {
+  border-color: var(--md3e-comp-field-focus);
+  background: color-mix(in oklab, var(--md3e-comp-field-bg) 82%, var(--md-sys-color-surface-container-high, white));
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--md3e-comp-field-focus) 16%, transparent);
+  outline: none;
+}
+
+:where(
+  .md3e-field__control,
+  input[type="text"],
+  input[type="password"],
+  input[type="search"],
+  input[type="number"],
+  input[type="url"],
+  input[type="email"],
+  textarea,
+  .cbi-input-text,
+  .cbi-input-password,
+  .cbi-input-user,
+  .cbi-input-select,
+  .outline-select-trigger
+)[disabled],
+.outline-select.disabled .outline-select-trigger {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+#maincontent .outline-select,
+#maincontent .cbi-dropdown {
+  position: relative;
+}
+
+#maincontent .outline-select.open,
+#maincontent .cbi-dropdown[open] {
+  z-index: 120;
+}
+
+#maincontent .cbi-value.md3e-value-dropdown-open,
+#maincontent .cbi-value-field.md3e-value-field-dropdown-open {
+  position: relative;
+  z-index: 160;
+}
+
+#maincontent .outline-select-panel,
+#maincontent .cbi-dropdown[open] > ul.dropdown,
+#maincontent .cbi-dropdown[open] > ul:not(.preview) {
+  z-index: 121;
+  padding: 0.25rem !important;
+  border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 38%, transparent) !important;
+  border-radius: 0.85rem !important;
+  background: var(--md-sys-color-surface-container-high, #ececf2) !important;
+  box-shadow:
+    0 14px 26px -22px rgb(0 0 0 / 0.2);
+  overflow: auto;
+  color: var(--foreground) !important;
+}
+
+#maincontent .outline-select-panel.above,
+#maincontent .cbi-dropdown[open] > ul.dropdown.above,
+#maincontent .cbi-dropdown[open] > ul:not(.preview).above {
+  transform-origin: bottom center;
+}
+
+#maincontent .outline-select-panel.align-end,
+#maincontent .cbi-dropdown[open] > ul.dropdown.align-end,
+#maincontent .cbi-dropdown[open] > ul:not(.preview).align-end {
+  transform-origin: top right;
+}
+
+#maincontent .outline-select-option {
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.72rem;
+  border-radius: 0.4rem;
+  background: transparent !important;
+  color: var(--md-sys-color-on-surface, #1d1b20);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+#maincontent .outline-select-option.selected {
+  color: var(--md-sys-color-on-secondary-container, #1d192b);
+  background: color-mix(in oklab, var(--md-sys-color-secondary-container, #e8def8) 46%, transparent) !important;
+}
+
+#maincontent .outline-select-option[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  #maincontent .outline-select-option:not([aria-disabled="true"]):hover {
+    background: color-mix(in oklab, currentColor 7%, transparent) !important;
+  }
+}
+
+.md3e-form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+
+@media not all and (min-width: 48rem) {
+  .md3e-card {
+    padding: 1rem;
+  }
+
+  .md3e-button-set {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .md3e-button-set > *,
+  #maincontent .right > a.btn {
+    width: 100%;
+  }
+
+  #maincontent .cbi-page-actions > * {
+    width: auto;
+  }
+}
+
+#maincontent :is(.cbi-map, .cbi-section, .cbi-section-node, .cbi-tabcontainer, .cbi-value):has(.outline-select.open, .cbi-dropdown[open]) {
+  position: relative;
+  z-index: 150 !important;
+}
+/* Content rows: no borders, stronger row surface, no corner artifacts. */
+#maincontent :is(.table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate !important;
+  border-spacing: 0 0.55rem !important;
+
+  :is(th, td, .th, .td, .cbi-section-table-cell) {
+    word-break: normal;
+    overflow-wrap: anywhere;
+    min-width: 0;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding-block: 0.62rem !important;
+    padding-inline: 1rem !important;
+    color: color-mix(in oklab, var(--md-sys-color-on-surface, #1d1b20) 88%, transparent);
+    line-height: 1.35;
+
+    &:first-child {
+      color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 82%, transparent) !important;
+      font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    &:not(:first-child) {
+      color: var(--md-sys-color-on-surface, #1d1b20) !important;
+      font-weight: 500;
+    }
+  }
+
+  :is(tr, .tr, .cbi-section-table-row) {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: color-mix(in oklab, var(--md-sys-color-surface-container-low, #f7f7fc) 88%, transparent);
+    box-shadow: none !important;
+  }
+
+  :is(tbody tr:nth-child(even), .tr:nth-child(even), .cbi-section-table-row:nth-child(even)) {
+    background: color-mix(in oklab, var(--md-sys-color-surface-container, #f1f1f8) 92%, transparent);
+  }
+
+  :is(tbody tr:hover, .tr:hover, .cbi-section-table-row:hover) {
+    background: color-mix(in oklab, var(--md-sys-color-surface-container-high, #ececf4) 94%, transparent);
+  }
+}
+
+#maincontent .cbi-value {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-low, #f7f7fc) 88%, transparent);
+  box-shadow: none !important;
+  padding-block: 0.62rem !important;
+  padding-inline: 1rem !important;
+  column-gap: 0.8rem;
+  align-items: center;
+}
+
+#maincontent .cbi-value:hover {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-high, #ececf4) 94%, transparent);
+}
+
+#maincontent :is(.cbi-value-title, .cbi-value-field) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#maincontent .cbi-value.md3e-value-rich-content {
+  padding-block: 0.85rem !important;
+}
+
+#maincontent .cbi-value-title {
+  color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 82%, transparent) !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+#maincontent .cbi-value-field {
+  color: var(--md-sys-color-on-surface, #1d1b20) !important;
+  font-weight: 500;
+  flex: 1 1 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* LuCI dynamic lists must shrink inside form rows instead of sizing from their contents. */
+#maincontent .cbi-dynlist,
+#maincontent .cbi-value-field > .cbi-dynlist {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  gap: 0.45rem 0.5rem;
+}
+
+#maincontent .cbi-dynlist > .item {
+  flex: 1 1 min(15.5rem, 100%);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#maincontent .cbi-dynlist > .item > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#maincontent .cbi-dynlist > .add-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  gap: 0.5rem;
+}
+
+#maincontent .cbi-dynlist > .add-item > .cbi-input-text {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+}
+
+#maincontent .cbi-dynlist > .add-item > .cbi-button,
+#maincontent .cbi-dynlist > .add-item > .cbi-button-add {
+  flex: 0 0 auto;
+  width: auto !important;
+  min-width: max-content;
+  min-height: 2.65rem;
+  height: 2.65rem !important;
+  padding-inline: 1rem !important;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  line-height: 1;
+  text-indent: 0;
+}
+
+/* Ensure hidden CBI values are strictly not displayed across all specificity layers */
+#maincontent .cbi-value.hidden,
+#maincontent .cbi-section-node .cbi-value.hidden {
+  display: none !important;
+}
+
+/* Shared tonal form group for native settings rows. */
+:is(#maincontent, .md3e-native-editor) .md3e-tonal-shell,
+:is(#maincontent, .md3e-native-editor) .md3e-tonal-settings > .cbi-section-node {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data, .cbi-value.md3e-tonal-data, .md3e-code-group.md3e-tonal-data):where(:not([data-tab]), [data-tab-active="true"]) {
+  --_settings-divider: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent);
+  container: md3e-settings / inline-size;
+  padding: .625rem clamp(.875rem, 2.5vw, 1.5rem) .5rem !important;
+  border-radius: var(--md-sys-shape-corner-extra-large) !important;
+  background: var(--md-sys-color-surface-container-low) !important;
+  box-shadow: none !important;
+
+  > :is(h3, h4) {
+    margin: .3rem 0 .45rem;
+    color: var(--md-sys-color-on-surface);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    font-weight: 600;
+  }
+
+  > .cbi-section-descr {
+    margin: 0 0 .35rem;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+}
+
+:is(#maincontent, .md3e-native-editor) .md3e-tonal-settings:where(:not([data-tab]), [data-tab-active="true"]) {
+  > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount),
+  > .cbi-section-node > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount) {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: .35rem 1rem !important;
+    padding: .55rem 0 !important;
+    background: transparent !important;
+
+    &:not(.md3e-value-dropdown-open) { margin-block: 0 !important; }
+    & ~ .cbi-value:not(.hidden) { border-block-start: var(--_settings-divider) !important; }
+
+    > .cbi-value-title {
+      width: auto !important;
+      margin: 0 !important;
+      overflow-wrap: anywhere;
+    }
+
+    > .cbi-value-field {
+      text-align: start;
+      > :is(input.cbi-input-text, select, textarea, .cbi-dropdown:not(.btn, .cbi-button)),
+      > div:has(> select + .outline-select),
+      > div:has(> select + .outline-select) > .outline-select,
+      > div:has(> select + .outline-select) > .outline-select > .outline-select-trigger,
+      > .outline-select:only-child,
+      > .outline-select:only-child > .outline-select-trigger {
+        inline-size: 100% !important;
+        max-inline-size: none !important;
+      }
+    }
+
+    @container md3e-settings (width >= 38rem) {
+      flex-direction: row !important;
+      align-items: start !important;
+      justify-content: space-between;
+
+      > .cbi-value-title { flex: 0 1 min(36%, 15rem) !important; padding-block: .5rem !important; }
+      > .cbi-value-field {
+        flex: 1 1 auto !important;
+        max-inline-size: 28rem !important;
+        margin-inline-start: auto !important;
+      }
+    }
+
+    &:not(:has(> .cbi-value-title)),
+    &:has(> .cbi-value-title:empty) {
+      > .cbi-value-field {
+        flex: 1 1 100% !important;
+        max-inline-size: 100% !important;
+        margin-inline-start: 0 !important;
+      }
+    }
+
+    &:has(> .cbi-value-field > :is(.cbi-checkbox, input[type="checkbox"])) {
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between;
+
+      > .cbi-value-title { flex: 1 1 auto !important; padding: 0 !important; }
+      > .cbi-value-field { flex: none !important; width: auto !important; }
+    }
+
+    &:has(> .cbi-value-field > :is(button, .cbi-button):only-child),
+    &:has(> .cbi-value-field > output > :is(button, .cbi-button):only-child):not(:has(> .cbi-value-field > :not(output):not(input[type="hidden"]))) {
+      @container md3e-settings (width >= 38rem) {
+        align-items: center !important;
+
+        > .cbi-value-title { flex: 1 1 auto !important; max-inline-size: 42rem; }
+        > .cbi-value-field { flex: none !important; width: auto !important; max-inline-size: none !important; margin-inline-start: auto !important; }
+      }
+    }
+  }
+}
+
+#maincontent .cbi-value.md3e-tonal-data:not(.hidden) {
+  display: block !important;
+  max-width: 100%;
+  margin-block: 0 var(--space-md) !important;
+}
+
+#maincontent .md3e-tonal-data > .cbi-section {
+  margin: 0;
+  padding: 0 !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) {
+  display: flex;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-items: center !important;
+  gap: 0.625rem;
+  margin-block: .35rem 0 !important;
+  padding: .55rem 0 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) > div:has(> input.cbi-section-create-name) {
+  flex: 1 1 12rem !important;
+  min-inline-size: 9rem;
+  max-inline-size: 20rem;
+  width: auto !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) input.cbi-section-create-name {
+  width: 100% !important;
+  min-inline-size: 0;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) > :is(.cbi-button, .cbi-button-add, button, input[type="submit"], input[type="button"]) {
+  flex: 0 0 auto !important;
+  inline-size: max-content !important;
+  width: auto !important;
+  min-inline-size: 4.5rem;
+  max-inline-size: 100%;
+  align-self: center;
+}
+
+.md3e-data-help {
+  margin-block: .25rem .45rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md3e-data-help > summary {
+  color: var(--md-sys-color-primary);
+  cursor: pointer;
+}
+/* Dark mode: reduce bright layer contrast and keep surfaces separated by tone. */
+[data-darkmode="true"] #maincontent .cbi-page-actions {
+  --_md3e-action-shell-bg: color-mix(in oklab, var(--md-sys-color-surface-container, #211f26) 84%, transparent);
+  --_md3e-action-shell-border: color-mix(in oklab, var(--md-sys-color-surface-container-highest, #36343b) 26%, transparent);
+  --_md3e-action-divider: color-mix(in oklab, var(--md-sys-color-surface-container-highest, #36343b) 24%, transparent);
+  box-shadow:
+    0 18px 34px -30px rgb(0 0 0 / 0.54);
+}
+
+[data-darkmode="true"] #maincontent :is(table, .table, .cbi-section-table) :is(tr, .tr, .cbi-section-table-row),
+[data-darkmode="true"] #maincontent .cbi-value {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-low, #1d1b20) 76%, transparent);
+}
+
+[data-darkmode="true"] #maincontent :is(table, .table, .cbi-section-table) :is(tbody tr:nth-child(even), .tr:nth-child(even), .cbi-section-table-row:nth-child(even)) {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container, #211f26) 82%, transparent);
+}
+
+[data-darkmode="true"] #maincontent :is(table, .table, .cbi-section-table) :is(tbody tr:hover, .tr:hover, .cbi-section-table-row:hover),
+[data-darkmode="true"] #maincontent .cbi-value:hover {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-high, #2b2930) 84%, transparent);
+}
+
+[data-darkmode="true"] #maincontent .outline-select-panel,
+[data-darkmode="true"] #maincontent .cbi-dropdown[open] > ul.dropdown,
+[data-darkmode="true"] #maincontent .cbi-dropdown[open] > ul:not(.preview) {
+  border-color: color-mix(in oklab, var(--md-sys-color-outline-variant, #49454f) 34%, transparent) !important;
+  background: var(--md-sys-color-surface-container-high, #2b2930) !important;
+  box-shadow:
+    0 16px 30px -24px rgb(0 0 0 / 0.62);
+}
+
+[data-darkmode="true"] #maincontent #tabmenu {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+[data-darkmode="true"] #maincontent #tabmenu > .tabs,
+[data-darkmode="true"] #maincontent .cbi-tabmenu {
+  background: color-mix(
+    in oklab,
+    var(--md-sys-color-surface-container-high, #282a2f) 90%,
+    var(--md-sys-color-surface-container-highest, #33353a) 10%
+  ) !important;
+  box-shadow: none !important;
+}
+
+[data-darkmode="true"] .md3e-on-this-page__link.active {
+  box-shadow: none;
+}
+
+/* Align the desktop rail logo with the primary navigation buttons. */
+body[data-layout-mode="desktop"] .md3e-mode-rail {
+  align-items: center;
+}
+
+/* Desktop rail active state: filled pill without an outer ring. */
+body[data-layout-mode="desktop"] .md3e-mode-rail .md3e-mode-link.active {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+body[data-layout-mode="desktop"] .md3e-mode-rail .md3e-mode-link.active .md3e-mode-link__icon {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+body[data-layout-mode="desktop"] .md3e-mode-rail .md3e-mode-link.active:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md-sys-color-primary, #6750a4) 42%, transparent) !important;
+  outline-offset: 2px !important;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo {
+  width: 3.5rem;
+  height: 3.5rem;
+  min-height: 3.5rem;
+  margin: 0.75rem auto 1rem;
+  border-radius: 1rem;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  line-height: 0;
+  position: relative;
+  text-decoration: none;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--md-sys-color-primary-container, #d8e2ff) 86%, var(--md-sys-color-surface-container-high, #e0e5f1));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cpath%20fill%3D'black'%20d%3D'M%2032.00%202.50%20C%2036.65%202.50%2C%2038.66%207.46%2C%2042.85%209.48%20C%2047.03%2011.49%2C%2052.17%209.97%2C%2055.06%2013.61%20C%2057.96%2017.24%2C%2055.34%2021.91%2C%2056.37%2026.44%20C%2057.41%2030.97%2C%2061.79%2034.03%2C%2060.76%2038.56%20C%2059.73%2043.10%2C%2054.44%2043.95%2C%2051.55%2047.59%20C%2048.65%2051.22%2C%2048.99%2056.56%2C%2044.80%2058.58%20C%2040.61%2060.59%2C%2036.65%2057.00%2C%2032.00%2057.00%20C%2027.35%2057.00%2C%2023.39%2060.59%2C%2019.20%2058.58%20C%2015.01%2056.56%2C%2015.35%2051.22%2C%2012.45%2047.59%20C%209.56%2043.95%2C%204.27%2043.10%2C%203.24%2038.56%20C%202.21%2034.03%2C%206.59%2030.97%2C%207.63%2026.44%20C%208.66%2021.91%2C%206.04%2017.24%2C%208.94%2013.61%20C%2011.83%209.97%2C%2016.97%2011.49%2C%2021.15%209.48%20C%2025.34%207.46%2C%2027.35%202.50%2C%2032.00%202.50%20Z'%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cpath%20fill%3D'black'%20d%3D'M%2032.00%202.50%20C%2036.65%202.50%2C%2038.66%207.46%2C%2042.85%209.48%20C%2047.03%2011.49%2C%2052.17%209.97%2C%2055.06%2013.61%20C%2057.96%2017.24%2C%2055.34%2021.91%2C%2056.37%2026.44%20C%2057.41%2030.97%2C%2061.79%2034.03%2C%2060.76%2038.56%20C%2059.73%2043.10%2C%2054.44%2043.95%2C%2051.55%2047.59%20C%2048.65%2051.22%2C%2048.99%2056.56%2C%2044.80%2058.58%20C%2040.61%2060.59%2C%2036.65%2057.00%2C%2032.00%2057.00%20C%2027.35%2057.00%2C%2023.39%2060.59%2C%2019.20%2058.58%20C%2015.01%2056.56%2C%2015.35%2051.22%2C%2012.45%2047.59%20C%209.56%2043.95%2C%204.27%2043.10%2C%203.24%2038.56%20C%202.21%2034.03%2C%206.59%2030.97%2C%207.63%2026.44%20C%208.66%2021.91%2C%206.04%2017.24%2C%208.94%2013.61%20C%2011.83%209.97%2C%2016.97%2011.49%2C%2021.15%209.48%20C%2025.34%207.46%2C%2027.35%202.50%2C%2032.00%202.50%20Z'%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  transition:
+    transform var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    background-color var(--md-sys-motion-effects-fast-duration, 225ms) ease;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo img {
+  position: relative;
+  z-index: 1;
+  width: 1.875rem;
+  height: 1.875rem;
+  display: block;
+  object-fit: contain;
+  margin: auto;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md-sys-color-primary, #445e91) 52%, transparent);
+  outline-offset: 2px;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo:active::before {
+  transform: scale(0.94);
+}
+
+@media (hover: hover) {
+  body[data-layout-mode="desktop"] .md3e-rail-logo:hover {
+    background: transparent;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+  body[data-layout-mode="desktop"] .md3e-rail-logo:hover::before {
+    transform: scale(1.06);
+    background: var(--md-sys-color-primary-container, #d8e2ff);
+  }
+}
+
+[data-darkmode="true"] body[data-layout-mode="desktop"] .md3e-rail-logo::before {
+  background: color-mix(in oklab, var(--md-sys-color-primary-fixed, #d8e2ff) 88%, transparent);
+}
+
+@media (hover: hover) {
+  [data-darkmode="true"] body[data-layout-mode="desktop"] .md3e-rail-logo:hover::before {
+    background: var(--md-sys-color-primary-fixed, #d8e2ff);
+  }
+}
+/* Tab styling has been consolidated into src/media/main/23-segmented-tabs.css.
+   Mobile responsive table card rules remain here under the mobile breakpoint. */
+@media (max-width: 920px) {
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(thead, tbody) {
+    display: block;
+    width: 100%;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(tr, .tr, .cbi-section-table-row) {
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+    gap: 0.35rem 0.75rem;
+    align-items: center;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(th, td, .th, .td, .cbi-section-table-cell) {
+    width: auto !important;
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    hyphens: none;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) .md3e-table-action-cell {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    white-space: normal;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(tr.table-titles, .tr.table-titles) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) .md3e-table-data-title-row {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title] {
+    display: grid !important;
+    grid-template-columns: minmax(7rem, 34%) minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: start;
+    padding-block: 0.42rem !important;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title]::before {
+    content: attr(data-title);
+    display: block !important;
+    color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 82%, transparent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title] > * {
+    min-width: 0;
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+/* Ultra-wide supporting pane: page-local section outline. */
+.md3e-on-this-page {
+  display: none;
+}
+
+.md3e-on-this-page__nav {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.375rem 0.25rem;
+  background: transparent;
+  box-shadow: none;
+}
+
+.md3e-on-this-page__title {
+  padding: 0 1.1rem;
+  color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 76%, transparent);
+  font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.md3e-on-this-page__list {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.md3e-on-this-page__link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 10rem;
+  min-width: 0;
+  padding: 0.44rem 0.95rem;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 82%, transparent);
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.md3e-on-this-page__link.active {
+  color: var(--md-sys-color-on-secondary-container, #1d1b20);
+  background: color-mix(in oklab, var(--md-sys-color-secondary-container) 78%, transparent);
+  box-shadow: none;
+  font-weight: 620;
+}
+
+@media (hover: hover) {
+  .md3e-on-this-page__link:hover {
+    color: var(--md-sys-color-on-surface, #1d1b20);
+    background: color-mix(in oklab, currentColor 6%, transparent);
+    text-decoration: none;
+  }
+}
+
+#maincontent .cbi-section.md3e-outline-target-focus {
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--md-sys-color-primary, #6750a4) 18%, transparent),
+    0 14px 30px -24px var(--expressive-shadow, rgb(0 0 0 / 0.24)) !important;
+  transition: box-shadow 0.18s ease;
+}
+
+@media (min-width: 921px) and (min-height: 36rem) {
+  body:not([data-layout-mode="mobile"]) #maincontent {
+    --md3e-rail-right: var(--nav-rail-width, 5.5rem);
+    --md3e-content-min-gap: 1.5rem;
+    --md3e-page-end-gap: clamp(1rem, 2vw, 2rem);
+    --md3e-content-max-width: 72rem;
+    --md3e-outline-width: 10rem;
+    --md3e-outline-gap: clamp(1rem, 1.45vw, 1.5rem);
+    --md3e-layout-available: calc(100vw - var(--md3e-rail-right) - var(--md3e-content-min-gap) - var(--md3e-page-end-gap));
+    --md3e-layout-content-width: min(var(--md3e-content-max-width), var(--md3e-layout-available));
+    --md3e-content-min-left: calc(var(--md3e-rail-right) + var(--md3e-content-min-gap));
+    --md3e-content-left: max(var(--md3e-content-min-left), calc((100vw - var(--md3e-layout-content-width)) / 2));
+    box-sizing: border-box;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  body:not([data-layout-mode="mobile"]) #maincontent > .docs-content {
+    width: var(--md3e-layout-content-width);
+    max-width: none;
+    margin-left: var(--md3e-content-left) !important;
+    margin-right: 0 !important;
+  }
+}
+
+@media (min-width: 96rem) and (min-height: 36rem) {
+  body:not([data-layout-mode="mobile"]).md3e-has-page-outline #maincontent {
+    --md3e-layout-content-width: min(var(--md3e-content-max-width), calc(var(--md3e-layout-available) - var(--md3e-outline-gap) - var(--md3e-outline-width)));
+    --md3e-content-max-left: calc(100vw - var(--md3e-page-end-gap) - var(--md3e-outline-width) - var(--md3e-outline-gap) - var(--md3e-layout-content-width));
+    --md3e-content-left: max(var(--md3e-content-min-left), min(var(--md3e-content-max-left), calc((100vw - var(--md3e-layout-content-width)) / 2)));
+  }
+
+  body:not([data-layout-mode="mobile"]).md3e-has-page-outline #maincontent > .docs-content {
+    width: var(--md3e-layout-content-width);
+    margin-left: var(--md3e-content-left) !important;
+    margin-right: 0 !important;
+  }
+
+  body[data-layout-mode="desktop"].md3e-has-page-outline #maincontent > .md3e-on-this-page {
+    display: block;
+    position: fixed;
+    left: calc(var(--md3e-content-left) + var(--md3e-layout-content-width) + var(--md3e-outline-gap));
+    width: var(--md3e-outline-width);
+    top: 6rem;
+    max-height: calc(100vh - 7.25rem);
+    min-width: 0;
+    overflow: auto;
+    padding-block: 0.25rem;
+  }
+}

@@ -1,0 +1,124 @@
+#maincontent .cbi-page-actions > .md3e-action-group {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3px;
+  min-height: 2.75rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  flex: 0 0 auto;
+  overflow: visible;
+  order: 1;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset {
+  order: 1;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save {
+  order: 2;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+#maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+#maincontent .cbi-page-actions > .cbi-button-reset {
+  position: relative;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 1.125rem;
+  border: 0 !important;
+  border-radius: 1.375rem !important;
+  box-shadow: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition:
+    border-radius var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    padding-inline var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    background-color var(--md-sys-motion-effects-fast-duration, 225ms) ease,
+    color var(--md-sys-motion-effects-fast-duration, 225ms) ease;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+}
+
+/* Leading in connected group (Reset, order: 1): outer-left 22px (1.375rem), inner-right 8px (0.5rem) */
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child) {
+  border-radius: 1.375rem 0.5rem 0.5rem 1.375rem !important;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):active {
+  border-radius: 1.375rem 0.25rem 0.25rem 1.375rem !important;
+  padding-inline: 1.375rem;
+}
+
+/* Trailing in connected group (Save, order: 2): inner-left 8px (0.5rem), outer-right 22px (1.375rem) */
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child) {
+  border-radius: 0.5rem 1.375rem 1.375rem 0.5rem !important;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):active {
+  border-radius: 0.25rem 1.375rem 1.375rem 0.25rem !important;
+  padding-inline: 1.375rem;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:only-child:active,
+#maincontent .cbi-page-actions > .cbi-button-save:only-child:active,
+#maincontent .cbi-page-actions > .cbi-button-reset:only-child:active {
+  border-radius: 0.75rem !important;
+  padding-inline: 1.375rem;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save,
+#maincontent .cbi-page-actions > .cbi-button-save:only-child {
+  background: var(--_md3e-action-save-bg) !important;
+  color: var(--_md3e-action-save-fg) !important;
+}
+
+#maincontent .cbi-page-actions > .cbi-button-reset,
+#maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset {
+  background: var(--_md3e-action-reset-bg) !important;
+  color: var(--_md3e-action-reset-fg) !important;
+}
+
+@media (hover: hover) {
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:hover,
+  #maincontent .cbi-page-actions > .cbi-button-save:only-child:hover {
+    background: var(--_md3e-action-save-hover) !important;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):hover {
+    border-radius: 0.75rem 1.375rem 1.375rem 0.75rem !important;
+  }
+
+  #maincontent .cbi-page-actions > .cbi-button-reset:hover,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:hover {
+    background: var(--_md3e-action-reset-hover) !important;
+    color: var(--md-sys-color-on-error-container) !important;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):hover {
+    border-radius: 1.375rem 0.75rem 0.75rem 1.375rem !important;
+  }
+}
+
+.md3e-action-group > .cbi-button:focus-visible,
+:is(.md3e-split-button, [data-md3e-split-button]):focus-within,
+:is(.md3e-split-button, [data-md3e-split-button]) > .open:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md3e-comp-field-focus) 34%, transparent);
+  outline-offset: 2px;
+}
+
+:is(.md3e-split-button, [data-md3e-split-button]) > .open:focus-visible {
+  outline-offset: -2px;
+}

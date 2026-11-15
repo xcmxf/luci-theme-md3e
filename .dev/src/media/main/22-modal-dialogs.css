@@ -1,0 +1,355 @@
+@layer components {
+  @layer modal {
+    #modal_overlay {
+      @apply pointer-events-none fixed top-0 bottom-0 hidden overflow-auto bg-transparent;
+
+      .modal-overlay-active & {
+        @apply bg-overlay-base/70 pointer-events-auto inset-0 right-0 left-0 z-100 grid grid-cols-1 place-items-center p-6 max-md:p-3;
+      }
+
+      & > .modal {
+        @apply border-border/50 bg-page-bg flex w-4xl max-w-full max-h-[90vh] flex-col gap-4 overflow-y-auto rounded-xl border p-6 wrap-break-word whitespace-normal max-md:max-h-[95vh] max-md:gap-3 max-md:p-4;
+        box-shadow: 0 18px 42px -32px var(--expressive-shadow);
+
+        &.cbi-modal:has(> .cbi-map + .button-row) {
+          overflow: hidden;
+
+          & > .cbi-map {
+            min-height: 0;
+            overflow: auto;
+            padding: 0.375rem;
+          }
+        }
+
+        & h4 {
+          @apply mb-0 text-center;
+          & em {
+            @apply text-primary font-semibold;
+          }
+        }
+
+        & h5 {
+          @apply text-foreground my-3;
+        }
+
+        & p {
+          @apply text-default-foreground text-base leading-relaxed;
+        }
+
+        & > ul {
+          @apply border-border/60 bg-page-bg/60 overflow-auto rounded-md border p-3;
+        }
+
+        & label.btn {
+          @apply border-border/60 bg-page-bg/60 text-foreground hover:border-border border;
+        }
+
+        & pre {
+          @apply overflow-auto;
+
+          &.errors {
+            @apply border-error/60 bg-error/20 text-error-foreground;
+          }
+        }
+
+        pre + pre {
+          @apply mt-3;
+        }
+
+        & .button-row,
+        & div.left,
+        & div.right {
+          @apply border-border/80 flex shrink-0 gap-3 border-t p-4 max-md:gap-1.5 max-md:p-2.5;
+        }
+
+        & div.left {
+          @apply justify-start;
+        }
+
+        & .button-row,
+        & div.right {
+          @apply justify-end;
+        }
+
+        &.uci-dialog {
+          background: var(--md-sys-color-surface-container-high);
+          color: var(--md-sys-color-on-surface);
+          border-radius: var(--md-sys-shape-corner-extra-large);
+          padding: 24px;
+          gap: 12px;
+
+          & > h4 {
+            margin: 0;
+            text-align: start;
+            font-size: var(--md-sys-typescale-title-large-size);
+            font-weight: 600;
+            line-height: var(--md-sys-typescale-title-large-line-height);
+            overflow-wrap: anywhere;
+          }
+
+          /* Native <br> separators are redundant once blocks carry their own rhythm. */
+          & > .cbi-section > br,
+          & .uci-change-list > br {
+            display: none;
+          }
+
+          & > .cbi-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+          }
+
+          & > .cbi-section > strong {
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: var(--md-sys-typescale-label-medium-size);
+            font-weight: var(--md-sys-typescale-label-medium-weight);
+            letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+          }
+
+          & :is(ins, del, var) {
+            font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-style: normal;
+            text-decoration: none;
+          }
+
+          & ins {
+            background: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+          }
+
+          & del {
+            background: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+          }
+
+          & var {
+            background: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+          }
+
+          & .uci-change-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            margin: 0;
+            padding: 10px 12px;
+            overflow: visible;
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: var(--md-sys-shape-corner-medium);
+            background: var(--md-sys-color-surface-container);
+          }
+
+          & .uci-change-legend-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: var(--md-sys-typescale-label-small-size);
+            font-weight: var(--md-sys-typescale-label-small-weight);
+            line-height: var(--md-sys-typescale-label-small-line-height);
+            overflow-wrap: anywhere;
+          }
+
+          & .uci-change-legend-label :is(ins, del, var) {
+            flex: none;
+            padding: 1px 5px;
+            border-radius: var(--md-sys-shape-corner-extra-small);
+            font-size: var(--md-sys-typescale-label-small-size);
+            font-weight: 600;
+          }
+
+          & .uci-change-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+            margin: 0;
+            padding: 0;
+            overflow: visible;
+          }
+
+          & .uci-change-list h5 {
+            margin: 0;
+            padding: 0;
+            background: none;
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: var(--md-sys-typescale-label-medium-size);
+            font-weight: var(--md-sys-typescale-label-medium-weight);
+            letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+            overflow-wrap: anywhere;
+
+            &:not(:first-child) {
+              margin-block-start: 6px;
+            }
+          }
+
+          /* One compact tonal block per change; nested markup stays inline. */
+          & .uci-change-list > :is(ins, del, var) {
+            display: block;
+            margin: 0;
+            padding: 8px 10px;
+            border-radius: var(--md-sys-shape-corner-small);
+            font-size: var(--md-sys-typescale-body-small-size);
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+          }
+
+          & .uci-change-list > var:has(> ins) {
+            background: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+          }
+
+          & .uci-change-list > var:has(> del) {
+            background: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+          }
+
+          & .uci-change-list var > :is(ins, del) {
+            display: inline;
+            margin: 0;
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+          }
+
+          & > .cbi-section > .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            margin: 0;
+            padding: 12px 0 0;
+            border-top: 1px solid var(--md-sys-color-outline-variant);
+          }
+
+          /* Native button and ComboButton colours/states stay untouched. */
+          & > .cbi-section > .button-row :is(button, .btn, .cbi-button) {
+            min-height: 44px;
+            min-width: 44px;
+            white-space: normal;
+          }
+        }
+      }
+    }
+
+    body[data-page^="admin-network-"] #modal_overlay > .cbi-modal:has(> .cbi-map):not(.md3e-native-editor) {
+      border-radius: var(--md-sys-shape-corner-extra-large);
+
+      > h4 {
+        text-align: start;
+        font-size: var(--md-sys-typescale-headline-small-size);
+        font-weight: 650;
+        overflow-wrap: anywhere;
+      }
+
+      > .button-row {
+        flex-wrap: wrap;
+        padding: 0.65rem 0 0;
+      }
+    }
+
+    /* Native CBI config editors (Interfaces, Static Routes, Firewall rules):
+       tonal dialog surface, restrained heading and a persistent footer. The
+       form area reuses the page-level tonal settings rows. */
+    #modal_overlay > .modal.md3e-native-editor {
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface);
+      border-color: transparent;
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      padding: 1.25rem 1.25rem 0;
+      gap: 0.75rem;
+
+      & > h4 {
+        margin: 0;
+        padding-inline: 0.25rem;
+        text-align: start;
+        font-size: var(--md-sys-typescale-title-large-size);
+        font-weight: 600;
+        line-height: var(--md-sys-typescale-title-large-line-height);
+        color: var(--md-sys-color-on-surface);
+        overflow-wrap: anywhere;
+      }
+
+      & > .cbi-map {
+        min-height: 0;
+        padding: 0;
+      }
+
+      & > .cbi-map > .cbi-section {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      /* Drop the page-level nested panel outline; tonal settings panels keep
+         their own surface through the shared component rules. */
+      :is(.cbi-section-node-tabbed, .cbi-section-node) {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      & > .button-row {
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 0.75rem 0;
+        border-top: 1px solid var(--md-sys-color-outline-variant);
+        background: transparent;
+      }
+
+      /* Native selects and CBI dropdowns share one field width and may shrink
+         below their content so narrow dialogs never overflow. */
+      .cbi-value-field > :is(select, .cbi-dropdown:not(.btn, .cbi-button)) {
+        max-width: 100%;
+        min-width: 0;
+      }
+    }
+
+    /* Modal entrance/exit animations */
+    .modal-overlay-active & {
+      animation: modal-overlay-enter 200ms ease-out;
+    }
+
+    .modal-overlay-exit & {
+      animation: modal-overlay-exit 150ms ease-in forwards;
+    }
+
+    & > .modal {
+      animation: modal-enter 200ms ease-out;
+
+      &.modal-exit {
+        animation: modal-exit 150ms ease-in forwards;
+      }
+    }
+
+    @keyframes modal-overlay-enter {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes modal-overlay-exit {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @keyframes modal-enter {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes modal-exit {
+      from { opacity: 1; transform: scale(1) translateY(0); }
+      to { opacity: 0; transform: scale(0.96) translateY(8px); }
+    }
+  }
+}

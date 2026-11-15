@@ -1,0 +1,37 @@
+@layer components {
+  @layer tab {
+    #tabmenu {
+      @apply w-full flex;
+      justify-content: safe center;
+      margin-bottom: 1.25rem;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 520px) {
+      #tabmenu {
+        justify-content: flex-start;
+        padding-inline: 0.25rem;
+      }
+    }
+
+    .cbi-section-node-tabbed {
+      margin-top: 0;
+      overflow: visible !important;
+    }
+
+    .cbi-section-node {
+      @apply flex flex-col gap-0 pt-4;
+      overflow: visible !important;
+      padding: 1.85rem 2rem 2.2rem;
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      border: none;
+      background: color-mix(in oklab, var(--panel-raised) 92%, transparent);
+      box-shadow: 0 18px 48px -40px var(--expressive-shadow);
+
+      & > .cbi-value + .cbi-value {
+        @apply mt-6 border-t-0;
+      }
+    }
+  }
+}

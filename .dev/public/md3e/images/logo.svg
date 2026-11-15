@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" shape-rendering="geometricPrecision" role="img" aria-label="MD3E logo">
+  <path d="M50.4 13.6C55 18.2 49 26.1 45 32C49 37.9 55 45.8 50.4 50.4C45.8 55 37.9 49 32 45C26.1 49 18.2 55 13.6 50.4C9 45.8 15 37.9 19 32C15 26.1 9 18.2 13.6 13.6C18.2 9 26.1 15 32 19C37.9 15 45.8 9 50.4 13.6Z" fill="#6750A4"/>
+  <rect x="21" y="21" width="21.5" height="4.8" rx="2.4" fill="#FFFFFF"/>
+  <rect x="21" y="29.6" width="14.5" height="4.8" rx="2.4" fill="#FFFFFF" opacity="0.92"/>
+  <rect x="21" y="38.2" width="21.5" height="4.8" rx="2.4" fill="#FFFFFF"/>
+</svg>

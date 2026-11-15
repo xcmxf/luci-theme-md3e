@@ -1,0 +1,29 @@
+<div class="md3e-mobile-topbar{{ in_dialog ? ' md3e-mobile-topbar--dialog' : '' }}">
+	{% if (in_dialog): %}
+	<button type="button" class="md3e-mobile-topbar-action" id="mobile-nav-close" data-md3e-close data-md3e-view="menu" aria-label="{{ _('Close menu') }}" autofocus>
+		<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M4 12h9M4 18h12M20 8l-4 4 4 4"/></svg>
+	</button>
+	<button type="button" class="md3e-mobile-topbar-action" data-md3e-open="menu" data-md3e-view="search" aria-label="{{ _('Open menu') }}">
+		<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+	</button>
+	{% else %}
+	<button type="button" class="md3e-mobile-topbar-action" id="mobile-menu-btn" data-md3e-open="menu" aria-label="{{ _('Open menu') }}" aria-expanded="false" aria-controls="mobile-menu-overlay" aria-haspopup="dialog">
+		<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+	</button>
+	{% endif %}
+	<a class="mobile-header-brand" href="{{ brand_url }}" aria-label="{{ _('Home') }}" title="{{ brand_label }}">
+		<img class="mobile-header-brand-logo" src="{{ brand_src }}" alt="" width="24" height="24">
+	</a>
+	{% if (in_dialog): %}
+	<button type="button" class="md3e-mobile-topbar-action md3e-mobile-topbar-trailing" data-md3e-open="search" data-md3e-view="menu" aria-label="{{ _('Search pages') }}">
+		<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m20 20-5.5-5.5M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"/></svg>
+	</button>
+	<button type="button" class="md3e-mobile-topbar-action md3e-mobile-topbar-trailing" data-md3e-close data-md3e-view="search" aria-label="{{ _('Close search') }}">
+		<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
+	</button>
+	{% else %}
+	<button type="button" class="md3e-mobile-topbar-action md3e-mobile-topbar-trailing" id="mobile-search-btn" data-md3e-open="search" aria-label="{{ _('Search pages') }}" aria-expanded="false" aria-controls="mobile-menu-overlay" aria-haspopup="dialog">
+		<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m20 20-5.5-5.5M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"/></svg>
+	</button>
+	{% endif %}
+</div>

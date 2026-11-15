@@ -1,0 +1,471 @@
+@layer components {
+  @layer shell-pro {
+    .md3e-native-row-action { display: none !important; }
+
+    #cbi-firewall :is(.cbi-section-table-titles, [data-name="enabled"]) {
+      overflow-wrap: anywhere;
+    }
+
+    .md3e-log-panel {
+      container: md3e-log / inline-size;
+      min-inline-size: 0;
+    }
+
+    #maincontent .md3e-log-panel > .md3e-log-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.75rem;
+      align-items: stretch;
+      padding: var(--md3e-content-edge);
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      background: var(--md-sys-color-surface-container-low);
+
+      @container md3e-log (width >= 32rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      @container md3e-log (width >= 54rem) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @container md3e-log (32rem <= width < 54rem) {
+      .md3e-log-field-range { grid-column: 1 / -1; }
+    }
+
+    #maincontent .md3e-log-panel :is(#syslog, #log_textarea) {
+      min-block-size: min(56dvh, 40rem);
+      max-block-size: min(76dvh, 52rem);
+      border-radius: var(--md-sys-shape-corner-large);
+      border-color: var(--md-sys-color-outline-variant) !important;
+      color: var(--md-sys-color-on-surface) !important;
+      background: var(--md-sys-color-surface-container-lowest) !important;
+      box-shadow: none !important;
+    }
+
+    .md3e-log-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      min-inline-size: 0;
+
+      .md3e-log-label-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        min-height: 1.5rem;
+      }
+
+      > label,
+      .md3e-log-label-row > label:not(.md3e-log-invert) {
+        margin: 0 !important;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--md-sys-color-on-surface-variant);
+        white-space: normal;
+        overflow-wrap: anywhere;
+        cursor: pointer;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      :is(input:not([type="checkbox"]), select, .md3e-log-toggle-field, .md3e-log-range-inputs) {
+        width: 100%;
+        min-inline-size: 0;
+        height: 2.25rem !important;
+        min-height: 2.25rem !important;
+        line-height: normal;
+        margin: 0 !important;
+        padding: 0.25rem 0.65rem;
+        font-size: 0.8125rem;
+        border-radius: var(--md-sys-shape-corner-full);
+        box-sizing: border-box;
+      }
+
+      select {
+        padding-inline-end: 2.25rem;
+      }
+    }
+
+    .md3e-log-toggle-field {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: var(--md-sys-color-on-surface);
+      cursor: pointer;
+      user-select: none;
+
+      input[type="checkbox"] {
+        margin: 0 !important;
+        cursor: pointer;
+        width: 0.95rem;
+        height: 0.95rem;
+        accent-color: var(--md-sys-color-primary);
+      }
+
+      span {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .md3e-log-invert {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-shrink: 0;
+      white-space: nowrap;
+      height: 100%;
+      padding-inline: 0.4rem;
+      border-radius: var(--md-sys-shape-corner-small);
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+      line-height: 1;
+
+      &:hover {
+        background: var(--md-sys-color-surface-container-high);
+        color: var(--md-sys-color-on-surface);
+      }
+
+
+
+      input[type="checkbox"] {
+        margin: 0 !important;
+        cursor: pointer;
+        width: 0.95rem;
+        height: 0.95rem;
+        accent-color: var(--md-sys-color-primary);
+      }
+    }
+
+    :is(#content_syslog, #content_dmesg) .md3e-log-jump {
+      display: inline-flex;
+      margin-block-end: 0.5rem !important;
+
+      button {
+        margin: 0 !important;
+        height: 2rem;
+        font-size: 0.8125rem;
+        padding-inline: 0.75rem;
+        border-radius: var(--md-sys-shape-corner-full);
+      }
+    }
+
+    #maincontent #cbi-system {
+      max-inline-size: 100%;
+
+      > .cbi-section {
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+        border: 0;
+        > h3 { display: none; }
+      }
+    }
+
+
+
+    body[data-page="admin-system-reboot"] #maincontent #view {
+      max-inline-size: 36rem;
+      /* The workspace resets #view padding in the shared layout. */
+      padding: var(--md3e-content-edge) !important;
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid color-mix(in oklab, var(--md-sys-color-error) 25%, transparent);
+
+      > p {
+        color: var(--md-sys-color-on-surface-variant);
+        margin-block: 0 1rem;
+      }
+      > button {
+        max-inline-size: 100%;
+        margin: 0;
+        white-space: normal;
+      }
+      > hr { display: none; }
+    }
+
+    :is(body[data-page="admin-system-reboot"] #view, body[data-page="admin-system-flash"] #cbi-json-actions-sysupgrade) button {
+      background: var(--md-sys-color-error) !important;
+      color: var(--md-sys-color-on-error) !important;
+      border-color: var(--md-sys-color-error) !important;
+
+      &:hover {
+        background: color-mix(in oklab, var(--md-sys-color-error) 90%, black) !important;
+      }
+    }
+
+    #cbi-json-keys .md3e-native-grid {
+      td[data-name="filename"] { overflow-wrap: anywhere; }
+      textarea { display: block; inline-size: 100%; max-inline-size: 100%; }
+    }
+
+    #maincontent .md3e-ssh-key-list > .cbi-dynlist {
+      gap: 0;
+
+      > .item {
+        display: block;
+        flex: 0 0 100%;
+        padding: 0.65rem 2.25rem 0.65rem 0.25rem !important;
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        overflow-wrap: anywhere;
+
+        > br { display: none; }
+        > :is(strong, small) { display: block; }
+        code { white-space: normal; }
+      }
+
+      > .add-item {
+        padding: 0.75rem 0 0.25rem !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+
+      > .item + :is(.item, .add-item) {
+        border-block-start: var(--_settings-divider) !important;
+      }
+    }
+
+    #cbi-system [data-name="_systime"] .md3e-clock-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem 0.55rem;
+      min-inline-size: 0;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      > span { font-variant-numeric: tabular-nums; font-weight: 650; }
+      > button { max-inline-size: 100%; min-block-size: 2.75rem; margin: 0; white-space: normal; }
+    }
+  
+    /* Match LuCI's overview markup so it is styled as soon as it renders. */
+    :is(
+      [data-page="admin-system-attendedsysupgrade"],
+      [data-page="admin-system-attendedsysupgrade-overview"]
+    ) #view > p:has(> button.cbi-button-positive) {
+      display: grid;
+      justify-items: start;
+      gap: 0.65rem;
+      max-inline-size: var(--md3e-content-readable-width);
+      margin-block-start: 0;
+      padding: var(--md3e-content-edge);
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      background: var(--md-sys-color-surface-container-low);
+      overflow-wrap: anywhere;
+
+      > p {
+        margin: 0;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      > h2 { display: none; }
+
+      > p:last-of-type {
+        inline-size: 100%;
+        margin-block-start: 0.35rem;
+        padding-block-start: 0.75rem;
+        border-block-start: 1px solid var(--md-sys-color-outline-variant);
+        color: var(--md-sys-color-on-surface);
+        font-weight: 600;
+      }
+
+      > button { margin: 0; max-inline-size: 100%; white-space: normal; }
+    }
+
+    [data-page="admin-system-attendedsysupgrade-configuration"] {
+      .cbi-map { max-width: var(--md3e-content-form-max-width); }
+      .cbi-value { padding-block: 0.75rem; }
+    }
+
+    .md3e-log-field-range {
+      .md3e-log-range-inputs {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+
+        input {
+          flex: 1 1 0;
+          min-width: 0;
+          min-height: 2.25rem;
+          padding: 0.25rem 0.5rem;
+          font-size: 0.8125rem;
+          border-radius: var(--md-sys-shape-corner-full);
+        }
+
+        .md3e-log-range-sep {
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+      }
+    }
+
+    /* nftables status page */
+    .nft-table {
+      margin-block-end: 2rem;
+
+      > .cbi-section {
+        margin: 0;
+        padding: 0;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        > h3 {
+          margin-block: 0.5rem 1rem;
+          font-size: var(--md-sys-typescale-title-large-size, 1.375rem);
+          font-weight: 600;
+          color: var(--md-sys-color-on-surface);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+      }
+    }
+
+    #maincontent .cbi-section.nft-chain {
+
+      > h4 {
+        margin-block: 0.25rem 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--md-sys-color-on-surface);
+      }
+    }
+
+    .nft-rules {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+
+      th { font-family: var(--font-sans); }
+
+      tr:hover td {
+        background: color-mix(in oklab, var(--md-sys-color-surface-container-high) 50%, transparent) !important;
+      }
+
+      .ifacebadge {
+        display: inline;
+        padding: 0;
+        margin: 0;
+        border: none;
+        background: transparent;
+        color: inherit;
+        box-shadow: none;
+        font-family: inherit;
+        font-size: inherit;
+
+        &.nft-comment {
+          display: inline-block;
+          padding: 0.1rem 0.4rem;
+          border-radius: 4px;
+          background: var(--md-sys-color-surface-container-highest);
+          color: var(--md-sys-color-on-surface-variant);
+          font-style: italic;
+        }
+
+        &.nft-counter {
+          display: inline-block;
+          padding: 0.1rem 0.45rem;
+          border-radius: 4px;
+          background: var(--md-sys-color-surface-container-high);
+          color: var(--md-sys-color-on-surface-variant);
+          font-variant-numeric: tabular-nums;
+        }
+
+        &:is(.md3e-nft-accept, .md3e-nft-drop, .md3e-nft-reject, .md3e-nft-jump) {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.15rem 0.55rem;
+          border-radius: 999px;
+          font-weight: 600;
+          font-size: 0.75rem;
+          font-family: var(--font-sans);
+        }
+
+        &.md3e-nft-accept {
+          background: var(--md-sys-color-primary-container);
+          color: var(--md-sys-color-on-primary-container);
+        }
+
+        &:is(.md3e-nft-drop, .md3e-nft-reject) {
+          background: var(--md-sys-color-error-container);
+          color: var(--md-sys-color-on-error-container);
+        }
+
+        &.md3e-nft-jump {
+          background: var(--md-sys-color-surface-container-highest);
+          color: var(--md-sys-color-on-surface);
+          a {
+            color: inherit;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+          }
+        }
+      }
+    }
+    #maincontent .md3e-native-grid > table.md3e-startup-table {
+      th:first-child { width: 10%; }
+      td:nth-child(2) {
+        overflow-wrap: anywhere;
+      }
+      td.cbi-section-actions {
+        width: 1% !important;
+      }
+      .md3e-row-action-cluster {
+        flex-wrap: nowrap;
+      }
+
+      @container md3e-settings (width < 28rem) {
+        :is(th, td) { padding-inline: .3rem !important; }
+        th:first-child { max-inline-size: 5rem; }
+      }
+    }
+
+    /* Network → Diagnostics: toned tools surface plus a compact, resizeable
+       output box. #command-output is a div wrapping the readonly textarea, so
+       the sizing lives on the textarea itself. */
+    body[data-page="admin-network-diagnostics"] #view > .cbi-map > table.table {
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-sys-shape-corner-large);
+      border-collapse: separate;
+      padding: 0.5rem;
+    }
+
+    #command-output > textarea {
+      block-size: 12rem;
+      min-block-size: 8rem;
+      max-block-size: 60vh;
+      overflow: auto;
+      resize: vertical;
+    }
+
+    /* The added labels sit before the native target input, which the upstream
+       handlers read as the action span's previous sibling. */
+    .md3e-diag-label {
+      display: block;
+      font-size: var(--md-sys-typescale-label-large-size);
+      line-height: var(--md-sys-typescale-label-large-line-height);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+  }
+}

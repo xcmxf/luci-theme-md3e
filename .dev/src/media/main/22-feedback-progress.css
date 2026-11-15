@@ -1,0 +1,70 @@
+@layer components {
+  @layer progress {
+    .cbi-progressbar {
+      @apply relative flex items-center justify-start gap-3 cursor-help;
+      min-height: 2.5rem;
+      padding: 0;
+      background: transparent;
+      overflow: visible;
+
+      /* Text label next to the circle */
+      &:not(.md3e-linear-progress)::before {
+        content: attr(title);
+        order: 2;
+        flex: 1 1 auto;
+        min-width: 0;
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.85rem;
+        font-weight: 500;
+        line-height: 1.25;
+        letter-spacing: 0.01em;
+        font-variant-numeric: tabular-nums;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: anywhere;
+      }
+
+      & .md3e-progress-ring {
+        order: 1;
+        width: 36px;
+        height: 36px;
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--md-sys-color-secondary);
+        filter: drop-shadow(0 10px 18px color-mix(in oklab, var(--md-sys-color-secondary) 12%, transparent));
+
+        svg {
+          width: 100%;
+          height: 100%;
+          display: block;
+          overflow: visible;
+        }
+      }
+
+      [data-page="admin-system-package-manager"] & {
+        @apply max-sm:before:text-[10px];
+      }
+
+      /* Ring layouts use their own fill. Keep the native fill on linear bars. */
+      &:not(.md3e-linear-progress) > div {
+        display: none !important;
+      }
+
+      @media (max-width: 640px) {
+        gap: 0.8rem;
+        flex-wrap: nowrap;
+
+        &::before {
+          font-size: 0.78rem;
+        }
+
+        & .md3e-progress-ring {
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+  }
+}

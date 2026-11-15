@@ -1,0 +1,348 @@
+@layer components {
+  @layer shell-pro {
+    @media (max-width: 1180px) {
+      header .header-context {
+        display: none;
+      }
+
+      #maincontent {
+        padding-inline: 0.85rem 1rem;
+      }
+
+      #maincontent > .docs-sidebar {
+        left: 0.85rem;
+      }
+    }
+
+    @media (min-width: __MD3E_DESKTOP_LAYOUT_MIN_WIDTH__px) {
+      header {
+        display: none;
+      }
+
+      #maincontent {
+        display: block;
+        max-width: none;
+        padding: 0 var(--md3e-content-edge) 0 0;
+      }
+
+      #maincontent > .docs-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        left: 0;
+        width: var(--nav-rail-width);
+        min-width: var(--nav-rail-width);
+        max-width: var(--nav-rail-width);
+        height: 100vh;
+        z-index: 40;
+      }
+
+      #maincontent > .docs-sidebar .docs-sidebar-shell,
+      #maincontent > .docs-sidebar .docs-sidebar-nav,
+      #maincontent > .docs-sidebar #sidebar-nav-host {
+        width: var(--nav-rail-width);
+        min-width: var(--nav-rail-width);
+        max-width: var(--nav-rail-width);
+      }
+
+      #maincontent > .docs-sidebar .docs-sidebar-shell {
+        background: var(--md-sys-color-surface-container-low);
+        border-right: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 58%, transparent);
+        box-shadow: none;
+      }
+
+      #maincontent > .docs-content {
+        width: calc(100% - var(--nav-rail-width) - var(--md3e-content-edge) - 1rem);
+        max-width: min(100%, var(--md3e-content-max-width));
+        margin-left: calc(var(--nav-rail-width) + 1rem);
+        min-height: 100vh;
+        padding: 1rem var(--md3e-content-edge) 2rem;
+        border-radius: 0;
+        border: 0;
+        box-shadow: none;
+        position: relative;
+        z-index: 0;
+      }
+
+      :is(
+        body[data-page$="-overview"],
+        body[data-page*="-status-"],
+        body[data-page*="-network-"],
+        body[data-page*="-firewall-"]
+      ) #maincontent > .docs-content {
+        max-width: min(100%, var(--md3e-content-wide-max-width));
+      }
+
+      .md3e-nav-shell {
+        width: 100%;
+        height: 100%;
+      }
+
+      .md3e-mode-rail {
+        height: 100%;
+        padding: 0.6rem 0.4rem;
+        border: 0;
+        border-right: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 44%, transparent);
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      #maincontent .sidebar-nav {
+        display: flex;
+        padding: 5.55rem 1rem 1.1rem;
+        background: var(--md-sys-color-surface-container-low);
+      }
+
+      .docs-sidebar-tools {
+        width: var(--nav-rail-width);
+        max-width: var(--nav-rail-width);
+        justify-content: center;
+        justify-self: start;
+        position: relative;
+        z-index: 3;
+      }
+
+      .docs-sidebar-nav {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: clip;
+      }
+
+      body[data-layout-mode="mobile"] #maincontent > .docs-sidebar {
+        display: none !important;
+      }
+
+      body[data-layout-mode="desktop"] header {
+        display: none !important;
+      }
+
+      body[data-layout-mode="desktop"] #maincontent {
+        display: block;
+        max-width: none;
+        padding: 0 0.75rem 0 0;
+      }
+
+      body[data-layout-mode="desktop"] #maincontent > .docs-sidebar {
+        display: block !important;
+        position: fixed;
+        inset: 0 auto 0 0;
+        left: 0;
+        width: var(--nav-rail-width);
+        min-width: var(--nav-rail-width);
+        max-width: var(--nav-rail-width);
+        height: 100vh;
+        z-index: 40;
+      }
+
+      body[data-layout-mode="desktop"] #maincontent > .docs-sidebar .docs-sidebar-shell,
+      body[data-layout-mode="desktop"] #maincontent > .docs-sidebar .docs-sidebar-nav,
+      body[data-layout-mode="desktop"] #maincontent > .docs-sidebar #sidebar-nav-host {
+        width: var(--nav-rail-width);
+        min-width: var(--nav-rail-width);
+        max-width: var(--nav-rail-width);
+      }
+
+      body[data-layout-mode="desktop"] #maincontent > .docs-sidebar .docs-sidebar-shell {
+        background: var(--md-sys-color-surface-container-low);
+        border-right: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 58%, transparent);
+      }
+
+      body[data-layout-mode="desktop"] #maincontent > .docs-content {
+        width: calc(100% - var(--nav-rail-width) - 1.5rem);
+        max-width: min(100%, var(--md3e-content-max-width));
+        margin-left: calc(var(--nav-rail-width) + 0.75rem);
+        min-height: 100vh;
+        border-radius: 0;
+        border: 0;
+        box-shadow: none;
+        padding: 1rem 0.9rem 2rem;
+        position: relative;
+        z-index: 0;
+      }
+
+      :is(
+        body[data-page$="-overview"],
+        body[data-page*="-status-"],
+        body[data-page*="-network-"],
+        body[data-page*="-firewall-"]
+      )[data-layout-mode="desktop"] #maincontent > .docs-content {
+        max-width: min(100%, var(--md3e-content-wide-max-width));
+      }
+
+      body[data-layout-mode="desktop"] #maincontent .sidebar-nav {
+        display: flex !important;
+        padding-top: 5.55rem;
+      }
+
+      body[data-layout-mode="desktop"] .docs-sidebar-nav {
+        width: 100%;
+        height: 100%;
+      }
+
+      body[data-layout-mode="desktop"] .md3e-nav-shell {
+        width: 100%;
+        height: 100%;
+      }
+
+      #maincontent {
+        gap: 0;
+        --md3e-content-gutter: clamp(0.45rem, 2.4vw, 0.75rem);
+        --md3e-content-edge: clamp(0.75rem, 2.6vw, 1rem);
+        --md3e-content-max-width: 100%;
+        --md3e-content-wide-max-width: 100%;
+        --md3e-content-form-max-width: 100%;
+        --md3e-content-readable-width: 100%;
+        padding-inline: clamp(0.45rem, 2.4vw, 0.75rem);
+        width: 100%;
+        max-width: 100%;
+        overflow-x: clip;
+      }
+
+      #maincontent > .docs-content {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 1.65rem;
+        padding: 0.9rem clamp(0.75rem, 2.6vw, 1rem) calc(6rem + env(safe-area-inset-bottom));
+        overflow-x: clip;
+        overflow-y: visible;
+      }
+
+      #view,
+      #maincontent .cbi-map {
+        width: 100%;
+        max-width: 100%;
+        align-self: stretch;
+        overflow-x: clip;
+      }
+
+      #maincontent .cbi-section {
+        padding: 0.75rem 0;
+        border-radius: 1.5rem;
+        overflow: visible;
+      }
+
+      #maincontent .cbi-section > .cbi-title {
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+        min-width: 0;
+        padding-right: max(0.25rem, env(safe-area-inset-right));
+        overflow: visible;
+
+        & > h3 {
+          min-width: 0;
+          max-width: calc(100% - 3rem);
+          overflow-wrap: anywhere;
+        }
+
+        & :is(.cbi-button, button, .label[data-clickable], span[data-indicator]) {
+          flex: none;
+        }
+      }
+
+      #maincontent .cbi-section-node {
+        padding: 1rem 0.85rem 1.15rem !important;
+        border-radius: 1.35rem !important;
+        min-width: 0;
+        overflow: visible !important;
+        overflow-wrap: anywhere;
+      }
+
+      @media (max-width: 430px) {
+        #maincontent {
+          padding-inline: 0.45rem;
+        }
+
+        #maincontent > .docs-content {
+          padding-inline: 0.65rem;
+          border-radius: 1.25rem;
+        }
+
+        #maincontent .cbi-section-node {
+          padding-inline: 0.75rem !important;
+        }
+      }
+
+      @media (max-width: 360px) {
+        #maincontent {
+          padding-inline: 0.35rem;
+        }
+
+        #maincontent > .docs-content {
+          padding: 0.75rem 0.48rem calc(5.5rem + env(safe-area-inset-bottom));
+          border-radius: 1rem;
+        }
+
+        #maincontent .cbi-section {
+          padding-block: 0.55rem;
+          border-radius: 1rem;
+        }
+
+        #maincontent .cbi-section > .cbi-title {
+          gap: 0.5rem;
+          margin-inline: 0.15rem;
+
+          & > h3 {
+            max-width: calc(100% - 2.55rem);
+            font-size: 1.05rem;
+            line-height: 1.26;
+          }
+        }
+
+        #maincontent .cbi-section-node {
+          padding: 0.82rem 0.6rem 0.95rem !important;
+          border-radius: 1rem !important;
+        }
+      }
+
+      @media (max-width: 340px) {
+        #maincontent {
+          padding-inline: 0.25rem;
+        }
+
+        #maincontent > .docs-content {
+          padding-inline: 0.38rem;
+          border-radius: 0.85rem;
+        }
+
+        #maincontent .cbi-section > .cbi-title {
+          margin-inline: 0.08rem;
+        }
+
+        #maincontent .cbi-section-node {
+          padding-inline: 0.48rem !important;
+          border-radius: 0.9rem !important;
+        }
+      }
+
+      .mobile-nav .md3e-nav-panel-head {
+        padding: 0 0 0.15rem;
+      }
+
+      .mobile-nav .md3e-nav-panel-copy {
+        font-size: 0.82rem;
+        line-height: 1.55;
+      }
+
+      .mobile-nav .md3e-subnav-link {
+        min-height: 2.75rem;
+      }
+    }
+
+    @media (max-width: 760px) {
+      header .header-actions {
+        gap: 0.55rem;
+      }
+
+      .mobile-nav-context-value {
+        font-size: 0.82rem;
+      }
+    }
+  }
+}

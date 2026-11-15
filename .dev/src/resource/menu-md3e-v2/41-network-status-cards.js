@@ -1,0 +1,121 @@
+  initNetworkStatusCards() {
+    if (this._networkStatusCardsInitialized) return;
+
+    const target = document.getElementById("maincontent") || document.body;
+    if (!target) return;
+
+    const enhanceCard = (card, allowNetworkCard = false) => {
+      if (!(card instanceof HTMLElement)) return false;
+
+      const isPortCard = Boolean(
+        card.querySelector(":scope > .ifacebox-head.cbi-tooltip-container"),
+      );
+
+      card.classList.toggle("md3e-port-card", isPortCard);
+
+      if (allowNetworkCard) {
+        card.classList.toggle("md3e-network-card", !isPortCard);
+      } else if (isPortCard) {
+        card.classList.remove("md3e-network-card");
+      }
+
+      if (isPortCard) {
+        card
+          .querySelector(":scope > .ifacebox-head:first-child")
+          ?.classList.add("md3e-port-name");
+        card
+          .querySelector(":scope > .ifacebox-head.cbi-tooltip-container")
+          ?.classList.add("md3e-port-zone");
+
+        const bodies = Array.from(
+          card.querySelectorAll(":scope > .ifacebox-body"),
+        );
+
+        bodies[0]?.classList.add("md3e-port-link");
+        bodies[1]?.classList.add("md3e-port-stats");
+        bodies[1]
+          ?.querySelector(":scope > .cbi-tooltip-container")
+          ?.classList.add("md3e-port-traffic");
+      }
+
+      if (!isPortCard && allowNetworkCard) {
+        card
+          .querySelectorAll(":scope > .ifacebox-body .ifacebadge")
+          .forEach((badge) => badge.classList.add("md3e-network-list-item"));
+      }
+
+      return isPortCard;
+    };
+
+    const enhance = (scope = target) => {
+      const tables = [];
+      if (
+        scope instanceof HTMLElement &&
+        scope.matches(".network-status-table")
+      ) {
+        tables.push(scope);
+      }
+      scope.querySelectorAll?.(".network-status-table").forEach((table) =>
+        tables.push(table),
+      );
+
+      tables.forEach((table) => {
+        table.classList.add("md3e-network-card-grid");
+
+        table.querySelectorAll(":scope > .ifacebox").forEach((card) => {
+          enhanceCard(card, true);
+        });
+      });
+
+      const portCards = [];
+      if (
+        scope instanceof HTMLElement &&
+        scope.matches(".ifacebox") &&
+        scope.querySelector(":scope > .ifacebox-head.cbi-tooltip-container")
+      ) {
+        portCards.push(scope);
+      }
+
+      scope.querySelectorAll?.(".ifacebox").forEach((card) => {
+        if (
+          card instanceof HTMLElement &&
+          card.querySelector(":scope > .ifacebox-head.cbi-tooltip-container")
+        ) {
+          portCards.push(card);
+        }
+      });
+
+      portCards.forEach((card) => {
+        if (!enhanceCard(card, false)) return;
+
+        const grid = card.parentElement;
+        if (grid && !grid.classList.contains("network-status-table")) {
+          grid.classList.add("md3e-port-card-grid");
+        }
+      });
+    };
+
+    this._networkStatusCardsInitialized = true;
+    enhance(target);
+
+    this.observeDomMutations(target, "network-status-cards", (mutations) => {
+      const added = new Set();
+
+      for (const mutation of mutations) {
+        if (mutation.type !== "childList") continue;
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType === 1) added.add(node);
+        }
+      }
+
+      if (!added.size) return;
+      this.scheduleFrame("_networkStatusCardsFrame", () => {
+        added.forEach((node) => {
+          if (node.isConnected) enhance(node);
+        });
+      });
+    }, {
+      childList: true,
+      subtree: true,
+    });
+  },

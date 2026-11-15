@@ -1,0 +1,84 @@
+/* Tab styling has been consolidated into src/media/main/23-segmented-tabs.css.
+   Mobile responsive table card rules remain here under the mobile breakpoint. */
+@media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(thead, tbody) {
+    display: block;
+    width: 100%;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(tr, .tr, .cbi-section-table-row) {
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+    gap: 0.35rem 0.75rem;
+    align-items: center;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(th, td, .th, .td, .cbi-section-table-cell) {
+    width: auto !important;
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    hyphens: none;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) .md3e-table-action-cell {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    white-space: normal;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(tr.table-titles, .tr.table-titles) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) .md3e-table-data-title-row {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title] {
+    display: grid !important;
+    grid-template-columns: minmax(7rem, 34%) minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: start;
+    padding-block: 0.42rem !important;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title]::before {
+    content: attr(data-title);
+    display: block !important;
+    color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 82%, transparent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title] > * {
+    min-width: 0;
+    grid-column: 2;
+    justify-self: start;
+  }
+}

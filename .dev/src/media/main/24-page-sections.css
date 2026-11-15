@@ -1,0 +1,263 @@
+@layer components {
+  @layer shell-pro {
+    .md3e-skip-link {
+      position: fixed;
+      inset-block-start: 0.75rem;
+      inset-inline-start: 0.75rem;
+      z-index: 100;
+      padding: 0.75rem 1rem;
+      border-radius: var(--md-sys-shape-corner-full);
+      color: var(--md-sys-color-on-primary);
+      background: var(--md-sys-color-primary);
+      translate: 0 calc(-100% - 1rem);
+
+      &:focus { translate: 0; }
+    }
+
+    .sr-only,
+    #maincontent > .docs-content > .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      clip-path: inset(50%) !important;
+      white-space: nowrap !important;
+      border-width: 0 !important;
+    }
+
+    /* Suppress page-level titles and introductory descriptions across all LuCI views */
+    #md3e-workspace > h2:not([name="content"]:has(+ p + p + tt:last-child)),
+    #view > h2:first-child,
+    #view > style + h2,
+    #view > div:first-child > h2:first-child,
+    #view > :is(form.cbi-map, .cbi-map) > h2:first-child,
+    #view > :is(form.cbi-map, .cbi-map) > h2[name="content"],
+    #view > p:first-child > h2:first-child,
+    #view > .cbi-map-descr,
+    #view > style + h2 + .cbi-map-descr,
+    #view > :is(form.cbi-map, .cbi-map) > .cbi-map-descr {
+      position: absolute !important;
+      inline-size: 1px !important;
+      block-size: 1px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip-path: inset(50%) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    /* Dispatch failures (404): keep the title and render the message as one tonal group */
+    #md3e-workspace:has(> h2[name="content"] + p + p + tt:last-child) {
+      & > :is(h2[name="content"], p, tt) {
+        max-inline-size: min(100%, 40rem);
+        margin: 0;
+        padding-inline: var(--space-lg);
+        background: var(--md-sys-color-surface-container-low);
+        overflow-wrap: anywhere;
+      }
+
+      & > h2[name="content"] {
+        padding-block: var(--space-lg) var(--space-sm);
+        border-radius: var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large) 0 0;
+        font-size: var(--md-sys-typescale-headline-small-size);
+        font-weight: 500;
+      }
+
+      & > p { padding-block: var(--space-sm); }
+
+      & > tt {
+        display: block;
+        padding-block: var(--space-sm) var(--space-lg);
+        border-radius: 0 0 var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large);
+        font-family: var(--font-mono);
+        font-size: var(--md-sys-typescale-body-medium-size);
+      }
+    }
+
+    .md3e-persistent-notice {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem 0.9rem;
+      padding: 0.65rem 0.85rem;
+      margin-block-end: 0.9rem;
+      border-radius: var(--md-sys-shape-corner-large);
+      background: color-mix(in oklab, var(--md-sys-color-tertiary-container) 50%, var(--md-sys-color-surface-container-low));
+      color: var(--md-sys-color-on-tertiary-container);
+
+      > div { flex: 1 1 22rem; }
+      strong {
+        font-size: var(--md-sys-typescale-label-large-size);
+        font-weight: 650;
+      }
+      p {
+        margin: 0.1rem 0 0;
+        color: inherit;
+        font-size: var(--md-sys-typescale-body-medium-size);
+      }
+
+      > a.btn {
+        max-width: 100%;
+        margin: 0;
+        border-color: currentColor;
+        background: transparent;
+        color: inherit;
+        white-space: normal;
+      }
+    }
+
+    #maincontent .cbi-map {
+      gap: var(--space-lg);
+      width: 100%;
+      max-width: min(100%, var(--md3e-content-form-max-width));
+      margin-inline: 0 auto;
+    }
+
+    :is(
+      body[data-page$="-overview"],
+      body[data-page*="-status-"],
+      body[data-page*="-network-"],
+      body[data-page*="-firewall-"]
+    ) #maincontent .cbi-map {
+      max-width: min(100%, var(--md3e-content-wide-max-width));
+    }
+
+    #maincontent .cbi-section {
+      @apply relative border-0 shadow-none bg-transparent p-0 mb-6;
+      width: 100%;
+      max-width: 100%;
+      border: 0 !important;
+      outline: none !important;
+      box-shadow: none !important;
+
+      &::before,
+      &::after {
+        content: none !important;
+      }
+
+      & > div:where(:not(.md3e-overview-data-scroll, .md3e-data-scroll)) {
+        @apply overflow-x-visible;
+      }
+
+      & > .cbi-title {
+        @apply flex flex-wrap items-start justify-between gap-4 mb-4;
+        padding-top: 0;
+        margin-left: var(--space-lg);
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          margin-left: var(--space-md);
+        }
+
+        h3 {
+          @apply m-0;
+          font-size: clamp(1.12rem, 1.04rem + 0.24vw, 1.34rem);
+          line-height: 1.35;
+          font-weight: 500;
+          letter-spacing: -0.01em;
+          text-transform: none;
+          color: color-mix(in oklab, var(--foreground) 82%, transparent);
+        }
+      }
+    }
+
+    
+    #maincontent .cbi-value .cbi-section-node,
+    #maincontent .cbi-section-node .cbi-section-node {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: 0 !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+    }
+
+    #maincontent .cbi-section-node {
+      @apply flex flex-col gap-0 overflow-visible! p-6;
+      isolation: isolate;
+      border: none !important;
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 78%, var(--md-sys-color-surface-container-low)) !important;
+      border-radius: var(--md-sys-shape-corner-extra-large) !important;
+      box-shadow: none !important;
+
+      /* MD3 Expressive 3.0 Value Styling */
+      & .cbi-value {
+        @apply flex flex-col items-start gap-2 py-0 mb-6 border-0;
+        background: transparent !important;
+        margin-top: 0 !important;
+        max-width: min(100%, var(--md3e-content-form-max-width));
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        & .cbi-value-title {
+          @apply flex-none font-medium;
+          width: 100% !important;
+          padding: 0 !important;
+          margin-bottom: 0;
+          font-size: var(--md-sys-typescale-title-small-size);
+          line-height: var(--md-sys-typescale-title-small-line-height);
+          letter-spacing: 0.01em;
+          text-transform: none;
+          color: color-mix(in oklab, var(--foreground) 74%, transparent);
+        }
+
+        & .cbi-value-field {
+          @apply flex-none p-0 text-foreground;
+          font-size: var(--md-sys-typescale-title-large-size);
+          line-height: var(--md-sys-typescale-title-large-line-height);
+          font-weight: 500;
+          letter-spacing: -0.01em;
+
+          &.md3e-value-field-progress {
+            @apply w-full;
+            font-size: var(--md-sys-typescale-headline-small-size);
+            line-height: var(--md-sys-typescale-headline-small-line-height);
+          }
+
+          & small, & .text-muted {
+            @apply block text-sm tracking-normal mt-1;
+            font-weight: 400;
+            color: color-mix(in oklab, var(--foreground) 58%, transparent);
+          }
+
+          & .progress, & .cbi-progressbar {
+            @apply mt-6 h-4 overflow-hidden border-0;
+            background: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 55%, transparent);
+            border-radius: 20px;
+            & > .progress-bar, & > div {
+              @apply transition-all duration-1000 ease-out;
+              background: linear-gradient(90deg, var(--primary), var(--secondary));
+              border-radius: 20px;
+              box-shadow: 0 0 15px var(--primary-fixed-dim);
+            }
+          }
+        }
+
+        @media (min-width: __MD3E_DESKTOP_LAYOUT_MIN_WIDTH__px) {
+          &:not(.md3e-value-has-progress) {
+            flex-direction: row;
+            align-items: start;
+            gap: clamp(1.25rem, 2vw, 2rem);
+            & .cbi-value-title {
+              width: clamp(11.25rem, 18vw, 14rem) !important;
+              margin-bottom: 0;
+            }
+            & .cbi-value-field {
+              min-width: 0;
+              max-width: min(100%, 46rem);
+              font-size: var(--md-sys-typescale-body-large-size);
+              line-height: var(--md-sys-typescale-body-large-line-height);
+              font-weight: 500;
+              & .cbi-dropdown, & .cbi-input-select, & .cbi-input-text {
+                transform: none !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

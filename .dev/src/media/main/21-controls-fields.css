@@ -1,0 +1,298 @@
+@layer components {
+  @layer input {
+    input {
+      @apply disabled:cursor-not-allowed disabled:opacity-60 disabled:dark:opacity-50;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    .cbi-input-text,
+    .cbi-input {
+      @apply relative border px-4 py-3 text-sm font-normal transition-all duration-200 focus:outline-none;
+      color: var(--md-comp-filled-field-input-text-color);
+      border-radius: var(--md-sys-shape-corner-large);
+      border-color: var(--md-comp-filled-field-outline-color);
+      background: var(--md-comp-filled-field-container-color);
+      box-shadow:
+
+        0 10px 18px -18px var(--expressive-shadow);
+      font-family: var(--font-sans);
+      line-height: var(--md-sys-typescale-body-large-line-height);
+
+      &:focus {
+        border-color: var(--md-comp-filled-field-focus-outline-color);
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--md-sys-color-primary) 14%, transparent);
+      }
+
+      .table.cbi-section-table & {
+        @apply w-full;
+      }
+    }
+
+    .cbi-input-text {
+      @apply min-w-20 max-md:min-w-14;
+    }
+
+    #localtime {
+      @apply min-w-70;
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    /* Outline buttons for Local Time sync actions */
+    .cbi-value-field.md3e-value-field-localtime .control-group .cbi-button {
+      @apply h-9 text-xs font-normal shadow-sm;
+      color: var(--md-comp-tonal-button-label-text-color);
+      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 76%, transparent);
+      background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 82%, transparent);
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      @apply focus:before:border-primary focus:before:ring-primary/20 checked:before:border-primary checked:before:bg-primary before:border-border before:bg-page-bg after:bg-input-checked hover:before:border-border relative mr-3 inline-block h-4 w-4 cursor-pointer appearance-none before:absolute before:top-0 before:left-0 before:h-4 before:w-4 before:border before:transition-all before:duration-200 after:absolute after:top-0.5 after:left-0.5 after:h-3 after:w-3 after:opacity-0 after:transition-opacity after:duration-200 checked:after:opacity-100 focus:before:ring-2 focus:before:outline-none disabled:cursor-not-allowed;
+    }
+
+    input[type="radio"] {
+      @apply before:rounded-full after:[mask:url('@assets/icons/radio.svg')_center/cover_no-repeat];
+    }
+
+    input[type="checkbox"] {
+      @apply before:rounded after:[mask:url('@assets/icons/check.svg')_center/cover_no-repeat];
+    }
+
+    .cbi-checkbox {
+      @apply relative inline-flex items-center;
+    }
+
+    /* Native form checkbox styled as a Material switch. */
+    .cbi-value > .cbi-value-field > input[type="checkbox"],
+    .cbi-value > .cbi-value-field > .cbi-checkbox > input[type="checkbox"] {
+      inline-size: 3.25rem;
+      block-size: 3rem;
+      margin: 0;
+      flex: none;
+      border: 0;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: transparent;
+
+      &::before {
+        inset: 50% 0 auto;
+        inline-size: 100%;
+        block-size: 2rem;
+        transform: translateY(-50%);
+        border: 2px solid var(--md-sys-color-outline);
+        border-radius: inherit;
+        background: var(--md-comp-switch-unselected-track-color);
+      }
+
+      &::after {
+        inset: 50% auto auto;
+        inset-inline-start: .5rem;
+        inline-size: 1rem;
+        block-size: 1rem;
+        transform: translateY(-50%);
+        border-radius: inherit;
+        background: var(--md-comp-switch-unselected-handle-color);
+        mask: none;
+        opacity: 1;
+        transition: inset-inline-start 180ms, inline-size 180ms, block-size 180ms, transform 180ms;
+      }
+
+      &:checked::before {
+        border-color: transparent;
+        background: var(--md-comp-switch-selected-track-color);
+      }
+
+      &:checked::after {
+        inset-inline-start: 1.5rem;
+        inline-size: 1.5rem;
+        block-size: 1.5rem;
+        background: var(--md-comp-switch-selected-handle-color);
+      }
+
+      &:not(:checked, :disabled):hover::before {
+        border-color: var(--md-sys-color-on-surface-variant);
+      }
+
+      &:active:not(:disabled)::after { transform: translateY(-50%) scale(1.1); }
+      &:disabled { opacity: .38; }
+    }
+
+    .md3e-password-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: min(100%, 28rem);
+
+      & > input {
+        width: 100% !important;
+        padding-right: 2.75rem !important;
+      }
+    }
+
+    .md3e-password-toggle {
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 2rem;
+      height: 2rem;
+      display: inline-grid;
+      place-items: center;
+      border: 0;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: transparent;
+      color: var(--md-sys-color-on-surface-variant);
+      cursor: pointer;
+      padding: 0;
+      transition: background-color 150ms ease;
+
+      &:hover, &:focus-visible {
+        background: var(--md-sys-color-surface-container-highest);
+        color: var(--md-sys-color-on-surface);
+      }
+
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        fill: currentColor;
+      }
+    }
+
+    .control-group > .md3e-password-wrap + button,
+    .control-group > .md3e-password-wrap ~ button {
+      display: none !important;
+    }
+
+    .cbi-value-description span:is([style*="red"], [style*="color:red"]) {
+      color: var(--md-sys-color-error, #ba1a1a) !important;
+      font-weight: 500;
+    }
+    .cbi-value-description span:is([style*="orange"], [style*="color:orange"]) {
+      color: var(--md-sys-color-tertiary, #b26c00) !important;
+      font-weight: 500;
+    }
+    .cbi-value-description span:is([style*="green"], [style*="color:green"]) {
+      color: var(--md-sys-color-primary, #006874) !important;
+      font-weight: 500;
+    }
+  }
+  @layer textarea {
+    textarea.md3e-code-editor,
+    #view > div > textarea,
+    #view [data-tab="rc"] textarea,
+    body[data-page="admin-system-crontab"] textarea,
+    body[data-page="admin-system-startup"] [data-tab="rc"] textarea,
+    body[data-page="admin-system-flash"] textarea,
+    body[data-page="admin-system-admin-repokeys"] textarea,
+    #command-output > textarea {
+      font-family: var(--font-mono, monospace) !important;
+      font-size: 0.8125rem !important;
+      line-height: 1.5 !important;
+      tab-size: 4 !important;
+      white-space: pre !important;
+      overflow-x: auto !important;
+      border-radius: var(--md-sys-shape-corner-medium) !important;
+      background: var(--md-sys-color-surface-container-lowest) !important;
+      color: var(--md-sys-color-on-surface) !important;
+    }
+
+    textarea {
+      @apply text-foreground placeholder-muted-foreground/50 min-h-24 w-full resize-y overflow-y-auto border px-4 py-3 text-sm leading-relaxed transition-all duration-200 focus:outline-none;
+      border-radius: calc(var(--shape-field) + 0.15rem);
+      border-color: color-mix(in oklab, var(--border) 80%, transparent);
+      background: color-mix(in oklab, var(--panel-raised) 94%, transparent);
+      font-family: var(--font-sans);
+
+      &:focus {
+        border-color: color-mix(in oklab, var(--accent) 48%, var(--border));
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent);
+      }
+      &[disabled] {
+        @apply cursor-not-allowed opacity-60 dark:opacity-50;
+      }
+    }
+  }
+  @layer select {
+    select {
+      @apply text-foreground appearance-none h-11 border px-4 pr-10 text-sm font-medium transition-colors duration-200 focus:outline-none;
+      border-radius: var(--shape-field);
+      border-color: color-mix(in oklab, var(--border) 78%, transparent);
+      background-color: color-mix(in oklab, var(--panel-raised) 94%, transparent);
+      @apply bg-[url('@assets/icons/arrow-down.svg')] bg-size-[16px] bg-position-[right_0.75rem_center] bg-no-repeat dark:bg-[url('@assets/icons/arrow-down-dark.svg')];
+
+      &:focus {
+        border-color: color-mix(in oklab, var(--accent) 48%, var(--border));
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent);
+      }
+
+      &[disabled] {
+        @apply cursor-not-allowed opacity-60 dark:opacity-50;
+      }
+    }
+
+    /* Custom select replacement (JS-driven) */
+    .outline-select {
+      @apply relative inline-flex cursor-pointer outline-none;
+
+      &.disabled {
+        @apply pointer-events-none opacity-60 dark:opacity-50;
+      }
+    }
+
+    .outline-select-trigger {
+      @apply text-foreground flex h-11 items-center gap-2 border px-4 pr-8 text-sm font-medium transition-colors duration-200;
+      border-radius: var(--shape-field);
+      border-color: color-mix(in oklab, var(--border) 78%, transparent);
+      background-color: color-mix(in oklab, var(--panel-raised) 94%, transparent);
+      outline: 2px solid transparent;
+      outline-offset: 0;
+    }
+
+    .outline-select.open .outline-select-trigger {
+      outline-color: color-mix(in oklab, var(--accent) 22%, transparent);
+    }
+
+    .outline-select-value {
+      @apply truncate;
+    }
+
+    .outline-select-chevron {
+      @apply text-muted-foreground absolute right-2.5 top-1/2 -translate-y-1/2 transition-transform duration-200;
+
+      &::after {
+        content: "";
+        @apply block h-4 w-4;
+        background: currentColor;
+        mask: url("@assets/icons/arrow-down.svg") center / cover no-repeat;
+      }
+    }
+
+    .outline-select.open .outline-select-chevron {
+      @apply rotate-180;
+    }
+
+    .outline-select-panel {
+      @apply hidden w-max;
+
+      &.above {
+        @apply top-auto bottom-full mt-0 mb-1;
+      }
+
+      &.align-end {
+        left: auto !important;
+        right: 0 !important;
+        transform-origin: top right;
+      }
+
+      &.above.align-end {
+        transform-origin: bottom right;
+      }
+    }
+  }
+}

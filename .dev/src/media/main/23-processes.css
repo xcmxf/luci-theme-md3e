@@ -1,0 +1,42 @@
+@layer components {
+  @layer shell-pro {
+    #view:has(.md3e-process-table) > h2:first-child,
+    #view:has(.md3e-process-table) > .cbi-map-descr {
+      display: none !important;
+    }
+
+    #maincontent .md3e-processes-group .md3e-data-scroll > .md3e-process-table {
+      th { white-space: nowrap; }
+
+      tbody tr:is(:hover, :focus-within) td {
+        background: var(--md-sys-color-surface-container-high) !important;
+      }
+
+      th.md3e-process-pid { width: 4.5rem; }
+      th.md3e-process-user { width: 6rem; }
+      th.md3e-process-cpu { width: 5rem; text-align: end; }
+      th.md3e-process-memory { width: 5.5rem; text-align: end; }
+      th.md3e-process-actions { width: 3.5rem; text-align: end; }
+      .md3e-process-actions { text-align: end; }
+      .md3e-process-command {
+        font-family: var(--font-mono, monospace);
+        overflow-wrap: anywhere;
+      }
+      .md3e-process-pid {
+        font-family: var(--font-mono, monospace);
+        font-variant-numeric: tabular-nums;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+      .md3e-process-cpu,
+      .md3e-process-memory {
+        font-variant-numeric: tabular-nums;
+        text-align: end;
+      }
+      .md3e-process-empty td {
+        padding: 1.5rem;
+        text-align: center;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+    }
+  }
+}

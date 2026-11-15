@@ -1,0 +1,113 @@
+{#
+ luci-theme-md3e:
+ Copyright 2025 eamonxg
+ This theme is derived from luci-theme-bootstrap UT template.
+ luci-theme-bootstrap:
+ Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{%
+	const boardinfo = ubus.call("system", "board") || {};
+-%}
+
+{% include("header", { blank_page: true }) %}
+
+<div class="login-screen" {% if (fuser): %}data-error="true"{% endif %}>
+	<main class="login-shell">
+		<form method="post" class="login-card">
+			<div class="login-card-top">
+				<img src="{{ media }}/images/logo.svg?v=md3e-logo" alt="" width="36" height="36" class="login-logo" aria-hidden="true">
+				<button type="button" class="theme-toggle login-theme-toggle" aria-label="{{ _("Toggle dark mode") }}" title="{{ _("Toggle dark mode") }}">
+					{% include("themes/md3e/icon_theme_sun") %}
+					{% include("themes/md3e/icon_theme_moon") %}
+				</button>
+			</div>
+
+			<div class="login-card-head">
+				<h1 class="login-title">{{ entityencode(boardinfo.hostname || _("Log in"), true) }}</h1>
+			</div>
+
+			{% if (fuser): %}
+			<div class="alert-message error login-alert" id="login-error" role="alert">{{ _("Invalid username and/or password! Please try again.") }}</div>
+			{% endif %}
+
+			<div class="login-fields">
+				<label class="login-field" for="luci_username">
+					<span class="login-label">{{ _("Username") }}</span>
+					<input
+						name="luci_username"
+						id="luci_username"
+						type="text"
+						class="login-input"
+						value="{{ entityencode(duser ?? "", true) }}"
+						autocomplete="username"{% if (fuser): %} aria-describedby="login-error" aria-invalid="true"{% endif %}
+					>
+				</label>
+
+				<div class="login-field">
+					<label class="login-label" for="luci_password">{{ _("Password") }}</label>
+					<div class="login-input-wrap login-input-wrap--password">
+						<input
+							name="luci_password"
+							id="luci_password"
+							type="password"
+							class="login-input"
+							autocomplete="current-password"{% if (fuser): %} aria-describedby="login-error" aria-invalid="true"{% endif %}
+						>
+						<button
+							type="button"
+							id="login-password-toggle"
+							class="login-password-toggle"
+							aria-controls="luci_password"
+							aria-pressed="false"
+							aria-label="{{ _("Show password") }}"
+							title="{{ _("Show password") }}"
+							data-show-label="{{ _("Show password") }}"
+							data-hide-label="{{ _("Hide password") }}"
+							hidden
+						>
+							<svg class="icon-eye" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/>
+								<circle cx="12" cy="12" r="3"/>
+							</svg>
+							<svg class="icon-eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10-7-10-7a18.45 18.45 0 0 1 5.06-5.94"/>
+								<path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19"/>
+								<path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+								<line x1="2" y1="2" x2="22" y2="22"/>
+							</svg>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<button type="submit" class="login-submit">{{ _("Log in") }}</button>
+		</form>
+	</main>
+</div>
+
+<script>
+(() => {
+	const userInput = document.getElementById("luci_username");
+	const passInput = document.getElementById("luci_password");
+	if (userInput && passInput) {
+		(userInput.value ? passInput : userInput).focus();
+	}
+	const toggle = document.getElementById("login-password-toggle");
+	if (toggle && passInput) {
+		const showLabel = toggle.dataset.showLabel || "Show password";
+		const hideLabel = toggle.dataset.hideLabel || "Hide password";
+		toggle.hidden = false;
+		toggle.addEventListener("click", () => {
+			const nextShow = passInput.type === "password";
+			passInput.type = nextShow ? "text" : "password";
+			toggle.setAttribute("aria-pressed", nextShow ? "true" : "false");
+			const label = nextShow ? hideLabel : showLabel;
+			toggle.setAttribute("title", label);
+		});
+	}
+})();
+</script>
+
+{% include("footer", { blank_page: true }) %}

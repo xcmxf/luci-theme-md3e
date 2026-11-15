@@ -1,0 +1,311 @@
+/* Content rows: no borders, stronger row surface, no corner artifacts. */
+#maincontent :is(.table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate !important;
+  border-spacing: 0 0.55rem !important;
+
+  :is(th, td, .th, .td, .cbi-section-table-cell) {
+    word-break: normal;
+    overflow-wrap: anywhere;
+    min-width: 0;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding-block: 0.62rem !important;
+    padding-inline: 1rem !important;
+    color: color-mix(in oklab, var(--md-sys-color-on-surface, #1d1b20) 88%, transparent);
+    line-height: 1.35;
+
+    &:first-child {
+      color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 82%, transparent) !important;
+      font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    &:not(:first-child) {
+      color: var(--md-sys-color-on-surface, #1d1b20) !important;
+      font-weight: 500;
+    }
+  }
+
+  :is(tr, .tr, .cbi-section-table-row) {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: color-mix(in oklab, var(--md-sys-color-surface-container-low, #f7f7fc) 88%, transparent);
+    box-shadow: none !important;
+  }
+
+  :is(tbody tr:nth-child(even), .tr:nth-child(even), .cbi-section-table-row:nth-child(even)) {
+    background: color-mix(in oklab, var(--md-sys-color-surface-container, #f1f1f8) 92%, transparent);
+  }
+
+  :is(tbody tr:hover, .tr:hover, .cbi-section-table-row:hover) {
+    background: color-mix(in oklab, var(--md-sys-color-surface-container-high, #ececf4) 94%, transparent);
+  }
+}
+
+#maincontent .cbi-value {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-low, #f7f7fc) 88%, transparent);
+  box-shadow: none !important;
+  padding-block: 0.62rem !important;
+  padding-inline: 1rem !important;
+  column-gap: 0.8rem;
+  align-items: center;
+}
+
+#maincontent .cbi-value:hover {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-high, #ececf4) 94%, transparent);
+}
+
+#maincontent :is(.cbi-value-title, .cbi-value-field) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#maincontent .cbi-value.md3e-value-rich-content {
+  padding-block: 0.85rem !important;
+}
+
+#maincontent .cbi-value-title {
+  color: color-mix(in oklab, var(--md-sys-color-on-surface-variant, #49454f) 82%, transparent) !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+#maincontent .cbi-value-field {
+  color: var(--md-sys-color-on-surface, #1d1b20) !important;
+  font-weight: 500;
+  flex: 1 1 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* LuCI dynamic lists must shrink inside form rows instead of sizing from their contents. */
+#maincontent .cbi-dynlist,
+#maincontent .cbi-value-field > .cbi-dynlist {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  gap: 0.45rem 0.5rem;
+}
+
+#maincontent .cbi-dynlist > .item {
+  flex: 1 1 min(15.5rem, 100%);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#maincontent .cbi-dynlist > .item > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#maincontent .cbi-dynlist > .add-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  gap: 0.5rem;
+}
+
+#maincontent .cbi-dynlist > .add-item > .cbi-input-text {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+}
+
+#maincontent .cbi-dynlist > .add-item > .cbi-button,
+#maincontent .cbi-dynlist > .add-item > .cbi-button-add {
+  flex: 0 0 auto;
+  width: auto !important;
+  min-width: max-content;
+  min-height: 2.65rem;
+  height: 2.65rem !important;
+  padding-inline: 1rem !important;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  line-height: 1;
+  text-indent: 0;
+}
+
+/* Ensure hidden CBI values are strictly not displayed across all specificity layers */
+#maincontent .cbi-value.hidden,
+#maincontent .cbi-section-node .cbi-value.hidden {
+  display: none !important;
+}
+
+/* Shared tonal form group for native settings rows. */
+:is(#maincontent, .md3e-native-editor) .md3e-tonal-shell,
+:is(#maincontent, .md3e-native-editor) .md3e-tonal-settings > .cbi-section-node {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data, .cbi-value.md3e-tonal-data, .md3e-code-group.md3e-tonal-data):where(:not([data-tab]), [data-tab-active="true"]) {
+  --_settings-divider: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent);
+  container: md3e-settings / inline-size;
+  padding: .625rem clamp(.875rem, 2.5vw, 1.5rem) .5rem !important;
+  border-radius: var(--md-sys-shape-corner-extra-large) !important;
+  background: var(--md-sys-color-surface-container-low) !important;
+  box-shadow: none !important;
+
+  > :is(h3, h4) {
+    margin: .3rem 0 .45rem;
+    color: var(--md-sys-color-on-surface);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    font-weight: 600;
+  }
+
+  > .cbi-section-descr {
+    margin: 0 0 .35rem;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+}
+
+:is(#maincontent, .md3e-native-editor) .md3e-tonal-settings:where(:not([data-tab]), [data-tab-active="true"]) {
+  > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount),
+  > .cbi-section-node > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount) {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: .35rem 1rem !important;
+    padding: .55rem 0 !important;
+    background: transparent !important;
+
+    &:not(.md3e-value-dropdown-open) { margin-block: 0 !important; }
+    & ~ .cbi-value:not(.hidden) { border-block-start: var(--_settings-divider) !important; }
+
+    > .cbi-value-title {
+      width: auto !important;
+      margin: 0 !important;
+      overflow-wrap: anywhere;
+    }
+
+    > .cbi-value-field {
+      text-align: start;
+      > :is(input.cbi-input-text, select, textarea, .cbi-dropdown:not(.btn, .cbi-button)),
+      > div:has(> select + .outline-select),
+      > div:has(> select + .outline-select) > .outline-select,
+      > div:has(> select + .outline-select) > .outline-select > .outline-select-trigger,
+      > .outline-select:only-child,
+      > .outline-select:only-child > .outline-select-trigger {
+        inline-size: 100% !important;
+        max-inline-size: none !important;
+      }
+    }
+
+    @container md3e-settings (width >= 38rem) {
+      flex-direction: row !important;
+      align-items: start !important;
+      justify-content: space-between;
+
+      > .cbi-value-title { flex: 0 1 min(36%, 15rem) !important; padding-block: .5rem !important; }
+      > .cbi-value-field {
+        flex: 1 1 auto !important;
+        max-inline-size: 28rem !important;
+        margin-inline-start: auto !important;
+      }
+    }
+
+    &:not(:has(> .cbi-value-title)),
+    &:has(> .cbi-value-title:empty) {
+      > .cbi-value-field {
+        flex: 1 1 100% !important;
+        max-inline-size: 100% !important;
+        margin-inline-start: 0 !important;
+      }
+    }
+
+    &:has(> .cbi-value-field > :is(.cbi-checkbox, input[type="checkbox"])) {
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between;
+
+      > .cbi-value-title { flex: 1 1 auto !important; padding: 0 !important; }
+      > .cbi-value-field { flex: none !important; width: auto !important; }
+    }
+
+    &:has(> .cbi-value-field > :is(button, .cbi-button):only-child),
+    &:has(> .cbi-value-field > output > :is(button, .cbi-button):only-child):not(:has(> .cbi-value-field > :not(output):not(input[type="hidden"]))) {
+      @container md3e-settings (width >= 38rem) {
+        align-items: center !important;
+
+        > .cbi-value-title { flex: 1 1 auto !important; max-inline-size: 42rem; }
+        > .cbi-value-field { flex: none !important; width: auto !important; max-inline-size: none !important; margin-inline-start: auto !important; }
+      }
+    }
+  }
+}
+
+#maincontent .cbi-value.md3e-tonal-data:not(.hidden) {
+  display: block !important;
+  max-width: 100%;
+  margin-block: 0 var(--space-md) !important;
+}
+
+#maincontent .md3e-tonal-data > .cbi-section {
+  margin: 0;
+  padding: 0 !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) {
+  display: flex;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-items: center !important;
+  gap: 0.625rem;
+  margin-block: .35rem 0 !important;
+  padding: .55rem 0 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) > div:has(> input.cbi-section-create-name) {
+  flex: 1 1 12rem !important;
+  min-inline-size: 9rem;
+  max-inline-size: 20rem;
+  width: auto !important;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) input.cbi-section-create-name {
+  width: 100% !important;
+  min-inline-size: 0;
+}
+
+:is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) > :is(.cbi-button, .cbi-button-add, button, input[type="submit"], input[type="button"]) {
+  flex: 0 0 auto !important;
+  inline-size: max-content !important;
+  width: auto !important;
+  min-inline-size: 4.5rem;
+  max-inline-size: 100%;
+  align-self: center;
+}
+
+.md3e-data-help {
+  margin-block: .25rem .45rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md3e-data-help > summary {
+  color: var(--md-sys-color-primary);
+  cursor: pointer;
+}

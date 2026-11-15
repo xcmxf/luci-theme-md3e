@@ -1,0 +1,412 @@
+@layer components {
+  @layer shell-pro {
+    #view > :is(.md3e-routing-copy, .md3e-view-copy)[hidden] {
+      display: none !important;
+    }
+
+
+    #maincontent #view > .md3e-routing-tabs {
+      margin-inline: auto;
+      margin-block-end: 1.5rem;
+      width: min(100%, 360px);
+      display: flex;
+      justify-content: center;
+
+      & > li {
+        flex: 1 1 0;
+        display: flex;
+        & > a { width: 100%; text-align: center; }
+      }
+    }
+
+    #maincontent .cbi-section.md3e-routing-panel {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    #maincontent .md3e-data-group {
+      min-inline-size: 0;
+      > .cbi-title > h3 { margin-block: 0.3rem 0.45rem; }
+    }
+
+    .md3e-data-scroll-hint {
+      display: none;
+      margin: 0.2rem 0 0.45rem;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: var(--md-sys-typescale-body-medium-size);
+    }
+
+    @container md3e-parameters (width < 43rem) {
+      .md3e-data-scroll[data-layout="wide"] + .md3e-data-scroll-hint,
+      .md3e-data-scroll-hint:has(+ .md3e-data-scroll[data-layout="wide"]) { display: block; }
+    }
+
+    @container md3e-parameters (width < 24rem) {
+      .md3e-data-scroll[data-layout="medium"] + .md3e-data-scroll-hint { display: block; }
+    }
+
+    #maincontent .md3e-dhcp-service-table > .cbi-tblsection-create {
+      padding: 0.35rem 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+
+      > .cbi-button-add:only-child {
+        inline-size: max-content !important;
+        min-inline-size: 4.5rem;
+        max-inline-size: 100%;
+        align-self: flex-start;
+      }
+    }
+
+    #maincontent .md3e-tonal-data .cbi-tblsection-create > .cbi-button-add {
+      inline-size: max-content !important;
+      min-inline-size: 4.5rem;
+      max-inline-size: 100%;
+      align-self: flex-start;
+      flex: none;
+    }
+
+    #maincontent .cbi-section .cbi-value.md3e-tonal-shell {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+
+    /* Native Wireless station table: keep the fixed rate column readable and let
+       long Host/SSID values wrap instead of forcing the whole table wide. */
+    #maincontent #wifi_assoclist_table {
+      > thead > tr > th:nth-child(5),
+      > tbody > tr:not(.placeholder) > td:nth-child(5) {
+        min-inline-size: 12rem;
+      }
+
+      > tbody > tr:not(.placeholder) > td:first-child {
+        min-inline-size: 8rem;
+      }
+
+      > tbody > tr:not(.placeholder) > td:nth-child(3) {
+        min-inline-size: 13rem;
+        overflow-wrap: anywhere;
+        white-space: normal;
+      }
+    }
+
+    #maincontent .md3e-data-group .md3e-data-scroll {
+      --md3e-table-min: 0px;
+      &[data-layout="wide"] { --md3e-table-min: 43rem; }
+      &[data-layout="medium"] { --md3e-table-min: 24rem; }
+
+      > table {
+        border-spacing: 0;
+        margin: 0;
+        color: var(--md-sys-color-on-surface);
+        font-variant-numeric: tabular-nums;
+
+        :is(th, td) {
+          font-size: var(--md-sys-typescale-body-medium-size);
+          color: var(--md-sys-color-on-surface);
+          border-radius: 0;
+        }
+
+        th { font-weight: 500; }
+
+        td { font-weight: 400; }
+
+        [data-md3e-column="number"] {
+          inline-size: 1%;
+          white-space: nowrap !important;
+          text-align: end;
+        }
+
+        th[data-sortable-row] {
+          cursor: pointer;
+          &:hover, &:focus-visible { background: var(--md-sys-color-surface-container-high) !important; }
+          &:focus-visible { outline: 2px solid var(--md-sys-color-primary); outline-offset: -2px; }
+        }
+
+        .ifacebadge {
+          margin: 0;
+          border: 0;
+          border-radius: var(--md-sys-shape-corner-full);
+          background: var(--md-sys-color-secondary-container);
+          color: var(--md-sys-color-on-secondary-container);
+        }
+
+        &:has(tr.placeholder) {
+          min-inline-size: 0;
+          tr.table-titles { display: none !important; }
+          tr.placeholder {
+            border: 0 !important;
+            td { color: var(--md-sys-color-on-surface-variant); text-align: start; }
+            em { font-style: normal; }
+          }
+        }
+      }
+
+    }
+  
+    #cbi-network-switch_vlan .md3e-native-grid td > .cbi-input-text {
+      min-inline-size: 5rem !important;
+    }
+
+    #cbi-network-switch_vlan .md3e-native-grid :is(select, .cbi-dropdown:not(.btn)) {
+      /* Port values need room inside this explicitly scrollable grid. */
+      min-inline-size: 8rem !important;
+    }
+
+    [data-page="admin-status-channel_analysis"] #view .cbi-title-section > h2.cbi-title-field {
+      display: none;
+    }
+
+    [data-page="admin-status-channel_analysis"] #channel_graph {
+      border-color: var(--md-sys-color-outline-variant) !important;
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      background: var(--md-sys-color-surface-container-low) !important;
+      overflow: hidden;
+
+      > svg > line {
+        stroke: var(--md-sys-color-outline-variant) !important;
+        stroke-width: 0.6px !important;
+      }
+
+      > svg > text {
+        fill: var(--md-sys-color-on-surface-variant) !important;
+        text-shadow: none !important;
+        font-family: var(--font-sans) !important;
+      }
+    }
+
+    #maincontent .md3e-tonal-data {
+      --md3e-parameter-divider: var(--_settings-divider);
+
+      .md3e-native-grid td.cbi-section-actions {
+        width: 1% !important;
+        min-width: 0 !important;
+      }
+
+      .md3e-native-grid .md3e-row-action-cluster {
+        inline-size: max-content;
+        flex-wrap: nowrap;
+      }
+    }
+
+    @container md3e-settings (width < 40rem) {
+      #maincontent .md3e-record-list .md3e-native-grid > table:not(.md3e-table-empty) {
+        display: block !important;
+        min-inline-size: 0;
+        > thead,
+        tr.cbi-section-table-titles {
+          position: absolute !important;
+          inline-size: 1px !important;
+          block-size: 1px !important;
+          overflow: hidden;
+          clip-path: inset(50%);
+        }
+        > tbody { display: block !important; }
+        tr.cbi-section-table-row {
+          display: grid !important;
+          grid-template-columns: minmax(0, 1fr);
+          padding: .65rem 0;
+          gap: .2rem;
+        }
+        tr.cbi-section-table-row > td {
+          display: block !important;
+          width: auto !important;
+          padding: .15rem 0 !important;
+          text-align: start;
+          word-break: normal;
+          overflow-wrap: anywhere;
+        }
+        td.cbi-section-table-titles {
+          font-size: var(--md-sys-typescale-title-medium-size);
+          font-weight: 600;
+        }
+        td[data-title]::before {
+          content: attr(data-title) !important;
+          display: block !important;
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: var(--md-sys-typescale-label-medium-size);
+        }
+        td[data-name="enabled"] {
+          display: flex !important;
+          align-items: center;
+          gap: .65rem;
+        }
+        td.cbi-section-actions .md3e-row-action-cluster {
+          inline-size: auto;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+        }
+      }
+    }
+
+    /* Realtime Graphs enhancements */
+    body[data-page^="admin-status-realtime-"] {
+      #map { margin-top: 0.5rem; }
+
+      .md3e-realtime-panel {
+        container: md3e-realtime / inline-size;
+        min-inline-size: 0;
+      }
+
+      .md3e-realtime-connections {
+        --md3e-parameter-divider: 1px solid var(--md-sys-color-outline-variant);
+        padding: var(--md3e-content-edge);
+        border-radius: var(--md-sys-shape-corner-extra-large);
+        background: var(--md-sys-color-surface-container-low);
+      }
+
+      .md3e-realtime-plot {
+        border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 35%, transparent) !important;
+        border-radius: var(--md-sys-shape-corner-extra-large) !important;
+        background: var(--md-sys-color-surface-container-low) !important;
+        overflow: hidden;
+
+        svg line { stroke: var(--md-sys-color-outline-variant) !important; stroke-opacity: 0.65; }
+        svg text { fill: var(--md-sys-color-on-surface-variant) !important; text-shadow: none !important; font-family: var(--font-sans) !important; font-size: 0.75rem !important; }
+        svg polyline { stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px !important; }
+      }
+
+      #load01, #other { stroke: var(--md-sys-color-error) !important; fill: var(--md-sys-color-error) !important; fill-opacity: 0.16 !important; }
+      #load05, #tx, #tcp, #noise { stroke: var(--md-sys-color-tertiary) !important; stroke-dasharray: 6 3 !important; fill: var(--md-sys-color-tertiary) !important; fill-opacity: 0.14 !important; }
+      #load15 { stroke: var(--md-sys-color-secondary) !important; stroke-dasharray: 2 3 !important; fill: var(--md-sys-color-secondary) !important; fill-opacity: 0.14 !important; }
+      #rx, #udp, #rssi, #rate { stroke: var(--md-sys-color-primary) !important; fill: var(--md-sys-color-primary) !important; fill-opacity: 0.18 !important; }
+
+      .cbi-section > div.right:has(:is(#scale, #scale2)) {
+        margin-block: 0.4rem 0.5rem;
+        padding-inline: 0.5rem;
+        :is(#scale, #scale2) { font-size: 0.75rem; color: var(--md-sys-color-on-surface-variant); }
+      }
+
+      .cbi-section > div.right + br { display: none !important; }
+
+      .md3e-realtime-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        margin-block: 0.75rem 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: var(--md-sys-shape-corner-large);
+        background: var(--md-sys-color-surface-container-low);
+        border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 45%, transparent);
+
+        .filter { flex: 1 1 16rem !important; input { width: 100%; } }
+        .right { flex: 0 0 auto !important; button { margin: 0; } }
+      }
+    }
+
+    /* Tonal Statistics Matrix */
+    table.md3e-stats-matrix {
+      margin-top: 0.5rem !important;
+      width: 100% !important;
+      table-layout: fixed !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+      border-radius: var(--md-sys-shape-corner-extra-large) !important;
+      background: var(--md-sys-color-surface-container-low) !important;
+      border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 35%, transparent) !important;
+      overflow: hidden;
+
+      th {
+        padding: 0.65rem 0.85rem !important;
+        font-size: 0.8125rem !important;
+        font-weight: 600 !important;
+        color: var(--md-sys-color-on-surface-variant) !important;
+        border-bottom: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 45%, transparent) !important;
+        background: transparent !important;
+        &:first-child { text-align: start !important; width: 28% !important; }
+        &:not(:first-child) { text-align: end !important; width: 24% !important; }
+      }
+
+      td {
+        padding: 0.65rem 0.85rem !important;
+        font-size: 0.875rem !important;
+        color: var(--md-sys-color-on-surface) !important;
+        font-variant-numeric: tabular-nums !important;
+        border-bottom: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 25%, transparent) !important;
+        background: transparent !important;
+        &:first-child { text-align: start !important; font-weight: 600 !important; display: flex; align-items: center; }
+        &:not(:first-child) { text-align: end !important; font-weight: 500 !important; }
+      }
+
+      tr:last-child td { border-bottom: none !important; }
+
+      @container md3e-realtime (width < 42rem) {
+        display: block !important;
+        padding: 0.5rem !important;
+        thead {
+          position: absolute !important;
+          width: 1px !important;
+          height: 1px !important;
+          padding: 0 !important;
+          margin: -1px !important;
+          overflow: hidden !important;
+          clip: rect(0, 0, 0, 0) !important;
+          white-space: nowrap !important;
+          border: 0 !important;
+        }
+        tbody { display: flex !important; flex-direction: column !important; }
+        tr {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 0.35rem !important;
+          padding: 0.65rem 0.85rem !important;
+          border-radius: var(--md-sys-shape-corner-large) !important;
+          background: var(--md-sys-color-surface-container) !important;
+          border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 30%, transparent) !important;
+          &:not(:last-of-type, :last-child) {
+            margin-bottom: 0.5rem !important;
+          }
+        }
+        td {
+          border: 0 !important;
+          padding: 0 !important;
+          &:first-child {
+            padding-bottom: 0.35rem !important;
+            border-bottom: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 35%, transparent) !important;
+            margin-bottom: 0.15rem !important;
+          }
+          &:not(:first-child) {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: baseline !important;
+            text-align: end !important;
+            gap: 0.75rem !important;
+            font-size: 0.8125rem !important;
+            &::before {
+              content: attr(data-label);
+              display: block !important;
+              font-size: 0.75rem;
+              font-weight: 500;
+              color: var(--md-sys-color-on-surface-variant);
+              text-align: start;
+              overflow-wrap: anywhere;
+            }
+          }
+        }
+      }
+    }
+
+    .md3e-stats-legend-marker {
+      display: inline-block;
+      flex: none;
+      width: 14px;
+      height: 3px;
+      border-radius: 2px;
+      margin-inline-end: 0.5rem;
+      vertical-align: middle;
+    }
+    .md3e-marker-load01, .md3e-marker-other { background: var(--md-sys-color-error); }
+    .md3e-marker-rx, .md3e-marker-udp, .md3e-marker-rssi, .md3e-marker-rate { background: var(--md-sys-color-primary); }
+    .md3e-marker-load05, .md3e-marker-tx, .md3e-marker-tcp, .md3e-marker-noise { background: repeating-linear-gradient(90deg, var(--md-sys-color-tertiary) 0 4px, #0000 4px 7px); }
+    .md3e-marker-load15 { background: repeating-linear-gradient(90deg, var(--md-sys-color-secondary) 0 2px, #0000 2px 4px); }
+
+    strong[style*="border-bottom"] { border-bottom: none !important; }
+  }
+}

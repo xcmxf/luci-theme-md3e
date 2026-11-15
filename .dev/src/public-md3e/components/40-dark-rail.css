@@ -1,0 +1,148 @@
+/* Dark mode: reduce bright layer contrast and keep surfaces separated by tone. */
+[data-darkmode="true"] #maincontent .cbi-page-actions {
+  --_md3e-action-shell-bg: color-mix(in oklab, var(--md-sys-color-surface-container, #211f26) 84%, transparent);
+  --_md3e-action-shell-border: color-mix(in oklab, var(--md-sys-color-surface-container-highest, #36343b) 26%, transparent);
+  --_md3e-action-divider: color-mix(in oklab, var(--md-sys-color-surface-container-highest, #36343b) 24%, transparent);
+  box-shadow:
+    0 18px 34px -30px rgb(0 0 0 / 0.54);
+}
+
+[data-darkmode="true"] #maincontent :is(table, .table, .cbi-section-table) :is(tr, .tr, .cbi-section-table-row),
+[data-darkmode="true"] #maincontent .cbi-value {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-low, #1d1b20) 76%, transparent);
+}
+
+[data-darkmode="true"] #maincontent :is(table, .table, .cbi-section-table) :is(tbody tr:nth-child(even), .tr:nth-child(even), .cbi-section-table-row:nth-child(even)) {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container, #211f26) 82%, transparent);
+}
+
+[data-darkmode="true"] #maincontent :is(table, .table, .cbi-section-table) :is(tbody tr:hover, .tr:hover, .cbi-section-table-row:hover),
+[data-darkmode="true"] #maincontent .cbi-value:hover {
+  background: color-mix(in oklab, var(--md-sys-color-surface-container-high, #2b2930) 84%, transparent);
+}
+
+[data-darkmode="true"] #maincontent .outline-select-panel,
+[data-darkmode="true"] #maincontent .cbi-dropdown[open] > ul.dropdown,
+[data-darkmode="true"] #maincontent .cbi-dropdown[open] > ul:not(.preview) {
+  border-color: color-mix(in oklab, var(--md-sys-color-outline-variant, #49454f) 34%, transparent) !important;
+  background: var(--md-sys-color-surface-container-high, #2b2930) !important;
+  box-shadow:
+    0 16px 30px -24px rgb(0 0 0 / 0.62);
+}
+
+[data-darkmode="true"] #maincontent #tabmenu {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+[data-darkmode="true"] #maincontent #tabmenu > .tabs,
+[data-darkmode="true"] #maincontent .cbi-tabmenu {
+  background: color-mix(
+    in oklab,
+    var(--md-sys-color-surface-container-high, #282a2f) 90%,
+    var(--md-sys-color-surface-container-highest, #33353a) 10%
+  ) !important;
+  box-shadow: none !important;
+}
+
+[data-darkmode="true"] .md3e-on-this-page__link.active {
+  box-shadow: none;
+}
+
+/* Align the desktop rail logo with the primary navigation buttons. */
+body[data-layout-mode="desktop"] .md3e-mode-rail {
+  align-items: center;
+}
+
+/* Desktop rail active state: filled pill without an outer ring. */
+body[data-layout-mode="desktop"] .md3e-mode-rail .md3e-mode-link.active {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+body[data-layout-mode="desktop"] .md3e-mode-rail .md3e-mode-link.active .md3e-mode-link__icon {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+body[data-layout-mode="desktop"] .md3e-mode-rail .md3e-mode-link.active:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md-sys-color-primary, #6750a4) 42%, transparent) !important;
+  outline-offset: 2px !important;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo {
+  width: 3.5rem;
+  height: 3.5rem;
+  min-height: 3.5rem;
+  margin: 0.75rem auto 1rem;
+  border-radius: 1rem;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  line-height: 0;
+  position: relative;
+  text-decoration: none;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--md-sys-color-primary-container, #d8e2ff) 86%, var(--md-sys-color-surface-container-high, #e0e5f1));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cpath%20fill%3D'black'%20d%3D'M%2032.00%202.50%20C%2036.65%202.50%2C%2038.66%207.46%2C%2042.85%209.48%20C%2047.03%2011.49%2C%2052.17%209.97%2C%2055.06%2013.61%20C%2057.96%2017.24%2C%2055.34%2021.91%2C%2056.37%2026.44%20C%2057.41%2030.97%2C%2061.79%2034.03%2C%2060.76%2038.56%20C%2059.73%2043.10%2C%2054.44%2043.95%2C%2051.55%2047.59%20C%2048.65%2051.22%2C%2048.99%2056.56%2C%2044.80%2058.58%20C%2040.61%2060.59%2C%2036.65%2057.00%2C%2032.00%2057.00%20C%2027.35%2057.00%2C%2023.39%2060.59%2C%2019.20%2058.58%20C%2015.01%2056.56%2C%2015.35%2051.22%2C%2012.45%2047.59%20C%209.56%2043.95%2C%204.27%2043.10%2C%203.24%2038.56%20C%202.21%2034.03%2C%206.59%2030.97%2C%207.63%2026.44%20C%208.66%2021.91%2C%206.04%2017.24%2C%208.94%2013.61%20C%2011.83%209.97%2C%2016.97%2011.49%2C%2021.15%209.48%20C%2025.34%207.46%2C%2027.35%202.50%2C%2032.00%202.50%20Z'%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cpath%20fill%3D'black'%20d%3D'M%2032.00%202.50%20C%2036.65%202.50%2C%2038.66%207.46%2C%2042.85%209.48%20C%2047.03%2011.49%2C%2052.17%209.97%2C%2055.06%2013.61%20C%2057.96%2017.24%2C%2055.34%2021.91%2C%2056.37%2026.44%20C%2057.41%2030.97%2C%2061.79%2034.03%2C%2060.76%2038.56%20C%2059.73%2043.10%2C%2054.44%2043.95%2C%2051.55%2047.59%20C%2048.65%2051.22%2C%2048.99%2056.56%2C%2044.80%2058.58%20C%2040.61%2060.59%2C%2036.65%2057.00%2C%2032.00%2057.00%20C%2027.35%2057.00%2C%2023.39%2060.59%2C%2019.20%2058.58%20C%2015.01%2056.56%2C%2015.35%2051.22%2C%2012.45%2047.59%20C%209.56%2043.95%2C%204.27%2043.10%2C%203.24%2038.56%20C%202.21%2034.03%2C%206.59%2030.97%2C%207.63%2026.44%20C%208.66%2021.91%2C%206.04%2017.24%2C%208.94%2013.61%20C%2011.83%209.97%2C%2016.97%2011.49%2C%2021.15%209.48%20C%2025.34%207.46%2C%2027.35%202.50%2C%2032.00%202.50%20Z'%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  transition:
+    transform var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    background-color var(--md-sys-motion-effects-fast-duration, 225ms) ease;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo img {
+  position: relative;
+  z-index: 1;
+  width: 1.875rem;
+  height: 1.875rem;
+  display: block;
+  object-fit: contain;
+  margin: auto;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--md-sys-color-primary, #445e91) 52%, transparent);
+  outline-offset: 2px;
+}
+
+body[data-layout-mode="desktop"] .md3e-rail-logo:active::before {
+  transform: scale(0.94);
+}
+
+@media (hover: hover) {
+  body[data-layout-mode="desktop"] .md3e-rail-logo:hover {
+    background: transparent;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+  body[data-layout-mode="desktop"] .md3e-rail-logo:hover::before {
+    transform: scale(1.06);
+    background: var(--md-sys-color-primary-container, #d8e2ff);
+  }
+}
+
+[data-darkmode="true"] body[data-layout-mode="desktop"] .md3e-rail-logo::before {
+  background: color-mix(in oklab, var(--md-sys-color-primary-fixed, #d8e2ff) 88%, transparent);
+}
+
+@media (hover: hover) {
+  [data-darkmode="true"] body[data-layout-mode="desktop"] .md3e-rail-logo:hover::before {
+    background: var(--md-sys-color-primary-fixed, #d8e2ff);
+  }
+}

@@ -1,0 +1,194 @@
+@layer components {
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) {
+    --md3e-action-primary-bg: color-mix(
+      in oklab,
+      var(--md-comp-filled-button-container-color) 92%,
+      var(--md-sys-color-tertiary)
+    );
+    --md3e-action-primary-hover: color-mix(
+      in oklab,
+      var(--md3e-action-primary-bg) 90%,
+      var(--md-sys-color-on-primary)
+    );
+    --md3e-action-primary-pressed: color-mix(
+      in oklab,
+      var(--md3e-action-primary-bg) 82%,
+      var(--md-sys-color-on-primary)
+    );
+    min-height: 3.25rem;
+    padding: 0;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3.15rem;
+    align-items: stretch;
+    overflow: visible;
+    border: 0;
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    color: var(--md-sys-color-on-primary);
+    background: var(--md3e-action-primary-bg);
+    box-shadow: none;
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+    transition:
+      background-color 160ms var(--md-sys-motion-easing-standard),
+      box-shadow 160ms var(--md-sys-motion-easing-standard);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]):is(:hover, :focus-within) {
+    background: var(--md3e-action-primary-hover);
+    box-shadow: none;
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]):active {
+    background: var(--md3e-action-primary-pressed);
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"])::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .md3e-split-button__label {
+    grid-column: 1;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 0.9rem 1.1rem 0.9rem 1.35rem;
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    font-weight: 700;
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .more {
+    display: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > ul.preview {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .open {
+    grid-column: 2;
+    grid-row: 1;
+    width: 3.15rem !important;
+    min-width: 3.15rem;
+    min-height: 100%;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0 !important;
+    line-height: 0;
+    text-indent: 0;
+    border: 0;
+    border-radius: 0 var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-extra-large) 0;
+    color: inherit;
+    background: color-mix(in oklab, var(--md-sys-color-on-primary) 8%, transparent);
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+    transition:
+      background-color 180ms var(--md-sys-motion-easing-standard);
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .open::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .open::after {
+    content: "" !important;
+    display: block;
+    width: 1.08rem;
+    height: 1.08rem;
+    background: currentColor;
+    mask: url("@assets/icons/arrow-down.svg") center / cover no-repeat;
+    transform: rotate(var(--md3e-split-arrow-rotate, 0deg)) !important;
+    transition: transform 180ms var(--md-sys-motion-easing-standard);
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"])[open] > .open {
+    --md3e-split-arrow-rotate: 180deg;
+    background: color-mix(in oklab, var(--md-sys-color-on-primary) 14%, transparent);
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > :is(ul.dropdown, ul:not(.preview)) {
+    display: none !important;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"])[open] > :is(ul.dropdown, ul:not(.preview)) {
+    display: grid !important;
+    position: absolute !important;
+    z-index: 130;
+    gap: 0.2rem;
+    top: calc(100% + 0.6rem) !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: 0 !important;
+    min-width: min(17rem, calc(100vw - 2rem)) !important;
+    width: max-content;
+    max-width: calc(100vw - 2rem) !important;
+    padding: 0.45rem;
+    border: 0;
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    background: color-mix(
+      in oklab,
+      var(--md-sys-color-surface-container-highest) 96%,
+      var(--md-sys-color-surface)
+    );
+    box-shadow: 0 24px 54px -30px var(--expressive-shadow);
+    transform-origin: top right;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"])[open] > :is(ul.dropdown, ul:not(.preview)).above {
+    top: auto !important;
+    bottom: calc(100% + 0.6rem) !important;
+    transform-origin: bottom right;
+  }
+
+  .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"])[open] > :is(ul.dropdown, ul:not(.preview)) > li {
+    display: flex !important;
+    min-height: 2.75rem;
+    border-radius: var(--md-sys-shape-corner-large);
+    background: transparent;
+  }
+
+  @media (width < 48rem) {
+    body.mobile-page-actions-visible .cbi-page-actions[data-dirty="true"] {
+      background: color-mix(
+        in oklab,
+        var(--md-sys-color-surface-container-low) 98%,
+        var(--md-sys-color-surface)
+      );
+      border-top: 0;
+      box-shadow: 0 -28px 62px -48px var(--expressive-shadow);
+    }
+
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) {
+      width: 100%;
+      min-height: 2.45rem;
+      grid-template-columns: minmax(0, 1fr) 2.65rem;
+    }
+  }
+}

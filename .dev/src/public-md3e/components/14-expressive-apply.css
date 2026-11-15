@@ -1,0 +1,142 @@
+#maincontent .cbi-page-actions > .md3e-apply-split {
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr) 2.75rem;
+  gap: 3px;
+  position: relative;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  order: 2;
+}
+
+.md3e-apply-split > .cbi-dropdown[hidden],
+.md3e-apply-menu[hidden] {
+  display: none !important;
+}
+
+.md3e-apply-split:has(> [aria-expanded="true"]) {
+  z-index: 50;
+}
+
+#maincontent .md3e-apply-split > :is(.md3e-apply-primary, .md3e-apply-toggle) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  height: 2.75rem;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0 1.125rem;
+  border: 0;
+  box-shadow: none;
+  color: var(--_md3e-action-primary-fg);
+  background: var(--_md3e-action-primary-bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  white-space: nowrap;
+  gap: 0.4rem;
+  transition:
+    border-radius var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    padding-inline var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1)),
+    background-color var(--md-sys-motion-effects-fast-duration, 225ms) ease;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-primary {
+  border-radius: 1.375rem 0.5rem 0.5rem 1.375rem !important;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-primary:enabled:active {
+  border-radius: 1.375rem 0.875rem 0.875rem 1.375rem !important;
+  padding-inline: 1.3rem;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-toggle {
+  padding: 0;
+  border-radius: 0.5rem 1.375rem 1.375rem 0.5rem !important;
+}
+
+#maincontent .md3e-apply-split > .md3e-apply-toggle:enabled:active,
+#maincontent .md3e-apply-split > .md3e-apply-toggle[aria-expanded="true"] {
+  border-radius: 1.375rem !important;
+}
+
+.md3e-apply-toggle::after {
+  content: "";
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--md-sys-motion-spatial-fast-duration, 417ms) var(--md-sys-motion-spatial-fast-easing, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.md3e-apply-toggle[aria-expanded="true"]::after {
+  transform: translateY(2px) rotate(225deg);
+}
+
+@media (hover: hover) {
+  #maincontent .md3e-apply-split > button:enabled:hover {
+    background: var(--_md3e-action-primary-hover);
+  }
+}
+
+#maincontent .md3e-apply-split > button:enabled:active,
+#maincontent .md3e-apply-split > .md3e-apply-toggle[aria-expanded="true"] {
+  background: var(--_md3e-action-primary-pressed);
+}
+
+#maincontent .md3e-apply-split:disabled > button {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: default;
+}
+
+.md3e-apply-menu {
+  position: absolute;
+  z-index: 1;
+  inline-size: max-content;
+  min-inline-size: 10rem;
+  padding: 0.375rem;
+  overflow: auto;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 16px;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  box-shadow: 0 12px 32px -18px var(--expressive-shadow);
+}
+
+#maincontent .md3e-apply-menu > button {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.875rem;
+  margin: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  text-align: start;
+}
+
+#maincontent .md3e-apply-menu > button:is(:hover, :focus-visible) {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border-radius: 12px;
+}
+
+#maincontent .md3e-apply-split > button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+}
+
+#maincontent .md3e-apply-menu > button:focus-visible,
+#maincontent .cbi-page-actions:has(> .md3e-apply-split) > .md3e-action-group > button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: -3px;
+}

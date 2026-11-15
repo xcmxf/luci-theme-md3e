@@ -1,0 +1,150 @@
+@layer components {
+  @layer layout {
+    :root {
+      --md3e-mobile-bar-end: calc(env(safe-area-inset-top) + 4rem);
+    }
+
+    .md3e-mobile-topbar {
+      display: none;
+    }
+
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      body > header:has(> .md3e-mobile-topbar) {
+        margin-block-end: 0.5rem;
+      }
+
+      .md3e-mobile-topbar {
+        display: flex;
+        position: relative;
+        z-index: 1;
+        align-items: center;
+        gap: 0.125rem;
+        box-sizing: border-box;
+        block-size: var(--md3e-mobile-bar-end);
+        padding: env(safe-area-inset-top) max(0.25rem, env(safe-area-inset-right))
+          0 max(0.25rem, env(safe-area-inset-left));
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .header-blur-overlay[data-is-opaque="true"] ~ .md3e-mobile-topbar {
+        background: var(--md-sys-color-surface-container-low);
+      }
+    }
+
+    .md3e-mobile-topbar-action,
+    .mobile-header-brand {
+      display: grid;
+      place-items: center;
+      flex: none;
+      inline-size: 3rem;
+      block-size: 3rem;
+      padding: 0;
+      border: 0;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-decoration: none;
+
+      &:hover { background: color-mix(in oklab, currentColor 8%, transparent); }
+      &:active { background: color-mix(in oklab, currentColor 12%, transparent); }
+      &:focus-visible {
+        outline: 2px solid var(--md-sys-color-primary);
+        outline-offset: -3px;
+      }
+    }
+
+    .mobile-header-brand-logo {
+      inline-size: 1.5rem;
+      block-size: 1.5rem;
+    }
+
+    .md3e-mobile-topbar-trailing {
+      margin-inline-start: auto;
+    }
+  }
+
+  @layer overlay {
+    .mobile-menu-overlay {
+      .md3e-mobile-topbar--dialog {
+        position: absolute;
+        inset: 0 0 auto;
+      }
+
+      &[data-mobile-view="menu"] [data-md3e-view="search"],
+      &[data-mobile-view="search"] :is([data-md3e-view="menu"], .mobile-nav) {
+        display: none;
+      }
+
+      &[data-mobile-view="search"] {
+        background: var(--md-sys-color-surface-container);
+
+        &::before { content: none; }
+        & .md3e-mobile-topbar { background: inherit; }
+      }
+
+      .md3e-mobile-page-search {
+        position: absolute;
+        inset: var(--md3e-mobile-bar-end) 0 0;
+        overflow: hidden auto;
+        overscroll-behavior: contain;
+        padding: 0.75rem max(0.5rem, env(safe-area-inset-right))
+          max(1rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
+      }
+
+      .md3e-mobile-search-form,
+      .md3e-mobile-search-status,
+      .md3e-mobile-search-results {
+        max-inline-size: 34rem;
+        margin-inline: auto;
+      }
+
+      #mobile-page-search {
+        appearance: none;
+        inline-size: 100%;
+        block-size: 4rem;
+        margin: 0;
+        padding-inline: 1.5rem;
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: var(--md-sys-shape-corner-full);
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        box-shadow: none;
+
+        &:focus {
+          outline: 2px solid var(--md-sys-color-primary);
+          outline-offset: -2px;
+        }
+      }
+
+      .md3e-mobile-search-status {
+        margin-block: 1.5rem 0.5rem;
+        padding-inline: 0.75rem;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .md3e-mobile-search-results {
+        display: grid;
+        gap: 0.25rem;
+        margin-block: 0;
+        padding: 0;
+        list-style: none;
+
+        .md3e-mobile-secondary-link {
+          display: grid;
+          gap: 0.2rem;
+          grid-template-columns: minmax(0, 1fr);
+          border-radius: var(--md-sys-shape-corner-large);
+        }
+
+        .md3e-mobile-search-section {
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}

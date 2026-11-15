@@ -1,0 +1,71 @@
+#maincontent .cbi-page-actions {
+  --_md3e-action-shell-bg: transparent;
+  --_md3e-action-shell-border: transparent;
+  --_md3e-action-divider: transparent;
+  --_md3e-action-subtle-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 96%, transparent);
+  --_md3e-action-subtle-fg: color-mix(in oklab, var(--foreground) 84%, transparent);
+  --_md3e-action-primary-bg: color-mix(
+    in oklab,
+    var(--md-comp-filled-button-container-color, var(--md3e-comp-filled-bg, var(--md-sys-color-primary))) 92%,
+    var(--md-sys-color-tertiary)
+  );
+  --_md3e-action-primary-fg: var(--md-comp-filled-button-label-text-color, var(--md3e-comp-filled-fg, var(--md-sys-color-on-primary)));
+  --_md3e-action-primary-hover: color-mix(in oklab, var(--_md3e-action-primary-bg) 90%, var(--_md3e-action-primary-fg));
+  --_md3e-action-primary-pressed: color-mix(in oklab, var(--_md3e-action-primary-bg) 82%, var(--_md3e-action-primary-fg));
+  --_md3e-action-save-bg: var(--md-sys-color-secondary-container);
+  --_md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+  --_md3e-action-save-hover: color-mix(in oklab, var(--md-sys-color-secondary-container) 86%, var(--md-sys-color-on-secondary-container) 14%);
+  --_md3e-action-save-ring: transparent;
+  --_md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 76%, transparent);
+  --_md3e-action-reset-fg: var(--md-sys-color-on-surface-variant);
+  --_md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 36%, var(--md-sys-color-surface-container-high));
+  --_md3e-action-reset-ring: transparent;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  margin-block: 1.25rem 0;
+  position: relative;
+  z-index: 10;
+  padding: 0;
+  gap: 0.625rem;
+  border-radius: 0;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#maincontent .cbi-page-actions > .md3e-action-group {
+  order: 1;
+}
+
+#maincontent .cbi-page-actions > :is(.md3e-apply-split, .md3e-split-button, [data-md3e-split-button]) {
+  order: 2;
+}
+
+[data-darkmode="true"] #maincontent .cbi-page-actions {
+  --_md3e-action-primary-bg: color-mix(in oklab, var(--md-sys-color-primary) 88%, var(--md-sys-color-tertiary));
+  --_md3e-action-primary-fg: var(--md-sys-color-on-primary);
+  --_md3e-action-save-bg: var(--md-sys-color-secondary-container);
+  --_md3e-action-save-fg: var(--md-sys-color-on-secondary-container);
+  --_md3e-action-save-hover: color-mix(in oklab, var(--md-sys-color-secondary-container) 84%, var(--md-sys-color-on-secondary-container) 16%);
+  --_md3e-action-reset-bg: color-mix(in oklab, var(--md-sys-color-surface-container-high) 82%, transparent);
+  --_md3e-action-reset-fg: var(--md-sys-color-on-surface-variant);
+  --_md3e-action-reset-hover: color-mix(in oklab, var(--md-sys-color-error-container) 42%, var(--md-sys-color-surface-container-high));
+}
+
+#maincontent .cbi-page-actions:hover,
+#maincontent .cbi-page-actions:focus-within,
+#maincontent .cbi-page-actions[data-dirty="true"] {
+  opacity: 1;
+  border: 0 !important;
+  box-shadow: none !important;
+}

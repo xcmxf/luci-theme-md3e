@@ -1,0 +1,505 @@
+@layer components {
+  @layer shell-pro {
+    #maincontent .cbi-section.md3e-parameter-group {
+      --md3e-parameter-inset: clamp(0.875rem, 2.5vw, 1.5rem);
+      --md3e-parameter-divider: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent);
+      container: md3e-parameters / inline-size;
+      padding: 0.625rem var(--md3e-parameter-inset) 0.5rem;
+      padding-block-start: 0.625rem !important;
+      margin-block-end: var(--space-md);
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      background: var(--md-sys-color-surface-container-low);
+
+      > .cbi-title {
+        margin: 0;
+        padding: 0;
+
+        > h3 {
+          align-items: center;
+          gap: 0.75rem;
+          inline-size: 100%;
+          max-inline-size: 100%;
+          font-weight: 600;
+          color: var(--md-sys-color-on-surface);
+        }
+
+        [role="button"] {
+          flex: none;
+          inline-size: 2.75rem;
+          min-inline-size: 2.75rem !important;
+          block-size: 2.75rem;
+
+          &:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: -2px;
+          }
+        }
+      }
+
+      > .cbi-title + div {
+        margin-block-start: 0;
+
+        > h3 {
+          margin-block: 0.4rem 0.2rem;
+          color: var(--md-sys-color-on-surface);
+          font-size: var(--md-sys-typescale-body-medium-size);
+          font-weight: 600;
+        }
+      }
+    }
+
+    .md3e-parameter-list {
+      margin: 0;
+    }
+
+    .md3e-parameter-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.15rem;
+      padding-block: 0.5rem;
+
+      & + & {
+        border-block-start: var(--md3e-parameter-divider);
+      }
+
+      > dt, > dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+
+      > dt {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: var(--md-sys-typescale-body-medium-size);
+      }
+
+      > dd {
+        color: var(--md-sys-color-on-surface);
+        font-weight: 550;
+        white-space: pre-line;
+      }
+
+      .cbi-progressbar {
+        gap: 0.625rem;
+        min-block-size: 2rem;
+
+        &::before {
+          color: var(--md-sys-color-on-surface);
+          font-size: var(--md-sys-typescale-body-medium-size);
+          font-weight: 550;
+        }
+      }
+    }
+
+    @container md3e-parameters (width >= 40rem) {
+      .md3e-parameter-row {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+        align-items: baseline;
+        gap: 1rem;
+
+        &:has(.cbi-progressbar) {
+          align-items: center;
+        }
+      }
+    }
+
+    .md3e-overview-empty {
+      display: block;
+      margin: 0;
+      padding-block: 0.5rem;
+      color: var(--md-sys-color-on-surface-variant);
+      font-style: normal;
+    }
+
+    .md3e-overview-port {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.4rem 1rem;
+      padding-block: 0.55rem;
+      overflow-wrap: anywhere;
+
+      & + & { border-block-start: var(--md3e-parameter-divider); }
+    }
+
+    .md3e-overview-port-identity {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      min-inline-size: 0;
+    }
+
+    .md3e-overview-port-icon {
+      display: grid;
+      place-items: center;
+      flex: none;
+      inline-size: 2.5rem;
+      block-size: 2.5rem;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+
+      &::before {
+        content: "";
+        inline-size: 1.25rem;
+        block-size: 1.25rem;
+        background: currentColor;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M3 5h18v10h-4l-2 4H9l-2-4H3zM8 8v3m4-3v3m4-3v3'/%3E%3C/svg%3E") center / contain no-repeat;
+      }
+    }
+
+    .md3e-overview-port[data-link-state="down"] .md3e-overview-port-icon {
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .md3e-overview-port-state {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.15rem 0.6rem;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: var(--md-sys-typescale-body-medium-size);
+
+      > span:first-child {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+
+        &::before {
+          content: "";
+          flex: none;
+          inline-size: 0.45rem;
+          block-size: 0.45rem;
+          border-radius: 50%;
+          background: currentColor;
+        }
+      }
+    }
+
+    .md3e-overview-port[data-link-state="up"] .md3e-overview-port-state > span:first-child {
+      color: var(--md-sys-color-primary);
+    }
+
+    .md3e-overview-port-traffic {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem 1rem;
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+
+      dt {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: var(--md-sys-typescale-body-medium-size);
+      }
+
+      dd {
+        margin: 0;
+        font-weight: 550;
+      }
+    }
+
+    .md3e-overview-port-details {
+      grid-column: 1 / -1;
+      min-inline-size: 0;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: var(--md-sys-typescale-body-medium-size);
+
+      > summary {
+        display: list-item;
+        inline-size: fit-content;
+        padding-block: 0.2rem;
+        cursor: pointer;
+      }
+    }
+
+    .md3e-port-details-panel {
+      max-inline-size: 54rem;
+      margin-block: 0.35rem 0.45rem;
+      padding-block-start: 0.5rem;
+      border-block-start: var(--md3e-parameter-divider);
+      overflow-wrap: anywhere;
+
+      .nowrap { white-space: normal !important; }
+    }
+
+    .md3e-port-associations {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem 0.65rem;
+    }
+
+    .md3e-port-network-chip[data-tooltip] {
+      display: inline-block;
+      white-space: normal;
+      text-decoration: none;
+      max-inline-size: 100%;
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      font-weight: 550;
+
+      &:focus-visible {
+        outline: 2px solid var(--md-sys-color-primary);
+        outline-offset: 2px;
+      }
+    }
+
+    .md3e-port-counters {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.65rem 1.75rem;
+      margin-block-start: 0.55rem;
+    }
+
+    .md3e-overview-port-details .md3e-port-counter-title {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      margin: 0 0 0.2rem;
+      color: var(--md-sys-color-on-surface);
+      font-size: var(--md-sys-typescale-body-medium-size);
+      font-weight: 650;
+
+      > span { color: var(--md-sys-color-on-surface-variant); }
+    }
+
+    .md3e-port-counter-list {
+      margin: 0;
+
+      > div {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) fit-content(48%);
+        gap: 0.65rem;
+        padding-block: 0.18rem;
+      }
+
+      dt, dd { margin: 0; }
+
+      dd {
+        color: var(--md-sys-color-on-surface);
+        font-variant-numeric: tabular-nums;
+        text-align: end;
+      }
+    }
+
+    .md3e-port-counter-extra {
+      max-inline-size: 26rem;
+      margin-block-start: 0.45rem;
+      padding-block-start: 0.4rem;
+      border-block-start: var(--md3e-parameter-divider);
+    }
+
+    @container md3e-parameters (width >= 36rem) {
+      .md3e-port-counters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @container md3e-parameters (width >= 40rem) {
+      .md3e-overview-port {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+        align-items: center;
+      }
+    }
+
+    #maincontent .md3e-parameter-group {
+      .network-status-table:empty { display: none; }
+
+      .network-status-table {
+        margin-block: 0.25rem;
+      }
+
+      .network-status-table > .ifacebox,
+      .network-status-table > .ifacebox > .ifacebox-head,
+      .network-status-table .ifacebox-body > div {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .network-status-table > .ifacebox,
+      .network-status-table > .ifacebox > .ifacebox-head {
+        padding-inline: 0;
+      }
+
+      .network-status-table > .ifacebox {
+        padding-block: 0.55rem;
+      }
+
+      .network-status-table > .ifacebox > .ifacebox-body {
+        padding-block-start: 0.35rem;
+      }
+
+      .network-status-table:has(> .ifacebox) + .md3e-parameter-list {
+        border-block-start: var(--md3e-parameter-divider);
+      }
+    }
+
+    #maincontent :is(.md3e-overview-data-scroll, .md3e-data-scroll) {
+        max-inline-size: 100%;
+        overflow-x: auto;
+        margin-block: 0.25rem 0.65rem;
+
+        &:focus-visible {
+          outline: 2px solid var(--md-sys-color-primary);
+          outline-offset: -2px;
+        }
+
+        > table {
+          display: table !important;
+          inline-size: 100%;
+          min-inline-size: var(--md3e-table-min, 38rem);
+          table-layout: auto !important;
+          border-collapse: collapse !important;
+
+          > thead { display: table-header-group !important; }
+          > tbody { display: table-row-group !important; }
+
+          tr {
+            display: table-row !important;
+            background: transparent !important;
+            border-radius: 0 !important;
+          }
+
+          tr + tr, thead + tbody tr:first-child {
+            border-block-start: var(--md3e-parameter-divider) !important;
+          }
+
+          :is(th, td) {
+            display: table-cell !important;
+            padding: 0.55rem 0.65rem !important;
+            word-break: normal;
+            background: transparent !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+          }
+
+          td:is([data-md3e-column="address"], [data-md3e-column="number"]),
+          &#connections td,
+          &#connections th {
+            white-space: nowrap !important;
+          }
+
+          td::before {
+            content: none !important;
+          }
+
+          th {
+            color: var(--md-sys-color-on-surface-variant) !important;
+            text-align: start;
+            text-transform: none;
+            letter-spacing: normal;
+            overflow-wrap: normal;
+          }
+        }
+      }
+    
+
+    /* Native CBI grids (DHCP leases, DNS records): md3e-management opts the
+       wrapper in, so only these keep native word breaking and let the scroll
+       wrapper take the overflow. */
+    .md3e-native-grid > table td {
+      overflow-wrap: normal;
+    }
+
+    /* An empty grid holds only LuCI's placeholder cell, so hide the column
+       labels instead of scrolling a blank grid. The shared :has(tr.placeholder)
+       rule already drops the minimum width. */
+    #maincontent table.md3e-table-empty :is(thead, tr.table-titles, tr.cbi-section-table-titles) {
+      display: none !important;
+    }
+
+    #md3e-leases-parameters .md3e-lease-label {
+      display: none;
+    }
+
+    #md3e-leases-parameters .md3e-lease-cards td {
+      overflow-wrap: break-word;
+    }
+
+    #md3e-leases-parameters .md3e-overview-data-scroll > table.md3e-lease-cards td.md3e-lease-short-id {
+      white-space: nowrap !important;
+    }
+
+    @container md3e-parameters (width < 46rem) {
+      #md3e-leases-parameters .md3e-overview-data-scroll > table.md3e-lease-cards {
+        position: relative;
+        display: block !important;
+        min-inline-size: 0;
+        padding-block: 0.25rem;
+        border-collapse: separate !important;
+
+        > :is(thead, tbody) { display: block !important; }
+
+        .table-titles {
+          position: absolute;
+          inset-block-start: 0;
+          inset-inline-start: 0;
+          inline-size: 1px;
+          block-size: 1px;
+          overflow: hidden;
+          clip-path: inset(50%);
+        }
+
+        tr:not(.table-titles) {
+          display: grid !important;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.55rem 0.85rem;
+          margin: 0 0 0.5rem;
+          padding: 0.7rem 0.8rem;
+          border-radius: var(--md-sys-shape-corner-large) !important;
+          background: var(--md-sys-color-surface-container) !important;
+          border: 0 !important;
+        }
+
+        tr:last-child { margin-block-end: 0; }
+
+        td {
+          display: block !important;
+          min-inline-size: 0;
+          padding: 0 !important;
+          overflow-wrap: anywhere;
+          text-align: start;
+          color: var(--md-sys-color-on-surface);
+
+          &.md3e-lease-identity {
+            font-weight: 650;
+            color: var(--md-sys-color-on-surface) !important;
+          }
+
+          &.md3e-lease-addresses { grid-column: 1 / -1; }
+          &.md3e-lease-short-id { white-space: normal !important; }
+
+          &.md3e-lease-actions {
+            grid-column: 1 / -1;
+            display: flex !important;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.35rem 0.75rem;
+            border-block-start: var(--md3e-parameter-divider) !important;
+            padding-block-start: 0.55rem !important;
+
+            > :is(button, a, input) {
+              margin: 0;
+              width: auto !important;
+              min-inline-size: 0;
+              max-inline-size: 100%;
+              white-space: normal;
+              overflow-wrap: anywhere;
+            }
+          }
+        }
+
+        .md3e-lease-label {
+          display: block;
+          margin-block-end: 0.1rem;
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: var(--md-sys-typescale-body-medium-size);
+          font-weight: 500;
+
+          &::before { content: attr(data-label); }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,151 @@
+@layer components {
+  @layer dropdown {
+    .cbi-dropdown {
+      @apply inline-flex h-fit max-w-full min-w-fit shrink-0 items-center p-0 whitespace-nowrap shadow-sm transition-all duration-200;
+      outline: 2px solid transparent;
+      outline-offset: 0;
+
+      &[disabled] {
+        @apply pointer-events-none opacity-60 dark:opacity-50;
+      }
+
+      &.btn, &.cbi-button {
+        @apply h-8;
+      }
+
+      &:not(.btn):not(.cbi-button) {
+        @apply border-border/60 bg-page-bg h-9 rounded-lg border text-sm font-normal transition-colors duration-200 hover:bg-muted/40;
+        & > ul > li {
+          &[placeholder] {
+            @apply hidden;
+          }
+        }
+      }
+
+      & > ul {
+        @apply m-0 flex flex-1 list-none flex-nowrap items-center gap-0.5 overflow-hidden max-md:flex-wrap;
+
+        & > li {
+          @apply m-0 hidden list-none items-center gap-1 overflow-hidden py-1.5 pl-3 pr-0;
+
+          &[display] {
+            @apply !flex;
+          }
+
+          & .hide-open {
+            @apply block;
+          }
+
+          & .hide-close {
+            @apply hidden;
+          }
+
+          & > form {
+            @apply pointer-events-none hidden;
+          }
+
+          & > label {
+            @apply flex items-center gap-2;
+          }
+
+          & img {
+            @apply h-5 w-5 flex-none align-middle;
+          }
+
+          & span {
+            @apply truncate;
+          }
+        }
+
+        &.dropdown {
+          @apply w-fit;
+        }
+
+        &.preview {
+          @apply hidden;
+        }
+      }
+
+      &[empty] {
+        & > ul {
+          @apply max-h-px max-w-px;
+
+          & > li {
+            @apply block;
+          }
+        }
+      }
+
+      &[optional][open] > ul.dropdown > li[placeholder] {
+        @apply block;
+      }
+
+      &[open] {
+        @apply relative;
+        z-index: 100;
+        outline-color: color-mix(in oklab, var(--primary) 20%, transparent);
+
+        & > ul.dropdown {
+          @apply block w-max max-w-none;
+
+          & > li {
+            @apply flex;
+
+            &[unselectable] {
+              @apply opacity-60 dark:opacity-50;
+            }
+
+            & .hide-open {
+              @apply hidden;
+            }
+
+            & .hide-close {
+              @apply block;
+            }
+          }
+        }
+
+        & > ul.preview {
+          @apply flex;
+        }
+      }
+
+      &[multiple] {
+        &[more],
+        &[empty] {
+          & > .more {
+            @apply flex flex-none shrink-0 px-2.5 py-1.5;
+          }
+        }
+
+        &[open] {
+          & > ul.dropdown > li > form {
+            @apply border-border/50 flex items-center border-b;
+
+            & > input {
+              @apply w-full border-0 bg-transparent px-1 py-2 text-base text-foreground placeholder-muted-foreground/50 outline-none;
+            }
+          }
+        }
+        & > ul > li > label {
+          @apply flex;
+        }
+      }
+
+      & > .open {
+        @apply text-muted-foreground flex flex-none shrink-0 cursor-pointer items-center justify-center border-0 pr-2.5 pl-2 text-[0px] leading-none;
+
+        &::after {
+          content: "";
+          @apply block h-4 w-4;
+          background: currentColor;
+          mask: url("@assets/icons/arrow-down.svg") center / cover no-repeat;
+        }
+      }
+
+      & > .more {
+        @apply hidden;
+      }
+    }
+  }
+}
