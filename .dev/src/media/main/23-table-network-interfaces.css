@@ -218,6 +218,12 @@
               white-space: normal !important;
               overflow-wrap: anywhere;
             }
+
+            /* Right-side port badges open inward so tooltips never widen the table. */
+            & .ifacebox-body > span:not(.cbi-tooltip-container) .cbi-tooltip.ifacebadge.large {
+              left: auto;
+              right: 0;
+            }
           }
 
           &[data-name="_ifacestat"],
@@ -300,6 +306,46 @@
       #cbi-network-interface > .cbi-section-table {
         table-layout: auto !important;
       }
+
+      #maincontent #cbi-network-interface .md3e-interface-row > :is(td.md3e-interface-actions-cell, td.cbi-section-actions) {
+        width: 1% !important;
+        min-width: max-content !important;
+        white-space: nowrap !important;
+
+        & > div,
+        & > .md3e-row-action-cluster {
+          display: inline-flex !important;
+          flex-wrap: nowrap !important;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 0.45rem;
+          width: max-content !important;
+          min-inline-size: max-content !important;
+          max-width: none !important;
+          margin-left: auto;
+        }
+
+        & :is(.cbi-button, .btn, button:not(.md3e-row-menu-trigger)) {
+          flex: none !important;
+          width: auto !important;
+          white-space: nowrap !important;
+        }
+      }
+
+      #maincontent #cbi-network-interface.md3e-tonal-data .md3e-interface-row .ifacebox {
+        border: 0 !important;
+        border-radius: var(--md-sys-shape-corner-large, 1rem) !important;
+        background: color-mix(in oklab, var(--md-sys-color-surface-container) 72%, transparent) !important;
+      }
+    }
+
+    #cbi-network-bridge-vlan > table.cbi-section-table {
+      table-layout: auto !important;
+
+      & :is(th, td) {
+        padding-inline: 0.5rem !important;
+        vertical-align: middle;
+      }
     }
 
     .cbi-section-table {
@@ -380,6 +426,20 @@
         white-space: normal;
         overflow-wrap: anywhere;
       }
+
+      @media (max-width: 640px) {
+        [data-name="_ifacestat_modal"] {
+          background: transparent;
+        }
+
+        [data-name="_ifacestat_modal"] .ifacebadge {
+          width: 100%;
+          padding: 0.45rem 0.6rem;
+          border-radius: var(--md3e-subcard-radius, 0.75rem);
+          font-size: 0.78rem;
+          line-height: 1.35;
+        }
+      }
     }
 
 
@@ -389,6 +449,9 @@
         display: block !important;
         width: 100% !important;
         max-width: 100% !important;
+        overflow: visible !important;
+        scrollbar-gutter: auto !important;
+        border-spacing: 0 !important;
       }
 
       [data-page="admin-network-network"] #cbi-network-interface > .cbi-section-table > :is(thead, tbody, .tbody, tfoot),
@@ -398,21 +461,125 @@
         max-width: 100% !important;
       }
 
-      [data-page="admin-network-network"] #cbi-network-interface .md3e-interface-row > :is(td, .td) {
+      /* Prevent hidden absolute hover tooltips from causing silent scrollWidth overflow. */
+      [data-page="admin-network-network"] #cbi-network-interface .ifacebox-body .cbi-tooltip.ifacebadge.large {
+        display: none !important;
+      }
+
+      [data-page="admin-network-network"] #cbi-network-interface .ifacebox-body .cbi-tooltip-container:is(:hover, :focus-within) > .cbi-tooltip.ifacebadge.large {
+        display: grid !important;
+      }
+
+      /* Flatten nested mobile padding inside the tonal section container. */
+      #maincontent #cbi-network-interface.md3e-tonal-data .md3e-interface-row {
+        gap: 0.45rem !important;
+        padding: 0.55rem 0 !important;
+        border-radius: 0 !important;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row > :is(td, .td) {
         display: block !important;
         width: 100% !important;
         max-width: 100% !important;
         min-width: 0 !important;
+        padding: 0 !important;
         box-sizing: border-box !important;
       }
 
-      [data-page="admin-network-network"] #cbi-network-interface.md3e-tonal-data .md3e-interface-row .ifacebox {
+      #maincontent #cbi-network-interface.md3e-tonal-data .md3e-interface-row .ifacebox {
         border: 0 !important;
-        border-radius: 1.25rem !important;
-        background: color-mix(in oklab, var(--md-sys-color-surface-container) 82%, transparent) !important;
+        border-radius: 0 !important;
+        background: transparent !important;
         width: 100% !important;
         max-width: 100% !important;
+        min-height: 0 !important;
+        padding: 0.1rem 0 !important;
+        grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+        column-gap: 0.55rem;
+        row-gap: 0.1rem;
         box-sizing: border-box !important;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row .ifacebox-body > .cbi-tooltip-container {
+        width: 2.15rem;
+        height: 2.15rem;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row .md3e-iface-summary {
+        gap: 0.15rem 0.35rem;
+        font-size: 0.8rem;
+        line-height: 1.25;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row .md3e-iface-addresses {
+        overflow-wrap: break-word;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row .ifacebox-body > small {
+        font-size: 0.78rem;
+        line-height: 1.2;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row [data-name="_ifacestat"] > div {
+        padding: 0.45rem 0.6rem !important;
+        border-radius: var(--md3e-subcard-radius, 0.75rem) !important;
+        background: color-mix(in oklab, var(--md-sys-color-surface-container) 62%, transparent) !important;
+        font-size: 0.78rem;
+        line-height: 1.28;
+        row-gap: 0.1rem;
+        column-gap: 0.6rem;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row .md3e-interface-actions-cell {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center;
+        justify-content: flex-start !important;
+        gap: 0.4rem;
+        padding: 0.15rem 0 0 !important;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row .md3e-interface-actions-cell > div {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        width: auto !important;
+        max-width: 100%;
+        margin: 0 !important;
+      }
+
+      #maincontent #cbi-network-interface .md3e-interface-row .md3e-interface-actions-cell :is(.cbi-button, .btn, button:not(.md3e-row-menu-trigger), a.btn, input.btn) {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-height: var(--md3e-control-height, 2.375rem) !important;
+        height: auto !important;
+        padding: 0.35rem 0.85rem !important;
+        font-size: 0.8125rem !important;
+      }
+
+      @media (max-width: 480px) {
+        #maincontent #cbi-network-interface.md3e-tonal-data .md3e-interface-row {
+          gap: 0.35rem !important;
+          padding: 0.45rem 0 !important;
+        }
+
+        #maincontent #cbi-network-interface .md3e-interface-row [data-name="_ifacestat"] > div {
+          grid-template-columns: minmax(0, 1fr);
+          padding: 0.4rem 0.55rem !important;
+        }
+      }
+
+      @media (max-width: 360px) {
+        #maincontent #cbi-network-interface.md3e-tonal-data .md3e-interface-row .ifacebox {
+          grid-template-columns: 2rem minmax(0, 1fr) auto;
+          column-gap: 0.45rem;
+        }
+
+        #maincontent #cbi-network-interface .md3e-interface-row .ifacebox-body > .cbi-tooltip-container {
+          width: 1.95rem;
+          height: 1.95rem;
+        }
       }
 
       [data-page="admin-network-network"] .cbi-section-table.md3e-table-has-data-title .cbi-section-table-titles {

@@ -98,7 +98,9 @@
 
     const clone = titleNode.cloneNode(true);
     clone
-      .querySelectorAll("button, .cbi-section-hide, .cbi-button")
+      .querySelectorAll(
+        "button, [role=\"button\"], [data-clickable], [data-indicator], .cbi-section-hide, .cbi-button, .sr-only, [aria-hidden=\"true\"]",
+      )
       .forEach((node) => node.remove());
 
     return (clone.textContent || "").replace(/\s+/g, " ").trim();

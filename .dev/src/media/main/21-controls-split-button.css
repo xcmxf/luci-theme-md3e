@@ -174,7 +174,7 @@
     background: transparent;
   }
 
-  @media (width < 48rem) {
+  @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
     body.mobile-page-actions-visible .cbi-page-actions[data-dirty="true"] {
       background: color-mix(
         in oklab,
@@ -186,9 +186,55 @@
     }
 
     .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) {
-      width: 100%;
-      min-height: 2.45rem;
-      grid-template-columns: minmax(0, 1fr) 2.65rem;
+      width: auto;
+      min-width: 0;
+      max-width: 100%;
+      min-height: var(--md3e-control-height, 2.5rem);
+      grid-template-columns: minmax(0, 1fr) 2.5rem;
+      border-radius: var(--md-sys-shape-corner-full);
+    }
+
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .md3e-split-button__label {
+      padding: 0 0.7rem 0 0.9rem;
+      font-size: 0.8125rem;
+    }
+
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .open {
+      width: 2.5rem !important;
+      min-width: 2.5rem;
+      border-radius: 0 var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full) 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) {
+      grid-template-columns: minmax(0, 1fr) 2.25rem;
+    }
+
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .md3e-split-button__label {
+      padding: 0 0.55rem 0 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .open {
+      width: 2.25rem !important;
+      min-width: 2.25rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) {
+      grid-template-columns: minmax(0, 1fr) 2rem;
+    }
+
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .md3e-split-button__label {
+      padding: 0 0.45rem 0 0.65rem;
+      font-size: 0.75rem;
+    }
+
+    .cbi-page-actions > .cbi-dropdown:is(.md3e-split-button, [data-md3e-split-button="true"]) > .open {
+      width: 2rem !important;
+      min-width: 2rem;
     }
   }
 }

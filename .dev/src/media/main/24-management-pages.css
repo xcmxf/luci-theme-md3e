@@ -36,8 +36,8 @@
     #maincontent .md3e-log-panel :is(#syslog, #log_textarea) {
       min-block-size: min(56dvh, 40rem);
       max-block-size: min(76dvh, 52rem);
-      border-radius: var(--md-sys-shape-corner-large);
-      border-color: var(--md-sys-color-outline-variant) !important;
+      border-radius: var(--md-sys-shape-corner-medium, 12px) !important;
+      border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 78%, transparent) !important;
       color: var(--md-sys-color-on-surface) !important;
       background: var(--md-sys-color-surface-container-lowest) !important;
       box-shadow: none !important;
@@ -226,6 +226,11 @@
         > br { display: none; }
         > :is(strong, small) { display: block; }
         code { white-space: normal; }
+
+        @media (max-width: 480px) {
+          padding: 0.55rem 2rem 0.55rem 0 !important;
+          font-size: 0.78rem;
+        }
       }
 
       > .add-item {
@@ -331,11 +336,17 @@
         > h3 {
           margin-block: 0.5rem 1rem;
           font-size: var(--md-sys-typescale-title-large-size, 1.375rem);
+          line-height: var(--md-sys-typescale-title-large-line-height, 1.75rem);
           font-weight: 600;
           color: var(--md-sys-color-on-surface);
           display: flex;
           align-items: center;
           gap: 0.5rem;
+
+          @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+            font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+            line-height: 1.32;
+          }
         }
       }
     }
@@ -436,8 +447,188 @@
       }
 
       @container md3e-settings (width < 28rem) {
-        :is(th, td) { padding-inline: .3rem !important; }
-        th:first-child { max-inline-size: 5rem; }
+        :is(th, td) {
+          padding: 0.4rem 0.25rem !important;
+          font-size: 0.8125rem;
+        }
+        th:first-child {
+          width: 3rem;
+          max-inline-size: 3.5rem;
+        }
+        .md3e-row-action-cluster {
+          gap: 0.25rem;
+        }
+        .md3e-row-action-cluster > :is(button, .btn, .cbi-button):not(.md3e-row-menu-trigger) {
+          min-height: var(--md3e-control-height, 2.375rem);
+          height: auto;
+          padding: 0.35rem 0.65rem;
+          font-size: 0.78rem;
+        }
+        .md3e-row-menu-trigger {
+          inline-size: var(--md3e-control-height, 2.375rem) !important;
+          block-size: var(--md3e-control-height, 2.375rem) !important;
+          min-inline-size: var(--md3e-control-height, 2.375rem) !important;
+          min-block-size: var(--md3e-control-height, 2.375rem) !important;
+        }
+      }
+    }
+
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      #maincontent .md3e-log-panel > .md3e-log-toolbar,
+      body[data-page="admin-system-reboot"] #maincontent #view,
+      :is(
+        [data-page="admin-system-attendedsysupgrade"],
+        [data-page="admin-system-attendedsysupgrade-overview"]
+      ) #view > p:has(> button.cbi-button-positive) {
+        padding: var(--md3e-card-pad, 1rem) !important;
+        border-radius: var(--md3e-card-radius, 1.25rem);
+      }
+
+      #cbi-system [data-name="_systime"] .md3e-clock-actions {
+        gap: 0.35rem 0.45rem;
+
+        > button {
+          flex: 1 1 7.25rem;
+          width: auto !important;
+          min-inline-size: 0;
+          min-block-size: var(--md3e-control-height, 2.375rem);
+          height: auto;
+          padding: 0.35rem 0.6rem;
+          font-size: 0.8rem;
+          line-height: 1.2;
+          white-space: normal;
+        }
+      }
+    }
+
+    /* Package Manager: fix upstream 250px centered label/control misalignment across mobile & tablet. */
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      body[data-page="admin-system-package-manager"] #maincontent .controls.md3e-software-toolbar > .md3e-tool-item > label {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        align-self: flex-start !important;
+        margin: 0 0 0.2rem 0 !important;
+        padding: 0 !important;
+        text-align: start !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .controls.md3e-software-toolbar > .md3e-tool-item > :is(.control-group, .md3e-i18n-segmented) {
+        align-self: flex-start !important;
+        margin-inline: 0 !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #maincontent .cbi-section:has(.md3e-startup-table) > p {
+        font-size: 0.8125rem;
+        line-height: 1.4;
+        margin: 0 0 0.5rem;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent #view {
+        gap: 0.45rem !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .md3e-software-disk-card {
+        padding: 0.45rem 0.65rem !important;
+        gap: 0.2rem !important;
+        border-radius: var(--md3e-subcard-radius, 0.75rem) !important;
+        margin: 0 !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .controls.md3e-software-toolbar {
+        gap: 0.45rem !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .controls.md3e-software-toolbar > .md3e-tool-item > label {
+        font-size: 0.72rem !important;
+        line-height: 1.2 !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent :is(.md3e-tool-filter, .md3e-tool-install) .control-group > :is(input[type="text"], button, .btn) {
+        height: auto !important;
+        min-height: var(--md3e-control-height, 2.5rem) !important;
+        max-height: none !important;
+        font-size: 0.8125rem !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .md3e-tool-actions .control-group {
+        gap: 0.35rem !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .md3e-tool-actions .control-group > :is(button, .btn) {
+        height: auto !important;
+        min-height: var(--md3e-control-height, 2.5rem) !important;
+        max-height: none !important;
+        padding: 0.35rem 0.75rem !important;
+        font-size: 0.78rem !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .controls.md3e-software-toolbar > .md3e-tool-i18n {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 0.25rem 0.5rem !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .controls.md3e-software-toolbar > .md3e-tool-i18n > label {
+        width: auto !important;
+        flex: 1 1 auto !important;
+        align-self: center !important;
+        margin: 0 !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .md3e-tool-i18n .md3e-i18n-segmented {
+        height: auto !important;
+        min-height: var(--md3e-control-height, 2.5rem) !important;
+        flex: 0 0 auto !important;
+        margin: 0 !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent .md3e-tool-i18n .md3e-i18n-pill {
+        height: auto !important;
+        min-height: calc(var(--md3e-control-height, 2.5rem) - 4px) !important;
+        padding: 0.25rem 0.65rem !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent ul.cbi-tabmenu.mode {
+        min-height: auto !important;
+        padding: 3px !important;
+        margin: 0 auto !important;
+      }
+
+      body[data-page="admin-system-package-manager"] #maincontent ul.cbi-tabmenu.mode > li > a {
+        height: auto !important;
+        min-height: var(--md3e-control-height, 2.5rem) !important;
+        padding: 0.35rem 0.75rem !important;
+        font-size: 0.8125rem !important;
+      }
+
+      body[data-page="admin-network-diagnostics"] #view > .cbi-map > table.table,
+      body[data-page="admin-network-diagnostics"] #view > .cbi-map > table.table > :is(thead, tbody) {
+        display: block !important;
+        width: 100% !important;
+      }
+
+      body[data-page="admin-network-diagnostics"] #view > .cbi-map > table.table tr {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.5rem;
+      }
+
+      body[data-page="admin-network-diagnostics"] #view > .cbi-map > table.table td {
+        display: block !important;
+        width: 100% !important;
+        padding: 0.35rem 0 !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      #maincontent .cbi-section:has(.md3e-startup-table) > p {
+        font-size: 0.75rem;
+        line-height: 1.35;
       }
     }
 
@@ -446,9 +637,22 @@
        the sizing lives on the textarea itself. */
     body[data-page="admin-network-diagnostics"] #view > .cbi-map > table.table {
       background: var(--md-sys-color-surface-container-low);
-      border-radius: var(--md-sys-shape-corner-large);
+      border-radius: var(--md3e-card-radius, var(--md-sys-shape-corner-large));
       border-collapse: separate;
-      padding: 0.5rem;
+      padding: var(--md3e-card-pad, 0.75rem);
+
+      & :is(tr, .tr, tr:hover, .tr:hover, td, .td) {
+        background: transparent !important;
+        border-radius: 0 !important;
+      }
+    }
+
+    /* Dark mode disabled danger buttons (e.g. Devices Unconfigure): keep legible contrast while looking disabled. */
+    [data-darkmode="true"] #maincontent :is(.cbi-button-negative, .cbi-button-remove, .cbi-button-reset):is([disabled], .disabled) {
+      background: color-mix(in oklab, var(--md-sys-color-error-container) 45%, var(--md-sys-color-surface-container-high)) !important;
+      color: color-mix(in oklab, var(--md-sys-color-on-error-container) 82%, transparent) !important;
+      border-color: color-mix(in oklab, var(--md-sys-color-error) 28%, transparent) !important;
+      opacity: 0.8 !important;
     }
 
     #command-output > textarea {

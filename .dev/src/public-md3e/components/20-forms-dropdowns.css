@@ -122,26 +122,29 @@ textarea {
   box-shadow: none;
 }
 
-#maincontent .outline-select,
-#maincontent .cbi-dropdown {
+:is(#maincontent, #modal_overlay) .outline-select,
+:is(#maincontent, #modal_overlay) .cbi-dropdown {
   position: relative;
 }
 
-#maincontent .outline-select.open,
-#maincontent .cbi-dropdown[open] {
+:is(#maincontent, #modal_overlay) .outline-select.open,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] {
   z-index: 120;
 }
 
-#maincontent .cbi-value.md3e-value-dropdown-open,
-#maincontent .cbi-value-field.md3e-value-field-dropdown-open {
+:is(#maincontent, #modal_overlay) .cbi-value.md3e-value-dropdown-open,
+:is(#maincontent, #modal_overlay) .cbi-value-field.md3e-value-field-dropdown-open {
   position: relative;
   z-index: 160;
 }
 
-#maincontent .outline-select-panel,
-#maincontent .cbi-dropdown[open] > ul.dropdown,
-#maincontent .cbi-dropdown[open] > ul:not(.preview) {
+:is(#maincontent, #modal_overlay) .outline-select-panel,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul.dropdown,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul:not(.preview) {
   z-index: 121;
+  max-height: min(16rem, 45vh);
+  max-height: min(16rem, 45dvh);
+  overscroll-behavior: contain;
   padding: 0.25rem !important;
   border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 38%, transparent) !important;
   border-radius: 0.85rem !important;
@@ -152,19 +155,26 @@ textarea {
   color: var(--foreground) !important;
 }
 
-#maincontent .outline-select-panel.above,
-#maincontent .cbi-dropdown[open] > ul.dropdown.above,
-#maincontent .cbi-dropdown[open] > ul:not(.preview).above {
+#modal_overlay .outline-select-panel,
+#modal_overlay .cbi-dropdown[open] > ul.dropdown,
+#modal_overlay .cbi-dropdown[open] > ul:not(.preview) {
+  max-height: min(14rem, 38vh);
+  max-height: min(14rem, 38dvh);
+}
+
+:is(#maincontent, #modal_overlay) .outline-select-panel.above,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul.dropdown.above,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul:not(.preview).above {
   transform-origin: bottom center;
 }
 
-#maincontent .outline-select-panel.align-end,
-#maincontent .cbi-dropdown[open] > ul.dropdown.align-end,
-#maincontent .cbi-dropdown[open] > ul:not(.preview).align-end {
+:is(#maincontent, #modal_overlay) .outline-select-panel.align-end,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul.dropdown.align-end,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul:not(.preview).align-end {
   transform-origin: top right;
 }
 
-#maincontent .outline-select-option {
+:is(#maincontent, #modal_overlay) .outline-select-option {
   min-height: 2.2rem;
   display: flex;
   align-items: center;
@@ -177,18 +187,18 @@ textarea {
   white-space: nowrap;
 }
 
-#maincontent .outline-select-option.selected {
+:is(#maincontent, #modal_overlay) .outline-select-option.selected {
   color: var(--md-sys-color-on-secondary-container, #1d192b);
   background: color-mix(in oklab, var(--md-sys-color-secondary-container, #e8def8) 46%, transparent) !important;
 }
 
-#maincontent .outline-select-option[aria-disabled="true"] {
+:is(#maincontent, #modal_overlay) .outline-select-option[aria-disabled="true"] {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
 @media (hover: hover) {
-  #maincontent .outline-select-option:not([aria-disabled="true"]):hover {
+  :is(#maincontent, #modal_overlay) .outline-select-option:not([aria-disabled="true"]):hover {
     background: color-mix(in oklab, currentColor 7%, transparent) !important;
   }
 }
@@ -196,30 +206,126 @@ textarea {
 .md3e-form-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 }
 
-@media not all and (min-width: 48rem) {
+@media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+  :where(
+    .md3e-field__control,
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-user,
+    .cbi-input-select,
+    .outline-select-trigger
+  ) {
+    min-height: var(--md3e-control-height, 2.5rem);
+    padding: 0.5rem var(--md3e-control-pad-inline, 0.875rem);
+    border-radius: var(--md3e-control-radius, 0.875rem);
+    font-size: var(--md-sys-typescale-body-medium-size, 0.875rem);
+    line-height: var(--md-sys-typescale-body-medium-line-height, 1.25rem);
+  }
+
+  :where(select, .cbi-input-select, .outline-select-trigger) {
+    padding-inline-end: 2.15rem;
+  }
+
+  textarea.md3e-field__control,
+  textarea {
+    min-height: 5.25rem;
+  }
+
   .md3e-card {
-    padding: 1rem;
+    padding: var(--md3e-card-pad, 1rem);
+    border-radius: var(--md3e-card-radius, 1.25rem);
   }
 
   .md3e-button-set {
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-
-  .md3e-button-set > *,
-  #maincontent .right > a.btn {
-    width: 100%;
+    gap: 0.5rem;
   }
 
   #maincontent .cbi-page-actions > * {
     width: auto;
   }
+
+  :is(#maincontent, #modal_overlay) .outline-select-option {
+    min-height: 2.15rem;
+    padding: 0.42rem 0.65rem;
+    font-size: 0.8125rem;
+  }
 }
 
-#maincontent :is(.cbi-map, .cbi-section, .cbi-section-node, .cbi-tabcontainer, .cbi-value):has(.outline-select.open, .cbi-dropdown[open]) {
+@media (max-width: 480px) {
+  :where(
+    .md3e-field__control,
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-user,
+    .cbi-input-select,
+    .outline-select-trigger
+  ) {
+    padding: 0.42rem var(--md3e-control-pad-inline, 0.75rem);
+  }
+
+  :where(select, .cbi-input-select, .outline-select-trigger) {
+    padding-inline-end: 2rem;
+  }
+
+  textarea.md3e-field__control,
+  textarea {
+    min-height: 4.5rem;
+  }
+
+  .md3e-form-grid {
+    gap: var(--md3e-section-gap, 0.625rem);
+  }
+
+  :is(#maincontent, #modal_overlay) .outline-select-option {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 360px) {
+  :where(
+    .md3e-field__control,
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-user,
+    .cbi-input-select,
+    .outline-select-trigger
+  ) {
+    padding: 0.36rem var(--md3e-control-pad-inline, 0.625rem);
+    font-size: 0.8125rem;
+  }
+
+  :where(select, .cbi-input-select, .outline-select-trigger) {
+    padding-inline-end: 1.85rem;
+  }
+}
+
+:is(#maincontent, #modal_overlay) :is(.cbi-map, .cbi-section, .cbi-section-node, .cbi-tabcontainer, .cbi-value):has(.outline-select.open, .cbi-dropdown[open]) {
   position: relative;
   z-index: 150 !important;
 }

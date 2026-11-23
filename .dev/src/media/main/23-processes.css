@@ -38,5 +38,45 @@
         color: var(--md-sys-color-on-surface-variant);
       }
     }
+
+    @media (max-width: 640px) {
+      #maincontent .md3e-data-group.md3e-processes-group .md3e-data-scroll[data-layout="wide"] {
+        --md3e-table-min: 29rem;
+      }
+
+      #maincontent .md3e-processes-group .md3e-data-scroll > .md3e-process-table {
+        th.md3e-process-pid { width: 2.85rem; }
+        th.md3e-process-user { width: 3.75rem; }
+        th.md3e-process-cpu { width: 3.5rem; }
+        th.md3e-process-memory { width: 4rem; }
+        th.md3e-process-actions { width: 2.75rem; }
+
+        :is(th, td) {
+          padding: 0.42rem 0.38rem !important;
+          font-size: 0.8rem !important;
+          line-height: 1.3;
+        }
+
+        .md3e-process-command {
+          font-size: 0.78rem !important;
+        }
+      }
+    }
+
+    @media (max-width: 360px) {
+      #maincontent .md3e-data-group.md3e-processes-group .md3e-data-scroll[data-layout="wide"] {
+        --md3e-table-min: 26rem;
+      }
+
+      #maincontent .md3e-processes-group .md3e-data-scroll > .md3e-process-table {
+        th.md3e-process-pid { width: 2.5rem; }
+        th.md3e-process-user { width: 3.4rem; }
+
+        :is(th, td) {
+          padding: 0.36rem 0.3rem !important;
+          font-size: 0.76rem !important;
+        }
+      }
+    }
   }
 }

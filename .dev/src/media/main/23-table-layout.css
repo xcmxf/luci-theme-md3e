@@ -70,7 +70,7 @@
           }
 
           &:is(.table-titles, .cbi-section-table-titles, .cbi-section-table-descr):where(:not(.md3e-native-grid > table tr)) {
-            @media (max-width: 768px) {
+            @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
               position: absolute !important;
               width: 1px !important;
               height: 1px !important;
@@ -279,6 +279,10 @@
               justify-content: flex-start;
               max-width: 100%;
               margin-left: 0;
+
+              & > :is(.cbi-button, .btn, button, a.btn, input.btn) {
+                min-height: var(--md3e-control-height, 2.5rem);
+              }
             }
           }
         }
@@ -333,7 +337,7 @@
             @apply max-md:w-full;
 
             & > .cbi-button {
-              @apply max-md:flex-1;
+              @apply max-md:flex-initial;
             }
           }
         }
@@ -369,6 +373,7 @@
 
             & > :is(.cbi-button, .btn, button, a.btn, input.btn) {
               width: auto;
+              min-height: var(--md3e-control-height, 2.375rem);
               min-width: 0;
               margin-inline: 0 0.28rem;
             }
@@ -376,7 +381,7 @@
         }
 
         & > .cbi-button {
-          @apply max-md:w-full;
+          @apply max-md:w-auto max-md:max-w-full;
         }
 
         &[width="100%"] {
@@ -411,32 +416,94 @@
       @apply max-md:overflow-visible!;
     }
 
+    /* Keep interface/port badges inside table headers legible, mixed-case, and single-line. */
+    .table th .ifacebadge,
+    table th .ifacebadge {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 0.3rem;
+      text-transform: none;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    /* Empty CBI tables (including Bridge VLAN filtering): span placeholder across full width
+       even when LuCI omits colspan on single-cell tr.placeholder rows. */
+    :is(#maincontent, #modal_overlay) :is(table.cbi-section-table, .table.cbi-section-table):has(> tbody > tr.placeholder:only-child) {
+      display: block !important;
+      width: 100% !important;
+      border-spacing: 0 !important;
+
+      & > thead {
+        display: table;
+        width: 100%;
+        table-layout: auto;
+      }
+
+      & > tbody {
+        display: block !important;
+        width: 100% !important;
+      }
+
+      & > tbody > tr.placeholder {
+        display: block !important;
+        width: 100% !important;
+        margin-top: 0.45rem;
+        border-radius: var(--md3e-subcard-radius, 0.875rem) !important;
+        background: var(--md-sys-color-surface-container) !important;
+
+        & > td {
+          display: block !important;
+          width: 100% !important;
+          padding: 0.9rem 1rem !important;
+          text-align: center;
+          color: var(--md-sys-color-on-surface-variant) !important;
+          background: transparent !important;
+        }
+      }
+    }
+
     @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      .cbi-section-table {
+        scrollbar-gutter: auto;
+      }
+
       :where(
         #maincontent,
         #maincontent > .docs-content,
         #view,
         .cbi-map,
         .cbi-section,
-        .cbi-section > div,
         .cbi-value,
         .cbi-value-title,
         .cbi-value-field,
-        .cbi-value-field > *,
-        .cbi-value-field .control-group,
         textarea,
-        pre,
-        code
+        pre
       ) {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: 100% !important;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
       }
 
-      pre, code {
-        white-space: pre-wrap !important;
-        word-break: break-all !important;
-        overflow-x: auto !important;
+      :where(
+        .cbi-section > div,
+        .cbi-value-field > *,
+        .cbi-value-field .control-group,
+        code
+      ) {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        overflow-x: auto;
+      }
+
+      code {
+        overflow-wrap: anywhere;
       }
 
       :where(
@@ -462,10 +529,9 @@
       }
 
       :where(
-        .cbi-value-field .cbi-dropdown,
-        .cbi-value-field .cbi-input-select,
-        .cbi-value-field .cbi-input-text,
-        .cbi-value-field .control-group > *
+        .cbi-value-field > .cbi-dropdown:not(.btn, .cbi-button),
+        .cbi-value-field > .cbi-input-select,
+        .cbi-value-field > .cbi-input-text
       ) {
         width: 100%;
         max-width: 100%;

@@ -32,6 +32,14 @@
   --md-sys-motion-effects-fast: 225ms cubic-bezier(.2, 0, 0, 1);
 }
 
+@media (max-width: 920px) {
+  :root {
+    --md3e-comp-card-radius: var(--md3e-card-radius, 1.25rem);
+    --md3e-comp-card-padding: var(--md3e-card-pad, 1rem);
+    --md3e-comp-field-radius: var(--md3e-control-radius, 0.875rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --md-sys-motion-spatial-fast-duration: 0ms;
@@ -163,6 +171,20 @@ html[data-darkmode="true"] #maincontent :is(.md3e-card, .cbi-section-node) {
     box-shadow var(--md3e-comp-duration) var(--md3e-comp-ease),
     color var(--md3e-comp-duration) ease;
   cursor: pointer;
+}
+
+@media (max-width: 920px) {
+  :where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) {
+    min-height: var(--md3e-control-height, 2.5rem);
+    padding: 0.45rem var(--md3e-control-pad-inline, 0.875rem);
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) {
+    font-size: 0.8125rem;
+  }
 }
 
 :where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) svg {
@@ -311,6 +333,20 @@ a.btn,
   opacity: 1;
   border: 0 !important;
   box-shadow: none !important;
+}
+
+@media (max-width: 920px) {
+  body.mobile-page-actions-visible #maincontent .cbi-page-actions[data-dirty="true"] {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 100;
+    margin: 0;
+    padding: 0.5rem var(--md3e-page-gutter, 0.75rem) calc(0.5rem + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in oklab, var(--md-sys-color-surface-container-low) 96%, transparent) !important;
+    border-top: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 58%, transparent) !important;
+    box-shadow: 0 -4px 16px var(--expressive-shadow) !important;
+  }
 }
 #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) {
   display: grid;
@@ -558,6 +594,71 @@ a.btn,
     background: color-mix(in oklab, currentColor 10%, transparent) !important;
   }
 }
+
+@media (max-width: 920px) {
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) {
+    min-width: 0;
+    width: auto;
+    max-width: 100%;
+    min-height: var(--md3e-control-height, 2.5rem);
+    height: var(--md3e-control-height, 2.5rem);
+    border-radius: var(--md-sys-shape-corner-full, 999px);
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.7rem 0 0.9rem;
+    border-radius: var(--md-sys-shape-corner-full, 999px) 0 0 var(--md-sys-shape-corner-full, 999px);
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display],
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > label,
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > span,
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > a {
+    font-size: 0.84rem !important;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open {
+    width: 2.5rem !important;
+    min-width: 2.5rem;
+    border-radius: 0 var(--md-sys-shape-corner-full, 999px) var(--md-sys-shape-corner-full, 999px) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.55rem 0 0.75rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display],
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > label,
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > span,
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > a {
+    font-size: 0.8125rem !important;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open {
+    width: 2.25rem !important;
+    min-width: 2.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.45rem 0 0.65rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display],
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > label,
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > span,
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] > a {
+    font-size: 0.75rem !important;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open {
+    width: 2rem !important;
+    min-width: 2rem;
+  }
+}
 #maincontent .cbi-page-actions > .md3e-action-group {
   display: inline-flex;
   flex-wrap: nowrap;
@@ -682,11 +783,11 @@ a.btn,
 :is(.md3e-split-button, [data-md3e-split-button]) > .open:focus-visible {
   outline-offset: -2px;
 }
-@media not all and (min-width: 48rem) {
+@media (max-width: 920px) {
   #maincontent .cbi-page-actions {
     width: 100%;
     max-width: 100%;
-    margin-block: 1rem 0;
+    margin-block: var(--md3e-section-gap, 0.875rem) 0;
     margin-inline: 0;
     padding: 0;
     gap: 0.5rem;
@@ -701,6 +802,7 @@ a.btn,
     order: 1;
     flex: 0 0 auto;
     width: auto;
+    min-height: var(--md3e-control-height, 2.5rem);
     display: inline-flex;
     flex-wrap: nowrap;
     gap: 3px;
@@ -708,11 +810,13 @@ a.btn,
     padding: 0;
   }
 
-  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn) {
+  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+  #maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+  #maincontent .cbi-page-actions > .cbi-button-reset {
     flex: 0 0 auto;
     min-width: 0;
-    height: 2.75rem;
-    min-height: 2.75rem;
+    height: var(--md3e-control-height, 2.5rem);
+    min-height: var(--md3e-control-height, 2.5rem);
     padding-inline: 0.875rem;
     justify-content: center;
   }
@@ -723,28 +827,78 @@ a.btn,
     width: auto;
     min-width: 0;
     max-width: 100%;
-    min-height: 2.75rem;
-    height: 2.75rem;
+    min-height: var(--md3e-control-height, 2.5rem);
+    height: var(--md3e-control-height, 2.5rem);
   }
 
   #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
-    padding: 0 0.75rem 0 1rem;
+    padding: 0 0.75rem 0 0.95rem;
   }
 
   #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open {
-    width: 2.75rem !important;
-    min-width: 2.75rem;
+    width: var(--md3e-control-height, 2.5rem) !important;
+    min-width: var(--md3e-control-height, 2.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  #maincontent .cbi-page-actions {
+    gap: 0.375rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+  #maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+  #maincontent .cbi-page-actions > .cbi-button-reset {
+    padding-inline: 0.72rem;
+    font-size: 0.8125rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-save:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-reset:only-child:active {
+    padding-inline: 0.78rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.6rem 0 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  #maincontent .cbi-page-actions {
+    gap: 0.3rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+  #maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+  #maincontent .cbi-page-actions > .cbi-button-reset {
+    padding-inline: 0.625rem;
+    font-size: 0.8rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-save:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-reset:only-child:active {
+    padding-inline: 0.65rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.5rem 0 0.7rem;
   }
 }
 #maincontent .cbi-page-actions > .md3e-apply-split {
   display: inline-grid;
-  grid-template-columns: minmax(0, 1fr) 2.75rem;
+  grid-template-columns: minmax(0, 1fr) var(--md3e-control-height, 2.75rem);
   gap: 3px;
   position: relative;
   min-inline-size: 0;
   max-inline-size: 100%;
-  min-block-size: 2.75rem;
-  height: 2.75rem;
+  min-block-size: var(--md3e-control-height, 2.75rem);
+  height: var(--md3e-control-height, 2.75rem);
   padding: 0;
   margin: 0;
   border: 0;
@@ -764,8 +918,8 @@ a.btn,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: 2.75rem;
-  height: 2.75rem;
+  min-block-size: var(--md3e-control-height, 2.75rem);
+  height: var(--md3e-control-height, 2.75rem);
   min-inline-size: 0;
   margin: 0;
   padding: 0 1.125rem;
@@ -877,6 +1031,44 @@ a.btn,
 #maincontent .cbi-page-actions:has(> .md3e-apply-split) > .md3e-action-group > button:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: -3px;
+}
+
+@media (max-width: 480px) {
+  #maincontent .md3e-apply-split > :is(.md3e-apply-primary, .md3e-apply-toggle) {
+    font-size: 0.8125rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary {
+    padding: 0 0.85rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary:enabled:active {
+    padding-inline: 0.9rem;
+  }
+
+  .md3e-apply-menu {
+    max-inline-size: calc(100vw - 2 * var(--md3e-page-gutter, 0.5rem));
+    border-radius: var(--md3e-subcard-radius, 0.75rem);
+  }
+
+  #maincontent .md3e-apply-menu > button {
+    min-height: var(--md3e-control-height, 2.375rem);
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 360px) {
+  #maincontent .md3e-apply-split > :is(.md3e-apply-primary, .md3e-apply-toggle) {
+    font-size: 0.8rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary {
+    padding: 0 0.7rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary:enabled:active {
+    padding-inline: 0.72rem;
+  }
 }
 .md3e-button-set {
   display: flex;
@@ -1002,26 +1194,29 @@ textarea {
   box-shadow: none;
 }
 
-#maincontent .outline-select,
-#maincontent .cbi-dropdown {
+:is(#maincontent, #modal_overlay) .outline-select,
+:is(#maincontent, #modal_overlay) .cbi-dropdown {
   position: relative;
 }
 
-#maincontent .outline-select.open,
-#maincontent .cbi-dropdown[open] {
+:is(#maincontent, #modal_overlay) .outline-select.open,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] {
   z-index: 120;
 }
 
-#maincontent .cbi-value.md3e-value-dropdown-open,
-#maincontent .cbi-value-field.md3e-value-field-dropdown-open {
+:is(#maincontent, #modal_overlay) .cbi-value.md3e-value-dropdown-open,
+:is(#maincontent, #modal_overlay) .cbi-value-field.md3e-value-field-dropdown-open {
   position: relative;
   z-index: 160;
 }
 
-#maincontent .outline-select-panel,
-#maincontent .cbi-dropdown[open] > ul.dropdown,
-#maincontent .cbi-dropdown[open] > ul:not(.preview) {
+:is(#maincontent, #modal_overlay) .outline-select-panel,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul.dropdown,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul:not(.preview) {
   z-index: 121;
+  max-height: min(16rem, 45vh);
+  max-height: min(16rem, 45dvh);
+  overscroll-behavior: contain;
   padding: 0.25rem !important;
   border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 38%, transparent) !important;
   border-radius: 0.85rem !important;
@@ -1032,19 +1227,26 @@ textarea {
   color: var(--foreground) !important;
 }
 
-#maincontent .outline-select-panel.above,
-#maincontent .cbi-dropdown[open] > ul.dropdown.above,
-#maincontent .cbi-dropdown[open] > ul:not(.preview).above {
+#modal_overlay .outline-select-panel,
+#modal_overlay .cbi-dropdown[open] > ul.dropdown,
+#modal_overlay .cbi-dropdown[open] > ul:not(.preview) {
+  max-height: min(14rem, 38vh);
+  max-height: min(14rem, 38dvh);
+}
+
+:is(#maincontent, #modal_overlay) .outline-select-panel.above,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul.dropdown.above,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul:not(.preview).above {
   transform-origin: bottom center;
 }
 
-#maincontent .outline-select-panel.align-end,
-#maincontent .cbi-dropdown[open] > ul.dropdown.align-end,
-#maincontent .cbi-dropdown[open] > ul:not(.preview).align-end {
+:is(#maincontent, #modal_overlay) .outline-select-panel.align-end,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul.dropdown.align-end,
+:is(#maincontent, #modal_overlay) .cbi-dropdown[open] > ul:not(.preview).align-end {
   transform-origin: top right;
 }
 
-#maincontent .outline-select-option {
+:is(#maincontent, #modal_overlay) .outline-select-option {
   min-height: 2.2rem;
   display: flex;
   align-items: center;
@@ -1057,18 +1259,18 @@ textarea {
   white-space: nowrap;
 }
 
-#maincontent .outline-select-option.selected {
+:is(#maincontent, #modal_overlay) .outline-select-option.selected {
   color: var(--md-sys-color-on-secondary-container, #1d192b);
   background: color-mix(in oklab, var(--md-sys-color-secondary-container, #e8def8) 46%, transparent) !important;
 }
 
-#maincontent .outline-select-option[aria-disabled="true"] {
+:is(#maincontent, #modal_overlay) .outline-select-option[aria-disabled="true"] {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
 @media (hover: hover) {
-  #maincontent .outline-select-option:not([aria-disabled="true"]):hover {
+  :is(#maincontent, #modal_overlay) .outline-select-option:not([aria-disabled="true"]):hover {
     background: color-mix(in oklab, currentColor 7%, transparent) !important;
   }
 }
@@ -1076,30 +1278,126 @@ textarea {
 .md3e-form-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 }
 
-@media not all and (min-width: 48rem) {
+@media (max-width: 920px) {
+  :where(
+    .md3e-field__control,
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-user,
+    .cbi-input-select,
+    .outline-select-trigger
+  ) {
+    min-height: var(--md3e-control-height, 2.5rem);
+    padding: 0.5rem var(--md3e-control-pad-inline, 0.875rem);
+    border-radius: var(--md3e-control-radius, 0.875rem);
+    font-size: var(--md-sys-typescale-body-medium-size, 0.875rem);
+    line-height: var(--md-sys-typescale-body-medium-line-height, 1.25rem);
+  }
+
+  :where(select, .cbi-input-select, .outline-select-trigger) {
+    padding-inline-end: 2.15rem;
+  }
+
+  textarea.md3e-field__control,
+  textarea {
+    min-height: 5.25rem;
+  }
+
   .md3e-card {
-    padding: 1rem;
+    padding: var(--md3e-card-pad, 1rem);
+    border-radius: var(--md3e-card-radius, 1.25rem);
   }
 
   .md3e-button-set {
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-
-  .md3e-button-set > *,
-  #maincontent .right > a.btn {
-    width: 100%;
+    gap: 0.5rem;
   }
 
   #maincontent .cbi-page-actions > * {
     width: auto;
   }
+
+  :is(#maincontent, #modal_overlay) .outline-select-option {
+    min-height: 2.15rem;
+    padding: 0.42rem 0.65rem;
+    font-size: 0.8125rem;
+  }
 }
 
-#maincontent :is(.cbi-map, .cbi-section, .cbi-section-node, .cbi-tabcontainer, .cbi-value):has(.outline-select.open, .cbi-dropdown[open]) {
+@media (max-width: 480px) {
+  :where(
+    .md3e-field__control,
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-user,
+    .cbi-input-select,
+    .outline-select-trigger
+  ) {
+    padding: 0.42rem var(--md3e-control-pad-inline, 0.75rem);
+  }
+
+  :where(select, .cbi-input-select, .outline-select-trigger) {
+    padding-inline-end: 2rem;
+  }
+
+  textarea.md3e-field__control,
+  textarea {
+    min-height: 4.5rem;
+  }
+
+  .md3e-form-grid {
+    gap: var(--md3e-section-gap, 0.625rem);
+  }
+
+  :is(#maincontent, #modal_overlay) .outline-select-option {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 360px) {
+  :where(
+    .md3e-field__control,
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    .cbi-input-text,
+    .cbi-input-password,
+    .cbi-input-user,
+    .cbi-input-select,
+    .outline-select-trigger
+  ) {
+    padding: 0.36rem var(--md3e-control-pad-inline, 0.625rem);
+    font-size: 0.8125rem;
+  }
+
+  :where(select, .cbi-input-select, .outline-select-trigger) {
+    padding-inline-end: 1.85rem;
+  }
+}
+
+:is(#maincontent, #modal_overlay) :is(.cbi-map, .cbi-section, .cbi-section-node, .cbi-tabcontainer, .cbi-value):has(.outline-select.open, .cbi-dropdown[open]) {
   position: relative;
   z-index: 150 !important;
 }
@@ -1118,8 +1416,8 @@ textarea {
     border-radius: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
-    padding-block: 0.62rem !important;
-    padding-inline: 1rem !important;
+    padding-block: var(--md3e-row-pad-y, 0.625rem) !important;
+    padding-inline: var(--md3e-row-pad-x, 1rem) !important;
     color: color-mix(in oklab, var(--md-sys-color-on-surface, #1d1b20) 88%, transparent);
     line-height: 1.35;
 
@@ -1156,10 +1454,63 @@ textarea {
   border-radius: 0 !important;
   background: color-mix(in oklab, var(--md-sys-color-surface-container-low, #f7f7fc) 88%, transparent);
   box-shadow: none !important;
-  padding-block: 0.62rem !important;
-  padding-inline: 1rem !important;
+  padding-block: var(--md3e-row-pad-y, 0.625rem) !important;
+  padding-inline: var(--md3e-row-pad-x, 1rem) !important;
   column-gap: 0.8rem;
   align-items: center;
+}
+
+@media (max-width: 920px) {
+  #maincontent .cbi-section-node .cbi-value:not(.md3e-tonal-data):not(.md3e-tonal-settings) {
+    padding-inline: 0 !important;
+  }
+}
+
+#maincontent :is(.cbi-section-node, .cbi-section-node-tabbed > [data-tab]):not(.md3e-tonal-settings) > .cbi-value:not(.hidden):not(.md3e-tonal-data) {
+  margin-block: 0 !important;
+  padding-block: 0.75rem !important;
+  border-radius: 0 !important;
+}
+
+#maincontent :is(.cbi-section-node, .cbi-section-node-tabbed > [data-tab]):not(.md3e-tonal-settings) > .cbi-value:not(.hidden):not(.md3e-tonal-data) ~ .cbi-value:not(.hidden):not(.md3e-tonal-data) {
+  border-block-start: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent) !important;
+}
+
+/* Keep toggle switches right-aligned with title + description on the left,
+   and right-align button/action-only fields on narrow screens across all CBI pages (including Services). */
+@media (max-width: 920px) {
+  #maincontent :is(.cbi-section-node, .cbi-section-node-tabbed > [data-tab]) > .cbi-value:not(.hidden):has(> .cbi-value-field > :is(.cbi-checkbox, input[type="checkbox"])):not(:has(> .cbi-value-field :is(input:not([type="checkbox"]):not([type="hidden"]), select, textarea))) {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.75rem !important;
+
+    > .cbi-value-title {
+      flex: 1 1 auto !important;
+      width: auto !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    > .cbi-value-field {
+      flex: none !important;
+      width: auto !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+    }
+  }
+
+  #maincontent :is(.cbi-section-node, .cbi-section-node-tabbed > [data-tab]) > .cbi-value:not(.hidden):has(> .cbi-value-field :is(button, .btn, .cbi-button)):not(:has(> .cbi-value-field :is(input:not([type="button"]):not([type="submit"]):not([type="hidden"]), select, textarea, .cbi-dynlist))) > .cbi-value-field {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.45rem !important;
+    width: 100% !important;
+    text-align: end !important;
+  }
 }
 
 #maincontent .cbi-value:hover {
@@ -1249,6 +1600,25 @@ textarea {
   text-indent: 0;
 }
 
+@media (max-width: 480px) {
+  #maincontent .cbi-dynlist > .add-item {
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  #maincontent .cbi-dynlist > .add-item > .cbi-input-text {
+    flex: 1 1 8rem;
+  }
+
+  #maincontent .cbi-dynlist > .add-item > .cbi-button,
+  #maincontent .cbi-dynlist > .add-item > .cbi-button-add {
+    min-height: var(--md3e-control-height, 2.375rem);
+    height: var(--md3e-control-height, 2.375rem) !important;
+    padding-inline: var(--md3e-control-pad-inline, 0.75rem) !important;
+    font-size: 0.8125rem;
+  }
+}
+
 /* Ensure hidden CBI values are strictly not displayed across all specificity layers */
 #maincontent .cbi-value.hidden,
 #maincontent .cbi-section-node .cbi-value.hidden {
@@ -1267,11 +1637,24 @@ textarea {
   --_settings-divider: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent);
   container: md3e-settings / inline-size;
   padding: .625rem clamp(.875rem, 2.5vw, 1.5rem) .5rem !important;
-  border-radius: var(--md-sys-shape-corner-extra-large) !important;
+  border-radius: var(--md3e-card-radius, var(--md-sys-shape-corner-extra-large)) !important;
   background: var(--md-sys-color-surface-container-low) !important;
   box-shadow: none !important;
 
-  > :is(h3, h4) {
+  > .cbi-title {
+    margin: 0 0 0.45rem !important;
+    padding: 0 !important;
+  }
+
+  > h3 {
+    margin: .3rem 0 .45rem;
+    color: var(--md-sys-color-on-surface);
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    font-weight: 600;
+  }
+
+  > h4 {
     margin: .3rem 0 .45rem;
     color: var(--md-sys-color-on-surface);
     font-size: var(--md-sys-typescale-title-medium-size);
@@ -1362,7 +1745,61 @@ textarea {
 #maincontent .cbi-value.md3e-tonal-data:not(.hidden) {
   display: block !important;
   max-width: 100%;
-  margin-block: 0 var(--space-md) !important;
+  margin-block: 0 var(--md3e-section-gap, 1rem) !important;
+}
+
+@media (max-width: 920px) {
+  :is(#maincontent, .md3e-native-editor) :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data, .cbi-value.md3e-tonal-data, .md3e-code-group.md3e-tonal-data):where(:not([data-tab]), [data-tab-active="true"]) {
+    padding: 0.5rem var(--md3e-card-pad, 1rem) 0.45rem !important;
+  }
+
+  #maincontent .cbi-value.md3e-tonal-data:not(.hidden) {
+    margin-block: 0 var(--md3e-section-gap, 0.875rem) !important;
+  }
+
+  #maincontent .cbi-value.md3e-tonal-data:not(.hidden):last-child,
+  #maincontent .cbi-map > .cbi-value.md3e-tonal-data:not(.hidden) {
+    margin-block-end: 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Flatten duplicate nested card chrome inside modal editors so narrow modals stay full-width and unclipped. */
+  #modal_overlay > .modal.md3e-native-editor :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data, .cbi-value.md3e-tonal-data, .md3e-code-group.md3e-tonal-data):where(:not([data-tab]), [data-tab-active="true"]) {
+    padding: 0.15rem 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #maincontent :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data, .cbi-value.md3e-tonal-data, .md3e-code-group.md3e-tonal-data):where(:not([data-tab]), [data-tab-active="true"]) {
+    padding: 0.45rem var(--md3e-card-pad, 0.75rem) 0.4rem !important;
+  }
+
+  #maincontent :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data, .cbi-value.md3e-tonal-data, .md3e-code-group.md3e-tonal-data):where(:not([data-tab]), [data-tab-active="true"]) > h3 {
+    margin: 0.15rem 0 0.3rem;
+    font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    line-height: 1.32;
+  }
+
+  #maincontent :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data, .cbi-value.md3e-tonal-data, .md3e-code-group.md3e-tonal-data):where(:not([data-tab]), [data-tab-active="true"]) > h4 {
+    margin: 0.15rem 0 0.3rem;
+    font-size: 0.9375rem;
+  }
+
+  :is(#maincontent, .md3e-native-editor) .md3e-tonal-settings:where(:not([data-tab]), [data-tab-active="true"]) > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount),
+  :is(#maincontent, .md3e-native-editor) .md3e-tonal-settings:where(:not([data-tab]), [data-tab-active="true"]) > .cbi-section-node > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount) {
+    gap: 0.25rem 0.75rem !important;
+    padding: 0.42rem 0 !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :is(#maincontent, .md3e-native-editor) .md3e-tonal-settings:where(:not([data-tab]), [data-tab-active="true"]) > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount),
+  :is(#maincontent, .md3e-native-editor) .md3e-tonal-settings:where(:not([data-tab]), [data-tab-active="true"]) > .cbi-section-node > .cbi-value:not(.hidden):is(:has(> .cbi-value-field), .md3e-value-custom-mount) {
+    padding: 0.35rem 0 !important;
+  }
 }
 
 #maincontent .md3e-tonal-data > .cbi-section {
@@ -1403,6 +1840,19 @@ textarea {
   min-inline-size: 4.5rem;
   max-inline-size: 100%;
   align-self: center;
+}
+
+@media (max-width: 480px) {
+  :is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) {
+    gap: 0.45rem;
+    margin-block: 0.25rem 0 !important;
+    padding: 0.35rem 0 0 !important;
+  }
+
+  :is(#maincontent, .md3e-native-editor) :is(.cbi-section-create, .cbi-tblsection-create) > div:has(> input.cbi-section-create-name) {
+    flex: 1 1 min(10rem, 100%) !important;
+    min-inline-size: 7rem;
+  }
 }
 
 .md3e-data-help {
@@ -1610,7 +2060,7 @@ body[data-layout-mode="desktop"] .md3e-rail-logo:active::before {
     white-space: normal;
   }
 
-  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(tr.table-titles, .tr.table-titles) {
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)).md3e-table-has-data-title :is(tr.table-titles, .tr.table-titles, tr.cbi-section-table-titles, .tr.cbi-section-table-titles, tr.cbi-section-table-descr, .tr.cbi-section-table-descr) {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -1624,15 +2074,15 @@ body[data-layout-mode="desktop"] .md3e-rail-logo:active::before {
 
   #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) .md3e-table-data-title-row {
     grid-template-columns: 1fr;
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
 
   #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title] {
     display: grid !important;
-    grid-template-columns: minmax(7rem, 34%) minmax(0, 1fr);
-    gap: 0.65rem;
+    grid-template-columns: minmax(6rem, 32%) minmax(0, 1fr);
+    gap: 0.5rem;
     align-items: start;
-    padding-block: 0.42rem !important;
+    padding: var(--md3e-row-pad-y, 0.45rem) var(--md3e-row-pad-x, 0.75rem) !important;
   }
 
   #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title]::before {
@@ -1648,6 +2098,838 @@ body[data-layout-mode="desktop"] .md3e-rail-logo:active::before {
     min-width: 0;
     grid-column: 2;
     justify-self: start;
+  }
+}
+
+@media (max-width: 480px) {
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+    padding: var(--md3e-row-pad-y, 0.35rem) 0 !important;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title]::before {
+    font-size: 0.72rem;
+    line-height: 1.2;
+  }
+
+  #maincontent :is(table, .table, .cbi-section-table):where(:not(.md3e-process-table, .md3e-stats-matrix, :is(.md3e-overview-data-scroll, .md3e-data-scroll) > table)) td[data-title] > * {
+    grid-column: 1;
+  }
+}
+
+/* Network Devices, Firewall Zones & Static Routes/Rules: convert wide horizontal tables into
+   clean stacked mobile cards on phones so selects, MACs, gateways, and action buttons stay
+   readable and tappable without horizontal clipping. */
+@media (max-width: 640px) {
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll {
+    overflow-x: visible !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll-hint {
+    display: none !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .cbi-tooltip.ifacebadge.large {
+    display: none !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) {
+    display: block !important;
+    min-inline-size: 0 !important;
+    width: 100% !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) > thead,
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-titles {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) > tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem 0.65rem;
+    padding: 0.65rem 0 !important;
+    width: 100% !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row + tr.cbi-section-table-row {
+    border-block-start: var(--_settings-divider, 1px solid var(--md-sys-color-outline-variant)) !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 0.15rem !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td[data-title]:not([data-name="name"]):not([data-name="_info"]):not([data-title=""])::before {
+    content: attr(data-title) !important;
+    display: block !important;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* Full-width header rows for Device badge, Firewall Zone forwards, and wide IPv6 fields. */
+  #maincontent #cbi-network-device .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td[data-name="name"] {
+    grid-column: 1 / -1;
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  #maincontent #cbi-network-device .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td[data-name="name"]::before,
+  #maincontent #cbi-firewall-zone .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td[data-name="_info"]::before {
+    content: none !important;
+  }
+
+  #maincontent #cbi-network-device .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td:nth-child(3),
+  #maincontent #cbi-firewall-zone .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td[data-name="_info"],
+  #maincontent #cbi-network-route6 .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td:is([data-name="target"], [data-name="gateway"]) {
+    grid-column: 1 / -1;
+  }
+
+  /* Full-width controls inside stacked Firewall Zone / Route cells so selects never clip. */
+  #maincontent :is(#cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td > :is(div, select, input[type="text"], .cbi-dropdown:not(.btn, .cbi-button)) {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #maincontent #cbi-firewall-zone .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td :is(select, .outline-select, .outline-select-trigger) {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td.cbi-section-actions {
+    grid-column: 1 / -1;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    padding-top: 0.25rem !important;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td.cbi-section-actions .md3e-row-action-cluster {
+    inline-size: auto;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    margin: 0;
+  }
+
+  #maincontent :is(#cbi-network-device, #cbi-firewall-zone, #cbi-network-route, #cbi-network-route6, #cbi-network-rule, #cbi-network-rule6) .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) tr.cbi-section-table-row > td.cbi-section-actions :is(button, .btn, .cbi-button) {
+    min-height: var(--md3e-control-height, 2.375rem);
+    height: auto;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8125rem;
+    width: auto !important;
+    flex: 0 1 auto;
+  }
+
+  /* Status -> Routing & Realtime Connections: stack data-title tables into 2-col cards on phones. */
+  :is(body[data-page="admin-status-routes"], body[data-page="admin-status-realtime-connections"]) #maincontent .md3e-data-group .md3e-data-scroll {
+    overflow-x: visible !important;
+  }
+
+  :is(body[data-page="admin-status-routes"], body[data-page="admin-status-realtime-connections"]) #maincontent .md3e-data-group .md3e-data-scroll-hint {
+    display: none !important;
+  }
+
+  :is(body[data-page="admin-status-routes"], body[data-page="admin-status-realtime-connections"]) #maincontent .md3e-data-group .md3e-data-scroll > table.md3e-table-has-data-title:not(.md3e-table-empty) {
+    display: block !important;
+    min-inline-size: 0 !important;
+    width: 100% !important;
+
+    & > :is(thead, tbody) {
+      display: block !important;
+      width: 100% !important;
+    }
+
+    & tr.table-titles,
+    & tr.cbi-section-table-titles {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      clip-path: inset(50%) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    & tr:not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem 0.65rem;
+      padding: 0.55rem 0 !important;
+      width: 100% !important;
+    }
+
+    & tr:not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > td {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 0.1rem !important;
+      width: auto !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      font-size: 0.8125rem;
+      line-height: 1.3;
+      white-space: normal !important;
+      overflow-wrap: anywhere;
+    }
+
+    & tr:not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > td[data-title]:not([data-title=""])::before {
+      content: attr(data-title) !important;
+      display: block !important;
+      font-size: 0.7rem;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+  }
+}
+
+/* Wireless Overview (#cbi-wireless-wifi-device) & Associated Stations (#wifi_assoclist_table):
+   Unified borderless M3 Expressive white/surface-container-low section cards matching Status -> Overview,
+   consistent across Light & Dark mode, Desktop & Mobile, and both Overview and Network -> Wireless. */
+
+body[data-page="admin-network-wireless"] #maincontent {
+  .md3e-wireless-device-table,
+  #cbi-wireless-wifi-device :is(table, .table) {
+    :is(th, td, .th, .td) {
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+  }
+
+  .md3e-wireless-device-row {
+    & > :is(td, .td) {
+      padding-block: 0.85rem !important;
+      vertical-align: middle;
+    }
+
+    & > .md3e-wireless-badge-cell {
+      width: 10rem;
+      min-width: 9rem;
+      padding-inline-start: 0 !important;
+      white-space: nowrap !important;
+      vertical-align: middle;
+      text-align: start;
+
+      & > .center {
+        display: flex;
+        justify-content: flex-start;
+        text-align: start;
+      }
+
+      & .ifacebadge {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        gap: 0.375rem !important;
+        padding: 0.32rem 0.72rem !important;
+        border: 0 !important;
+        border-radius: var(--md-sys-shape-corner-full, 999px) !important;
+        background: var(--md-sys-color-secondary-container) !important;
+        color: var(--md-sys-color-on-secondary-container) !important;
+        box-shadow: none !important;
+        inline-size: max-content !important;
+        max-inline-size: none !important;
+        font-size: 0.8125rem !important;
+        font-weight: 500 !important;
+        line-height: 1.25 !important;
+        white-space: nowrap !important;
+
+        & > img {
+          flex: 0 0 auto !important;
+        }
+
+        & > span {
+          flex: 0 0 auto !important;
+          min-inline-size: max-content !important;
+          white-space: nowrap !important;
+        }
+      }
+    }
+
+    & > .md3e-wireless-info-cell {
+      min-width: 0;
+      white-space: normal !important;
+      overflow-wrap: break-word !important;
+
+      & :is(strong, b, span, small, div) {
+        max-width: 100%;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+      }
+
+      & code {
+        max-width: 100%;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+      }
+    }
+
+    & > .md3e-wireless-actions-cell,
+    & > td.cbi-section-actions {
+      width: 1% !important;
+      min-width: max-content;
+      padding-inline-end: 0 !important;
+      white-space: nowrap;
+      vertical-align: middle;
+
+      & .md3e-row-action-cluster {
+        inline-size: max-content;
+        flex-wrap: nowrap;
+      }
+    }
+  }
+
+  .md3e-wireless-card-title {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--md-sys-color-on-surface);
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .md3e-wireless-card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+    margin-bottom: 0.35rem;
+  }
+
+  .md3e-wireless-card-note {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--md-sys-color-on-surface-variant);
+    overflow-wrap: anywhere;
+  }
+
+  dl.md3e-wireless-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: 0.4rem 1.25rem;
+    margin: 0;
+  }
+
+  .md3e-wireless-spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+    min-width: 0;
+
+    &.is-wide {
+      grid-column: 1 / -1;
+    }
+
+    & > dt {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 0.01em;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    & > dd {
+      margin: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--md-sys-color-on-surface);
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+/* Associated Stations (#wifi_assoclist_table) — Desktop (> 820px), unified on Overview & Wireless */
+@media (min-width: 821px) {
+  #maincontent #wifi_assoclist_table:not(.md3e-table-empty) {
+    width: 100% !important;
+    min-inline-size: 0 !important;
+    table-layout: auto !important;
+
+    & :is(th, td, .th, .td) {
+      vertical-align: middle;
+      min-inline-size: 0 !important;
+    }
+
+    & :is(th, td, .th, .td):nth-child(1) {
+      min-inline-size: 11rem;
+      max-inline-size: 16.5rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+
+      & .ifacebadge {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        gap: 0.375rem !important;
+        max-width: 100%;
+        padding: 0.3rem 0.68rem !important;
+        border: 0 !important;
+        border-radius: 0.875rem !important;
+        background: var(--md-sys-color-secondary-container) !important;
+        color: var(--md-sys-color-on-secondary-container) !important;
+        box-shadow: none !important;
+        font-size: 0.8125rem !important;
+        line-height: 1.3 !important;
+
+        & > img { flex: 0 0 auto !important; }
+        & > span { min-width: 0 !important; overflow-wrap: anywhere !important; white-space: normal !important; }
+      }
+    }
+
+    & :is(th, td, .th, .td):nth-child(2) {
+      width: 1%;
+      min-inline-size: 9.25rem !important;
+      white-space: nowrap !important;
+      overflow-wrap: normal !important;
+      font-family: var(--font-mono, monospace);
+      font-size: 0.8125rem;
+      color: var(--md-sys-color-on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+
+    & :is(th, td, .th, .td):nth-child(3) {
+      max-inline-size: 18rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+
+      & > span.hide-xs {
+        display: block;
+        margin-top: 0.125rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.78rem;
+        font-weight: 400;
+        line-height: 1.35;
+        color: var(--md-sys-color-on-surface-variant);
+        overflow-wrap: anywhere;
+      }
+    }
+
+    & :is(th, td, .th, .td):nth-child(4) {
+      width: 1%;
+      white-space: nowrap !important;
+
+      & .ifacebadge {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        padding: 0.3rem 0.68rem !important;
+        border: 0 !important;
+        border-radius: var(--md-sys-shape-corner-full, 999px) !important;
+        background: var(--md-sys-color-secondary-container) !important;
+        color: var(--md-sys-color-on-secondary-container) !important;
+        box-shadow: none !important;
+        inline-size: max-content !important;
+        max-inline-size: none !important;
+        font-size: 0.8125rem !important;
+        line-height: 1.25 !important;
+        white-space: nowrap !important;
+
+        & > img { flex: 0 0 auto !important; }
+        & > span { flex: 0 0 auto !important; min-inline-size: max-content !important; white-space: nowrap !important; }
+      }
+    }
+
+    & :is(th, td, .th, .td):nth-child(5) {
+      min-inline-size: 10rem !important;
+      white-space: normal;
+      overflow-wrap: break-word;
+      font-size: 0.8125rem;
+      line-height: 1.45;
+      color: var(--md-sys-color-on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+
+    & :is(th, td, .th, .td):last-child:is(.md3e-table-action-cell, .cbi-section-actions) {
+      width: 1%;
+      white-space: nowrap;
+      text-align: end;
+    }
+  }
+}
+
+/* Wireless Overview (#cbi-wireless-wifi-device) — Mobile (<= 640px):
+   Keeps the unified crisp surface-container-low white card (matching Overview sections),
+   stacking rows inside with clean hairline dividers and full-width readable spec grids. */
+@media (max-width: 640px) {
+  body[data-page="admin-network-wireless"] #maincontent #cbi-wireless-wifi-device .md3e-data-scroll {
+    overflow-x: visible !important;
+    margin: 0 !important;
+  }
+
+  body[data-page="admin-network-wireless"] #maincontent #cbi-wireless-wifi-device .md3e-data-scroll-hint {
+    display: none !important;
+  }
+
+  body[data-page="admin-network-wireless"] #maincontent :is(.md3e-wireless-device-table, #cbi-wireless-wifi-device :is(table, .table)):not(.md3e-table-empty) {
+    display: block !important;
+    min-inline-size: 0 !important;
+    width: 100% !important;
+    border-spacing: 0 !important;
+
+    & > :is(thead, .thead, tbody, .tbody) {
+      display: block !important;
+      width: 100% !important;
+    }
+
+    & tr.md3e-wireless-device-row,
+    & > tbody > tr:not(.placeholder):not(.table-titles):not(.cbi-section-table-titles) {
+      container: md3e-wireless-card / inline-size;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+      gap: 0.5rem;
+      width: 100% !important;
+      padding: 0.75rem 0 !important;
+      border-radius: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    & tr.md3e-wireless-device-row + tr.md3e-wireless-device-row,
+    & > tbody > tr:not(.placeholder):not(.table-titles):not(.cbi-section-table-titles) + tr:not(.placeholder):not(.table-titles):not(.cbi-section-table-titles) {
+      border-block-start: var(--md3e-parameter-divider, 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent)) !important;
+    }
+
+    & tr.md3e-wireless-device-row:first-child {
+      padding-top: 0.25rem !important;
+    }
+
+    & tr.md3e-wireless-device-row:last-child {
+      padding-bottom: 0.25rem !important;
+    }
+
+    & tr.md3e-wireless-device-row > :is(td, .td),
+    & > tbody > tr:not(.placeholder):not(.table-titles):not(.cbi-section-table-titles) > :is(td, .td) {
+      display: block !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      white-space: normal !important;
+      overflow-wrap: break-word !important;
+    }
+
+    & tr.md3e-wireless-device-row > .md3e-wireless-badge-cell {
+      width: auto !important;
+      min-width: 0 !important;
+      justify-self: start;
+    }
+
+    & dl.md3e-wireless-spec-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem 0.75rem;
+    }
+
+    & tr.md3e-wireless-device-row > .md3e-wireless-actions-cell,
+    & > tbody > tr:not(.placeholder) > td.cbi-section-actions {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      gap: 0.45rem !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      padding-top: 0.25rem !important;
+
+      & .md3e-row-action-cluster {
+        inline-size: auto !important;
+        max-width: 100% !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-start !important;
+        gap: 0.45rem !important;
+        margin: 0 !important;
+      }
+
+      & :is(button, .btn, .cbi-button):not(.md3e-row-menu-trigger) {
+        min-height: var(--md3e-control-height, 2.375rem);
+        height: auto;
+        padding: 0.38rem 0.85rem;
+        font-size: 0.8125rem;
+        width: auto !important;
+        flex: 0 1 auto;
+      }
+    }
+
+    @container md3e-wireless-card (width < 18rem) {
+      & dl.md3e-wireless-spec-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.35rem;
+      }
+    }
+  }
+}
+
+/* Associated Stations (#wifi_assoclist_table) — Mobile & Narrow (<= 820px):
+   Matches Status -> Overview DHCP Leases (.md3e-lease-cards) design language 1:1:
+   clean 2-column key-value grid inside tonal sub-cards (surface-container), uniform labels
+   above every field, unified sans typography (no jarring monospace/pill bubbles inside cards),
+   and a single hairline divider above the bottom action row. */
+@media (max-width: 820px) {
+  #maincontent :is(.md3e-data-scroll, .md3e-overview-data-scroll):has(#wifi_assoclist_table) {
+    overflow-x: visible !important;
+    margin-inline: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #maincontent .md3e-data-group:has(#wifi_assoclist_table) .md3e-data-scroll-hint {
+    display: none !important;
+  }
+
+  #maincontent #wifi_assoclist_table:not(.md3e-table-empty) {
+    position: relative;
+    display: block !important;
+    min-inline-size: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-block: 0.25rem;
+    border-spacing: 0 !important;
+    border-collapse: separate !important;
+
+    & > :is(thead, .thead, tbody, .tbody) {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    & :is(tr, .tr).table-titles,
+    & :is(tr, .tr).cbi-section-table-titles {
+      position: absolute !important;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      inline-size: 1px !important;
+      block-size: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      clip-path: inset(50%) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) {
+      container: md3e-station-card / inline-size;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 0.55rem 0.85rem;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      margin: 0 0 0.5rem !important;
+      padding: 0.7rem 0.8rem !important;
+      border-radius: var(--md3e-subcard-radius, 0.875rem) !important;
+      border: 0 !important;
+      background: var(--md-sys-color-surface-container) !important;
+      box-shadow: none !important;
+    }
+
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder):last-child {
+      margin-block-end: 0 !important;
+    }
+
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td) {
+      display: block !important;
+      width: auto !important;
+      min-inline-size: 0 !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      text-align: start;
+      font-family: inherit;
+      font-size: var(--md-sys-typescale-body-medium-size, 0.875rem);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--md-sys-color-on-surface);
+      font-variant-numeric: tabular-nums;
+      white-space: normal !important;
+      overflow-wrap: anywhere !important;
+
+      & :not(img) {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+      }
+
+      & .ifacebadge {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        color: inherit !important;
+        box-shadow: none !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+
+        & > img {
+          flex: 0 0 auto !important;
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+
+    /* Uniform field labels above every data cell, matching .md3e-lease-label 1:1 */
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td):not(.md3e-table-action-cell):not(.cbi-section-actions)[data-title]:not([data-title=""])::before {
+      content: attr(data-title) !important;
+      display: block !important;
+      margin-block-end: 0.1rem;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: var(--md-sys-typescale-body-medium-size, 0.875rem);
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    /* Row 1 (full width): Hostname (bold identity) + IPv4/IPv6 */
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td):nth-child(3) {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      font-weight: 650;
+      color: var(--md-sys-color-on-surface) !important;
+
+      & > span.hide-xs {
+        display: block !important;
+        margin-top: 0.05rem;
+        font-weight: 400 !important;
+        color: var(--md-sys-color-on-surface-variant) !important;
+      }
+    }
+
+    /* Row 2 Left: MAC Address */
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td):nth-child(2) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    /* Row 2 Right: Signal / Noise (bold metric) */
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td):nth-child(4) {
+      grid-column: 2;
+      grid-row: 2;
+      font-weight: 650;
+      color: var(--md-sys-color-on-surface) !important;
+
+      & .ifacebadge > span {
+        white-space: nowrap !important;
+        overflow-wrap: normal !important;
+      }
+    }
+
+    /* Row 3 (full width): Network */
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td):nth-child(1) {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
+
+    /* Row 4 (full width): RX / TX Rate — no extra divider line above */
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td):nth-child(5) {
+      grid-column: 1 / -1;
+      grid-row: 4;
+    }
+
+    /* Row 5 (full width): Single hairline divider + right-aligned action button (matches .md3e-lease-actions) */
+    & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td):is(.md3e-table-action-cell, .cbi-section-actions) {
+      grid-column: 1 / -1;
+      grid-row: 5;
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      gap: 0.35rem 0.75rem;
+      border-block-start: var(--md3e-parameter-divider, 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent)) !important;
+      padding-block-start: 0.55rem !important;
+
+      & :is(button, .btn, .cbi-button) {
+        margin: 0;
+        width: auto !important;
+        min-inline-size: 0;
+        max-inline-size: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    @container md3e-station-card (width < 20rem) {
+      & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.4rem;
+        padding: 0.55rem 0.65rem !important;
+      }
+
+      & :is(tr, .tr):not(.table-titles):not(.cbi-section-table-titles):not(.placeholder) > :is(td, .td) {
+        grid-column: 1 / -1;
+        grid-row: auto;
+      }
+    }
+  }
+}
+
+@media (pointer: coarse) and (max-width: 820px) {
+  #maincontent :is(.md3e-wireless-actions-cell, #wifi_assoclist_table :is(td, .td).md3e-table-action-cell, #wifi_assoclist_table :is(td, .td).cbi-section-actions) :is(button, .btn, .cbi-button):not(.md3e-row-menu-trigger) {
+    min-block-size: 44px;
   }
 }
 /* Ultra-wide supporting pane: page-local section outline. */

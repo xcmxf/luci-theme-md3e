@@ -32,6 +32,14 @@
   --md-sys-motion-effects-fast: 225ms cubic-bezier(.2, 0, 0, 1);
 }
 
+@media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+  :root {
+    --md3e-comp-card-radius: var(--md3e-card-radius, 1.25rem);
+    --md3e-comp-card-padding: var(--md3e-card-pad, 1rem);
+    --md3e-comp-field-radius: var(--md3e-control-radius, 0.875rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --md-sys-motion-spatial-fast-duration: 0ms;
@@ -163,6 +171,20 @@ html[data-darkmode="true"] #maincontent :is(.md3e-card, .cbi-section-node) {
     box-shadow var(--md3e-comp-duration) var(--md3e-comp-ease),
     color var(--md3e-comp-duration) ease;
   cursor: pointer;
+}
+
+@media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+  :where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) {
+    min-height: var(--md3e-control-height, 2.5rem);
+    padding: 0.45rem var(--md3e-control-pad-inline, 0.875rem);
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) {
+    font-size: 0.8125rem;
+  }
 }
 
 :where(.md3e-button, a.btn, input.btn, .cbi-button, .cbi-page-actions .btn) svg {

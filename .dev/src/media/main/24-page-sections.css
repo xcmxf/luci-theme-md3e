@@ -89,7 +89,14 @@
       background: color-mix(in oklab, var(--md-sys-color-tertiary-container) 50%, var(--md-sys-color-surface-container-low));
       color: var(--md-sys-color-on-tertiary-container);
 
-      > div { flex: 1 1 22rem; }
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        gap: 0.35rem 0.75rem;
+        padding: var(--md3e-card-pad);
+        margin-block-end: var(--md3e-section-gap);
+        border-radius: var(--md3e-card-radius);
+      }
+
+      > div { flex: 1 1 min(22rem, 100%); min-width: 0; }
       strong {
         font-size: var(--md-sys-typescale-label-large-size);
         font-weight: 650;
@@ -111,7 +118,7 @@
     }
 
     #maincontent .cbi-map {
-      gap: var(--space-lg);
+      gap: 0;
       width: 100%;
       max-width: min(100%, var(--md3e-content-form-max-width));
       margin-inline: 0 auto;
@@ -127,9 +134,10 @@
     }
 
     #maincontent .cbi-section {
-      @apply relative border-0 shadow-none bg-transparent p-0 mb-6;
+      @apply relative border-0 shadow-none bg-transparent p-0;
       width: 100%;
       max-width: 100%;
+      margin-block: 0 var(--md3e-section-gap);
       border: 0 !important;
       outline: none !important;
       box-shadow: none !important;
@@ -148,20 +156,29 @@
         padding-top: 0;
         margin-left: var(--space-lg);
         @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
-          margin-left: var(--space-md);
+          margin-left: 0.25rem;
+          margin-bottom: 0.5rem;
+          gap: 0.5rem;
         }
 
         h3 {
           @apply m-0;
-          font-size: clamp(1.12rem, 1.04rem + 0.24vw, 1.34rem);
-          line-height: 1.35;
-          font-weight: 500;
-          letter-spacing: -0.01em;
+          font-size: var(--md-sys-typescale-title-large-size);
+          line-height: var(--md-sys-typescale-title-large-line-height);
+          font-weight: 600;
+          letter-spacing: -0.015em;
           text-transform: none;
-          color: color-mix(in oklab, var(--foreground) 82%, transparent);
+          color: var(--md-sys-color-on-surface);
+
+          @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+            font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+            line-height: 1.32;
+          }
         }
       }
     }
+
+
 
     
     #maincontent .cbi-value .cbi-section-node,
@@ -178,8 +195,12 @@
       isolation: isolate;
       border: none !important;
       background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 78%, var(--md-sys-color-surface-container-low)) !important;
-      border-radius: var(--md-sys-shape-corner-extra-large) !important;
+      border-radius: var(--md3e-card-radius) !important;
       box-shadow: none !important;
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        padding: var(--md3e-card-pad);
+      }
 
       /* MD3 Expressive 3.0 Value Styling */
       & .cbi-value {
@@ -187,6 +208,11 @@
         background: transparent !important;
         margin-top: 0 !important;
         max-width: min(100%, var(--md3e-content-form-max-width));
+
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          gap: 0.35rem;
+          margin-bottom: var(--md3e-section-gap);
+        }
 
         &:last-child {
           margin-bottom: 0;
@@ -202,19 +228,34 @@
           letter-spacing: 0.01em;
           text-transform: none;
           color: color-mix(in oklab, var(--foreground) 74%, transparent);
+
+          @media (max-width: 480px) {
+            font-size: var(--md-sys-typescale-body-medium-size);
+            line-height: 1.3;
+          }
         }
 
         & .cbi-value-field {
           @apply flex-none p-0 text-foreground;
-          font-size: var(--md-sys-typescale-title-large-size);
-          line-height: var(--md-sys-typescale-title-large-line-height);
+          font-size: var(--md-sys-typescale-body-large-size);
+          line-height: var(--md-sys-typescale-body-large-line-height);
           font-weight: 500;
           letter-spacing: -0.01em;
+
+          @media (max-width: 480px) {
+            font-size: var(--md-sys-typescale-body-medium-size);
+            line-height: 1.4;
+          }
 
           &.md3e-value-field-progress {
             @apply w-full;
             font-size: var(--md-sys-typescale-headline-small-size);
             line-height: var(--md-sys-typescale-headline-small-line-height);
+
+            @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+              font-size: var(--md-sys-typescale-title-medium-size);
+              line-height: 1.35;
+            }
           }
 
           & small, & .text-muted {
@@ -225,6 +266,10 @@
 
           & .progress, & .cbi-progressbar {
             @apply mt-6 h-4 overflow-hidden border-0;
+
+            @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+              margin-top: 0.5rem;
+            }
             background: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 55%, transparent);
             border-radius: 20px;
             & > .progress-bar, & > div {

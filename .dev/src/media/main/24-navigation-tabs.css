@@ -8,10 +8,11 @@
       overflow-x: auto;
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
       #tabmenu {
         justify-content: flex-start;
-        padding-inline: 0.25rem;
+        margin-bottom: var(--md3e-section-gap, 0.75rem);
+        padding-inline: 0;
       }
     }
 
@@ -31,6 +32,15 @@
 
       & > .cbi-value + .cbi-value {
         @apply mt-6 border-t-0;
+      }
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        padding: var(--md3e-card-pad, 1rem);
+        border-radius: var(--md3e-card-radius, 1.25rem);
+
+        & > .cbi-value + .cbi-value {
+          margin-top: var(--md3e-section-gap, 0.875rem);
+        }
       }
     }
   }

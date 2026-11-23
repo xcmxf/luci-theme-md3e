@@ -2,32 +2,23 @@
     if (this._customSelectsInitialized) return;
 
     const target = document.getElementById("maincontent") || document.body;
-    if (!target.querySelector("select, .cbi-dropdown")) {
-      this.watchForAddedElement(
-        "_customSelectBootstrapObserver",
-        target,
-        "select, .cbi-dropdown",
-        () => this.initCustomSelects(),
-      );
-      return;
-    }
-
     this._customSelectsInitialized = true;
     this._openOutlineSelects = this._openOutlineSelects || new Set();
     this._openCbiDropdowns = this._openCbiDropdowns || new Set();
     this._activeOutlineSelect = this._activeOutlineSelect || null;
     this._activeCbiDropdown = this._activeCbiDropdown || null;
 
-    const replaceAll = (scope = target) => {
-      this.forEachElementMatch(scope, "select", (select) =>
+    const syncContainer = (container) => {
+      if (!(container instanceof HTMLElement)) return;
+      this.forEachElementMatch(container, "select", (select) =>
         this.replaceSelect(select),
       );
+      container
+        .querySelectorAll?.(".cbi-dropdown[open]")
+        .forEach((dropdown) => this.syncCbiDropdownPanel(dropdown));
     };
 
-    replaceAll(target);
-    target
-      .querySelectorAll?.(".cbi-dropdown[open]")
-      .forEach((dropdown) => this.syncCbiDropdownPanel(dropdown));
+    syncContainer(target);
 
     if (!this._customSelectClickHandler) {
       this._customSelectClickHandler = (event) => {
@@ -55,6 +46,27 @@
     }
 
     this.observeCustomSelectMutations(target);
+
+    const attachModalOverlay = (overlay) => {
+      if (!(overlay instanceof HTMLElement) || overlay._md3eSelectsObserved) return;
+      overlay._md3eSelectsObserved = true;
+      syncContainer(overlay);
+      this.observeCustomSelectMutations(overlay);
+    };
+
+    const modalOverlay = document.getElementById("modal_overlay");
+    if (modalOverlay) {
+      attachModalOverlay(modalOverlay);
+    } else if (target !== document.body) {
+      const bodyObserver = new MutationObserver(() => {
+        const overlay = document.getElementById("modal_overlay");
+        if (!overlay) return;
+        bodyObserver.disconnect();
+        attachModalOverlay(overlay);
+      });
+      bodyObserver.observe(document.body, { childList: true });
+    }
+
     this.initSelectViewportListeners();
   },
 
@@ -147,6 +159,8 @@
       const method = hasOpen ? "addEventListener" : "removeEventListener";
       window[method]("resize", this._dropdownViewportHandler);
       window[method]("scroll", this._dropdownViewportHandler, true);
+      window.visualViewport?.[method]("resize", this._dropdownViewportHandler);
+      window.visualViewport?.[method]("scroll", this._dropdownViewportHandler);
     };
 
     if (!this._dropdownViewportHandler) {

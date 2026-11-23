@@ -21,18 +21,79 @@
     }
 
     .zonebadge {
-      @apply border-secondary bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 overflow-visible rounded-full border px-1 py-1.5 text-sm font-medium shadow-sm transition-all duration-200 hover:shadow-md max-md:gap-1 max-md:text-xs;
+      @apply border-secondary bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 overflow-visible rounded-full border px-2.5 py-1 text-sm font-medium shadow-sm transition-all duration-200 hover:shadow-md max-md:gap-1 max-md:text-xs;
 
       &[style*="--zone-color-rgb"] {
-        @apply bg-[rgb(var(--zone-color-rgb),.7)]!;
+        background-color: color-mix(in srgb, rgb(var(--zone-color-rgb)) 55%, #ffffff) !important;
+        border-color: color-mix(in srgb, rgb(var(--zone-color-rgb)) 70%, #374151) !important;
+        color: #14161c !important;
 
-        & em {
-          @apply text-default-foreground;
+        & strong,
+        & em,
+        & span:not(.ifacebadge) {
+          color: #14161c !important;
+        }
+
+        & > .ifacebadge,
+        & > .ifacebadge.ifacebadge-active {
+          background: rgba(255, 255, 255, 0.74) !important;
+          border-color: rgba(20, 22, 28, 0.2) !important;
+          color: #14161c !important;
         }
       }
 
+      [data-darkmode="true"] &[style*="--zone-color-rgb"] {
+        background-color: color-mix(in srgb, rgb(var(--zone-color-rgb)) 26%, rgb(26 28 36)) !important;
+        border-color: color-mix(in srgb, rgb(var(--zone-color-rgb)) 52%, rgb(68 71 79)) !important;
+        color: #f1f3f9 !important;
+
+        & strong,
+        & em,
+        & span:not(.ifacebadge) {
+          color: #f1f3f9 !important;
+        }
+
+        & > .ifacebadge,
+        & > .ifacebadge.ifacebadge-active {
+          background: rgba(17, 19, 24, 0.68) !important;
+          border-color: rgba(241, 243, 249, 0.2) !important;
+          color: #f1f3f9 !important;
+        }
+      }
+
+      &.zonebadge-empty,
+      &:not([style*="--zone-color-rgb"]) {
+        background: var(--md-sys-color-surface-container-high);
+        border-color: var(--md-sys-color-outline-variant);
+        color: var(--md-sys-color-on-surface);
+
+        & strong,
+        & em,
+        & span:not(.ifacebadge) {
+          color: inherit;
+        }
+      }
+
+      &.zonebadge-empty {
+        background: var(--md-sys-color-error-container);
+        border-color: color-mix(in oklab, var(--md-sys-color-error) 35%, transparent);
+        color: var(--md-sys-color-on-error-container);
+      }
+
+      [data-darkmode="true"] &:not([style*="--zone-color-rgb"]) {
+        background: var(--md-sys-color-surface-container-high);
+        border-color: var(--md-sys-color-outline-variant);
+        color: var(--md-sys-color-on-surface);
+      }
+
+      [data-darkmode="true"] &.zonebadge-empty {
+        background: var(--md-sys-color-error-container);
+        border-color: color-mix(in oklab, var(--md-sys-color-error) 45%, transparent);
+        color: var(--md-sys-color-on-error-container);
+      }
+
       .cbi-dropdown & {
-        @apply rounded-xl px-1 py-0.5;
+        @apply rounded-xl px-2 py-0.5;
       }
     }
 
@@ -81,6 +142,25 @@
       }
     }
 
+    @media (max-width: 480px) {
+      .label {
+        padding: 0.15rem 0.55rem;
+        font-size: 0.6875rem;
+      }
+
+      .zonebadge {
+        padding: 0.15rem 0.35rem;
+        font-size: 0.75rem;
+      }
+
+      .ifacebadge {
+        gap: 0.25rem;
+        padding: 0.25rem 0.45rem;
+        border-radius: var(--md-sys-shape-corner-small);
+        font-size: 0.75rem;
+      }
+    }
+
     /* Global M3 monochrome vector icon replacement for legacy LuCI /resources/icons/ */
     img[src*="/luci-static/resources/icons/"]:is([src*="ethernet"], [src*="port_"], [src*="bridge"], [src*="vlan"], [src*="switch"], [src*="wifi.svg"], [src*="wifi_disabled"], [src*="tunnel"], [src*="wireguard"], [src*="alias"], [src*="vrf"], [src*="signal-"]) {
       content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'/%3E");
@@ -100,6 +180,15 @@
 
     img[src*="/luci-static/resources/icons/"]:is([src*="_disabled.svg"], [src*="port_down.svg"], [src*="port_pse_down.svg"], [src*="signal-none.svg"], [src*="signal-000-000.svg"]) {
       opacity: 0.55;
+    }
+
+    [data-darkmode="true"] .ifacebadge {
+      background: color-mix(in oklab, var(--md-sys-color-surface-container-highest) 88%, var(--md-sys-color-secondary-container) 12%);
+      color: var(--md-sys-color-on-surface);
+    }
+
+    [data-darkmode="true"] img[src*="/luci-static/resources/icons/"]:is([src*="_disabled.svg"], [src*="port_down.svg"], [src*="port_pse_down.svg"], [src*="signal-none.svg"], [src*="signal-000-000.svg"]) {
+      opacity: 0.78;
     }
 
     img[src*="/luci-static/resources/icons/ethernet"], img[src*="/luci-static/resources/icons/port_"] {

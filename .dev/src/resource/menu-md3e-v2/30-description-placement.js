@@ -93,9 +93,9 @@
 
     move();
 
-    const target = document.getElementById("maincontent") || document.body;
+    const mainTarget = document.getElementById("maincontent") || document.body;
     const pendingScopes = new Set();
-    this.observeDomMutations(target, "description-placement", (mutations) => {
+    const handleMutations = (mutations) => {
       mutations.forEach((mutation) => {
         if (
           mutation.type === "attributes" &&
@@ -135,10 +135,34 @@
         pendingScopes.forEach((scope) => move(scope));
         pendingScopes.clear();
       });
-    }, {
+    };
+
+    const observerOptions = {
       childList: true,
       attributes: true,
       attributeFilter: ["open", "class", "disabled"],
       subtree: true,
-    });
+    };
+
+    this.observeDomMutations(mainTarget, "description-placement", handleMutations, observerOptions);
+
+    const attachModalOverlay = (overlay) => {
+      if (!(overlay instanceof HTMLElement) || overlay._md3eDescObserved) return;
+      overlay._md3eDescObserved = true;
+      move(overlay);
+      this.observeDomMutations(overlay, "description-placement", handleMutations, observerOptions);
+    };
+
+    const modalOverlay = document.getElementById("modal_overlay");
+    if (modalOverlay) {
+      attachModalOverlay(modalOverlay);
+    } else if (mainTarget !== document.body) {
+      const bodyObserver = new MutationObserver(() => {
+        const overlay = document.getElementById("modal_overlay");
+        if (!overlay) return;
+        bodyObserver.disconnect();
+        attachModalOverlay(overlay);
+      });
+      bodyObserver.observe(document.body, { childList: true });
+    }
   },

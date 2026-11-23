@@ -1,7 +1,12 @@
 @layer components {
   @layer tooltip {
     .cbi-tooltip {
-      @apply bg-tooltip-bg text-foreground border-border/60 absolute z-110 max-w-[13rem] rounded-md border px-2 py-2 text-xs leading-4 break-normal whitespace-normal opacity-0 scale-95 shadow-md pointer-events-none;
+      @apply bg-tooltip-bg border-border/60 absolute z-110 max-w-[13rem] rounded-md border px-2 py-2 text-xs leading-4 break-normal whitespace-normal opacity-0 scale-95 shadow-md pointer-events-none;
+      color: var(--md-sys-color-inverse-on-surface);
+
+      & :is(strong, em, code, a, span, p) {
+        color: inherit;
+      }
       transform-origin: var(--tooltip-origin, center bottom);
       transition:
         opacity 150ms ease-out,
@@ -22,8 +27,12 @@
       }
     }
 
-    .cbi-tooltip-container,
     [data-tooltip] {
+      position: relative;
+    }
+
+    .cbi-tooltip-container,
+    [data-tooltip]:not(.cbi-dropdown, .outline-select, input, select, textarea, button, .btn, .cbi-button) {
       @apply relative inline-block cursor-help whitespace-nowrap underline decoration-current decoration-dotted underline-offset-2 transition-all duration-200;
 
       & .cbi-tooltip {

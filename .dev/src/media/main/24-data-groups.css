@@ -9,6 +9,10 @@
       margin-inline: auto;
       margin-block-end: 1.5rem;
       width: min(100%, 360px);
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        margin-block-end: var(--md3e-section-gap);
+      }
       display: flex;
       justify-content: center;
 
@@ -44,7 +48,16 @@
       .md3e-data-scroll-hint:has(+ .md3e-data-scroll[data-layout="wide"]) { display: block; }
     }
 
+    @container md3e-settings (width < 43rem) {
+      .md3e-data-scroll[data-layout="wide"] + .md3e-data-scroll-hint,
+      .md3e-data-scroll-hint:has(+ .md3e-data-scroll[data-layout="wide"]) { display: block; }
+    }
+
     @container md3e-parameters (width < 24rem) {
+      .md3e-data-scroll[data-layout="medium"] + .md3e-data-scroll-hint { display: block; }
+    }
+
+    @container md3e-settings (width < 24rem) {
       .md3e-data-scroll[data-layout="medium"] + .md3e-data-scroll-hint { display: block; }
     }
 
@@ -165,7 +178,7 @@
 
     [data-page="admin-status-channel_analysis"] #channel_graph {
       border-color: var(--md-sys-color-outline-variant) !important;
-      border-radius: var(--md-sys-shape-corner-extra-large);
+      border-radius: var(--md3e-card-radius);
       background: var(--md-sys-color-surface-container-low) !important;
       overflow: hidden;
 
@@ -257,13 +270,17 @@
       .md3e-realtime-connections {
         --md3e-parameter-divider: 1px solid var(--md-sys-color-outline-variant);
         padding: var(--md3e-content-edge);
-        border-radius: var(--md-sys-shape-corner-extra-large);
+        border-radius: var(--md3e-card-radius);
         background: var(--md-sys-color-surface-container-low);
+
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          padding: var(--md3e-card-pad);
+        }
       }
 
       .md3e-realtime-plot {
-        border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 35%, transparent) !important;
-        border-radius: var(--md-sys-shape-corner-extra-large) !important;
+        border: none !important;
+        border-radius: var(--md3e-card-radius) !important;
         background: var(--md-sys-color-surface-container-low) !important;
         overflow: hidden;
 
@@ -296,7 +313,14 @@
         background: var(--md-sys-color-surface-container-low);
         border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 45%, transparent);
 
-        .filter { flex: 1 1 16rem !important; input { width: 100%; } }
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          gap: 0.5rem;
+          margin-block: 0.5rem var(--md3e-section-gap);
+          padding: var(--md3e-card-pad);
+          border-radius: var(--md3e-subcard-radius);
+        }
+
+        .filter { flex: 1 1 min(16rem, 100%) !important; min-width: 0; input { width: 100%; } }
         .right { flex: 0 0 auto !important; button { margin: 0; } }
       }
     }
@@ -308,9 +332,9 @@
       table-layout: fixed !important;
       border-collapse: separate !important;
       border-spacing: 0 !important;
-      border-radius: var(--md-sys-shape-corner-extra-large) !important;
+      border-radius: var(--md3e-card-radius) !important;
       background: var(--md-sys-color-surface-container-low) !important;
-      border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 35%, transparent) !important;
+      border: none !important;
       overflow: hidden;
 
       th {
@@ -357,7 +381,7 @@
           flex-direction: column !important;
           gap: 0.35rem !important;
           padding: 0.65rem 0.85rem !important;
-          border-radius: var(--md-sys-shape-corner-large) !important;
+          border-radius: var(--md3e-subcard-radius) !important;
           background: var(--md-sys-color-surface-container) !important;
           border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 30%, transparent) !important;
           &:not(:last-of-type, :last-child) {

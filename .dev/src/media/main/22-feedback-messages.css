@@ -9,11 +9,15 @@
       color: var(--md-sys-color-on-surface-variant);
       box-shadow: 0 12px 24px -16px var(--expressive-shadow);
 
-      @media (max-width: 767px) {
-        padding-left: 48px;
-        padding-right: 16px;
-        padding-top: 1.1rem;
-        padding-bottom: 1.1rem;
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        margin-bottom: var(--md3e-section-gap, 0.875rem);
+        border-radius: var(--md3e-subcard-radius, 0.875rem);
+        padding: 0.75rem 0.9rem 0.75rem 2.65rem;
+      }
+
+      @media (max-width: 480px) {
+        padding: 0.625rem 0.75rem 0.625rem 2.35rem;
+        font-size: 0.8125rem;
       }
 
       #maincontent > & {
@@ -107,11 +111,11 @@
           top: calc(8rem + var(--toast-index, 0) * 4.5rem);
         }
 
-        @media (max-width: 767px) {
-          right: 0.75rem;
-          left: 0.75rem;
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          right: var(--md3e-page-gutter, 0.75rem);
+          left: var(--md3e-page-gutter, 0.75rem);
           max-width: none;
-          top: calc(8rem + var(--toast-index, 0) * 2.5rem);
+          top: calc(var(--md3e-mobile-topbar-height, 3.5rem) + env(safe-area-inset-top, 0px) + 0.5rem + var(--toast-index, 0) * 3.5rem);
           box-shadow: 0 8px 20px -16px var(--expressive-shadow);
         }
       }
@@ -124,6 +128,18 @@
         mask-position: center;
         /* Default: info circle icon */
         mask-image: var(--md3e-icon-info-mask);
+
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          left: 0.8rem;
+          width: 1.125rem;
+          height: 1.125rem;
+        }
+
+        @media (max-width: 480px) {
+          left: 0.65rem;
+          width: 1rem;
+          height: 1rem;
+        }
       }
 
       &.spinning {

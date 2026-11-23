@@ -311,15 +311,21 @@ return baseclass.extend({
     const anchor = this.menuRow.trigger.getBoundingClientRect();
     const { offsetWidth: width, offsetHeight: height } = this.menu;
     const gap = 8;
+    const preferredLeft = anchor.right - width >= gap ? anchor.right - width : anchor.left;
     const left = Math.max(
       gap,
-      Math.min(anchor.right - width, innerWidth - width - gap),
+      Math.min(preferredLeft, innerWidth - width - gap),
     );
     const above = anchor.bottom + height + gap * 2 > innerHeight;
     const top = above
       ? Math.max(gap, anchor.top - height - gap)
       : anchor.bottom + gap;
-    Object.assign(this.menu.style, { left: left + "px", top: top + "px" });
+    Object.assign(this.menu.style, {
+      left: left + "px",
+      top: top + "px",
+      right: "auto",
+      bottom: "auto",
+    });
   },
 
   chooseAction(signal, label) {

@@ -3,13 +3,33 @@
     button,
     .btn,
     .cbi-button {
-      @apply inline-flex h-11 cursor-pointer items-center justify-center gap-1.5 border px-4 text-sm font-medium antialiased transition-all duration-200 max-md:h-10 max-md:text-sm;
+      @apply inline-flex h-11 cursor-pointer items-center justify-center gap-1.5 border px-4 text-sm font-medium antialiased transition-all duration-200;
       border-radius: var(--md-sys-shape-corner-full);
       &[disabled] {
         @apply cursor-not-allowed opacity-60 dark:opacity-50;
       }
       .td & {
-        @apply inline-flex w-auto flex-none whitespace-nowrap max-md:min-h-9 max-md:text-sm;
+        @apply inline-flex w-auto flex-none whitespace-nowrap;
+      }
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        height: auto;
+        min-height: var(--md3e-control-height);
+        padding-block: 0.35rem;
+        padding-inline: var(--md3e-control-pad-inline);
+
+        .td & {
+          min-height: var(--md3e-control-height);
+        }
+      }
+
+      @media (max-width: 480px) {
+        font-size: 0.8125rem;
+        line-height: 1.2;
+
+        .td & {
+          font-size: 0.8125rem;
+        }
       }
     }
 
@@ -58,6 +78,11 @@
     .cbi-button-add {
       @apply h-10;
       color: var(--md-comp-tonal-button-label-text-color);
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        height: auto;
+        min-height: var(--md3e-control-height);
+      }
       border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 82%, transparent);
       background: color-mix(in oklab, var(--md-comp-tonal-button-container-color) 88%, transparent);
     }

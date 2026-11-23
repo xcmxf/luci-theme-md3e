@@ -1,14 +1,25 @@
 @layer components {
   @layer shell-pro {
     #maincontent .cbi-section.md3e-parameter-group {
-      --md3e-parameter-inset: clamp(0.875rem, 2.5vw, 1.5rem);
+      --md3e-parameter-inset: var(--md3e-card-pad);
       --md3e-parameter-divider: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent);
       container: md3e-parameters / inline-size;
       padding: 0.625rem var(--md3e-parameter-inset) 0.5rem;
       padding-block-start: 0.625rem !important;
-      margin-block-end: var(--space-md);
-      border-radius: var(--md-sys-shape-corner-extra-large);
+      margin-block: 0 var(--md3e-section-gap);
+      border-radius: var(--md3e-card-radius);
       background: var(--md-sys-color-surface-container-low);
+
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+        padding: 0.5rem var(--md3e-card-pad) 0.45rem;
+        padding-block-start: 0.5rem !important;
+        margin-block-end: var(--md3e-section-gap);
+      }
+
+      @media (max-width: 480px) {
+        padding: 0.45rem var(--md3e-card-pad) 0.4rem;
+        padding-block-start: 0.45rem !important;
+      }
 
       > .cbi-title {
         margin: 0;
@@ -19,8 +30,16 @@
           gap: 0.75rem;
           inline-size: 100%;
           max-inline-size: 100%;
+          font-size: var(--md-sys-typescale-title-large-size);
+          line-height: var(--md-sys-typescale-title-large-line-height);
           font-weight: 600;
           color: var(--md-sys-color-on-surface);
+
+          @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+            gap: 0.5rem;
+            font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+            line-height: 1.32;
+          }
         }
 
         [role="button"] {
@@ -28,6 +47,12 @@
           inline-size: 2.75rem;
           min-inline-size: 2.75rem !important;
           block-size: 2.75rem;
+
+          @media (max-width: 480px) {
+            inline-size: 2.25rem;
+            min-inline-size: 2.25rem !important;
+            block-size: 2.25rem;
+          }
 
           &:focus-visible {
             outline: 2px solid var(--md-sys-color-primary);
@@ -48,6 +73,8 @@
       }
     }
 
+
+
     .md3e-parameter-list {
       margin: 0;
     }
@@ -57,6 +84,15 @@
       grid-template-columns: minmax(0, 1fr);
       gap: 0.15rem;
       padding-block: 0.5rem;
+
+      @media (max-width: 480px) {
+        gap: 0.0625rem;
+        padding-block: 0.35rem;
+      }
+
+      @media (max-width: 360px) {
+        padding-block: 0.3rem;
+      }
 
       & + & {
         border-block-start: var(--md3e-parameter-divider);
@@ -70,17 +106,32 @@
       > dt {
         color: var(--md-sys-color-on-surface-variant);
         font-size: var(--md-sys-typescale-body-medium-size);
+
+        @media (max-width: 480px) {
+          font-size: var(--md-sys-typescale-body-small-size);
+          line-height: 1.25;
+        }
       }
 
       > dd {
         color: var(--md-sys-color-on-surface);
         font-weight: 550;
         white-space: pre-line;
+
+        @media (max-width: 480px) {
+          font-size: var(--md-sys-typescale-body-medium-size);
+          line-height: 1.35;
+        }
       }
 
       .cbi-progressbar {
         gap: 0.625rem;
         min-block-size: 2rem;
+
+        @media (max-width: 480px) {
+          gap: 0.5rem;
+          min-block-size: 1.65rem;
+        }
 
         &::before {
           color: var(--md-sys-color-on-surface);
@@ -117,6 +168,11 @@
       padding-block: 0.55rem;
       overflow-wrap: anywhere;
 
+      @media (max-width: 480px) {
+        gap: 0.3rem 0.75rem;
+        padding-block: 0.4rem;
+      }
+
       & + & { border-block-start: var(--md3e-parameter-divider); }
     }
 
@@ -125,6 +181,10 @@
       align-items: center;
       gap: 0.7rem;
       min-inline-size: 0;
+
+      @media (max-width: 480px) {
+        gap: 0.55rem;
+      }
     }
 
     .md3e-overview-port-icon {
@@ -133,6 +193,11 @@
       flex: none;
       inline-size: 2.5rem;
       block-size: 2.5rem;
+
+      @media (max-width: 480px) {
+        inline-size: 2.15rem;
+        block-size: 2.15rem;
+      }
       border-radius: var(--md-sys-shape-corner-medium);
       background: var(--md-sys-color-secondary-container);
       color: var(--md-sys-color-on-secondary-container);
@@ -186,14 +251,28 @@
       margin: 0;
       font-variant-numeric: tabular-nums;
 
+      @media (max-width: 480px) {
+        gap: 0.35rem 0.75rem;
+      }
+
       dt {
         color: var(--md-sys-color-on-surface-variant);
         font-size: var(--md-sys-typescale-body-medium-size);
+
+        @media (max-width: 480px) {
+          font-size: var(--md-sys-typescale-body-small-size);
+          line-height: 1.25;
+        }
       }
 
       dd {
         margin: 0;
         font-weight: 550;
+
+        @media (max-width: 480px) {
+          font-size: var(--md-sys-typescale-body-medium-size);
+          line-height: 1.35;
+        }
       }
     }
 
@@ -305,32 +384,109 @@
       .network-status-table:empty { display: none; }
 
       .network-status-table {
-        margin-block: 0.25rem;
-      }
-
-      .network-status-table > .ifacebox,
-      .network-status-table > .ifacebox > .ifacebox-head,
-      .network-status-table .ifacebox-body > div {
-        background: transparent;
-        border: 0;
-        box-shadow: none;
-      }
-
-      .network-status-table > .ifacebox,
-      .network-status-table > .ifacebox > .ifacebox-head {
-        padding-inline: 0;
+        margin-block: 0.35rem 0.65rem;
+        gap: 0.75rem;
+        align-items: start;
       }
 
       .network-status-table > .ifacebox {
-        padding-block: 0.55rem;
+        align-self: start;
+        padding: 0.75rem 0.9rem !important;
+        border: 0 !important;
+        border-radius: var(--md3e-subcard-radius, 0.875rem) !important;
+        background: var(--md-sys-color-surface-container) !important;
+        box-shadow: none !important;
+      }
+
+      .network-status-table > .ifacebox > .ifacebox-head {
+        display: inline-flex;
+        justify-self: start;
+        align-items: center;
+        min-height: 1.65rem;
+        padding: 0.18rem 0.65rem;
+        border: 0;
+        border-radius: var(--md-sys-shape-corner-full);
+        background: var(--md-sys-color-secondary-container);
+        color: var(--md-sys-color-on-secondary-container);
+        box-shadow: none;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        line-height: 1.25;
       }
 
       .network-status-table > .ifacebox > .ifacebox-body {
-        padding-block-start: 0.35rem;
+        padding-block-start: 0.5rem;
+        gap: 0.5rem;
+      }
+
+      .network-status-table .ifacebox-body > div:empty {
+        display: none;
+      }
+
+      .network-status-table .ifacebox-body > div:not(:empty) {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        margin-top: 0.25rem;
+        border-block-start: var(--md3e-parameter-divider);
+      }
+
+      .network-status-table .ifacebox-body .ifacebadge {
+        grid-template-columns: 1.35rem minmax(0, 1fr);
+        align-items: start;
+        gap: 0.55rem;
+        min-height: 0 !important;
+        padding: 0.55rem 0 !important;
+
+        > img {
+          margin-top: 0.15rem;
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+
+        > span {
+          gap: 0.15rem !important;
+          line-height: 1.35;
+
+          > br {
+            display: none !important;
+          }
+        }
+      }
+
+      .network-status-table .ifacebox-body .ifacebadge + .ifacebadge {
+        border-top: var(--md3e-parameter-divider);
       }
 
       .network-status-table:has(> .ifacebox) + .md3e-parameter-list {
         border-block-start: var(--md3e-parameter-divider);
+      }
+    }
+
+    /* Overview Wireless (#md3e-wireless-parameters): avoid giant lopsided empty space when
+       one radio is disabled/empty and another has multiple SSIDs. Stack radio cards full-width
+       and lay out radio specs & SSIDs in balanced multi-column grids on wide containers. */
+    #maincontent #md3e-wireless-parameters .network-status-table {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    @container md3e-parameters (width >= 40rem) {
+      #maincontent #md3e-wireless-parameters .network-status-table > .ifacebox > .ifacebox-body > span {
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        gap: 0.2rem 1.25rem;
+      }
+
+      #maincontent #md3e-wireless-parameters .network-status-table .ifacebox-body > div:not(:empty) {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+        gap: 0.5rem 1.25rem;
+        padding-top: 0.45rem;
+      }
+
+      #maincontent #md3e-wireless-parameters .network-status-table .ifacebox-body .ifacebadge {
+        padding: 0.25rem 0 !important;
+        border-top: 0 !important;
       }
     }
 
@@ -371,6 +527,10 @@
             background: transparent !important;
             box-shadow: none !important;
             border-radius: 0 !important;
+
+            @media (max-width: 480px) {
+              padding: 0.42rem 0.5rem !important;
+            }
           }
 
           td:is([data-md3e-column="address"], [data-md3e-column="number"]),
@@ -389,6 +549,15 @@
             text-transform: none;
             letter-spacing: normal;
             overflow-wrap: normal;
+          }
+
+          .ifacebadge {
+            margin: 0;
+            border: 0 !important;
+            border-radius: var(--md-sys-shape-corner-full);
+            background: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            box-shadow: none !important;
           }
         }
       }
@@ -421,10 +590,16 @@
     }
 
     @container md3e-parameters (width < 46rem) {
-      #md3e-leases-parameters .md3e-overview-data-scroll > table.md3e-lease-cards {
+      #maincontent .md3e-overview-data-scroll:has(> table.md3e-lease-cards) {
+        overflow-x: visible !important;
+        margin-inline: 0 !important;
+      }
+
+      #maincontent .md3e-overview-data-scroll > table.md3e-lease-cards {
         position: relative;
         display: block !important;
-        min-inline-size: 0;
+        min-inline-size: 0 !important;
+        width: 100% !important;
         padding-block: 0.25rem;
         border-collapse: separate !important;
 
@@ -446,7 +621,7 @@
           gap: 0.55rem 0.85rem;
           margin: 0 0 0.5rem;
           padding: 0.7rem 0.8rem;
-          border-radius: var(--md-sys-shape-corner-large) !important;
+          border-radius: var(--md3e-subcard-radius) !important;
           background: var(--md-sys-color-surface-container) !important;
           border: 0 !important;
         }
@@ -498,6 +673,16 @@
           font-weight: 500;
 
           &::before { content: attr(data-label); }
+        }
+      }
+    }
+
+    @container md3e-parameters (width < 20rem) {
+      #maincontent .md3e-overview-data-scroll > table.md3e-lease-cards {
+        tr:not(.table-titles) {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0.4rem;
+          padding: 0.55rem 0.65rem;
         }
       }
     }

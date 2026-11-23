@@ -57,7 +57,7 @@
         }
 
         @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
-          padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+          padding-bottom: calc(1rem + env(safe-area-inset-bottom));
         }
       }
 
@@ -166,7 +166,7 @@
         color: color-mix(in oklab, var(--foreground) 74%, transparent);
         margin: 0;
 
-        @media (max-width: 48rem) {
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
           font-size: var(--md-sys-typescale-body-medium-size);
           line-height: var(--md-sys-typescale-body-medium-line-height);
         }
@@ -187,17 +187,17 @@
         margin: 0;
         min-height: 0;
 
-        @media (width < 48rem) {
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
           display: flex;
           position: static;
-          justify-content: stretch;
-          align-items: stretch;
+          justify-content: center;
+          align-items: center;
           flex-direction: row;
           flex-wrap: wrap;
-          gap: 0.3rem;
-          width: fit-content;
-          max-width: min(100%, 18rem);
-          margin-inline: auto;
+          gap: 0.375rem;
+          width: 100%;
+          max-width: 100%;
+          margin-inline: 0;
           padding: 0;
           border-radius: 0;
           border: 0;
@@ -210,9 +210,9 @@
         }
       }
 
-      @media (width < 48rem) {
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
         body.mobile-page-actions-visible #maincontent {
-          padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+          padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
         }
 
         body.mobile-page-actions-visible .cbi-page-actions[data-dirty="true"] {
@@ -225,30 +225,25 @@
           left: 0;
           right: 0;
           z-index: 100;
-          padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
-          background: color-mix(in oklab, var(--surface-bg) 96%, transparent);
+          padding: 0.5rem var(--md3e-page-gutter) calc(0.5rem + env(safe-area-inset-bottom, 0px));
+          background: color-mix(in oklab, var(--md-sys-color-surface-container-low) 96%, transparent);
           box-shadow: 0 -4px 16px var(--expressive-shadow);
-          border-top: 1px solid color-mix(in oklab, var(--border) 54%, transparent);
+          border-top: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 58%, transparent);
           flex-wrap: wrap;
           flex-direction: row;
-          justify-content: flex-start;
-          align-items: stretch;
-          gap: 0.3rem;
+          justify-content: center;
+          align-items: center;
+          gap: 0.375rem;
         }
 
         .cbi-page-actions > .cbi-button,
         .cbi-page-actions > .cbi-dropdown {
-          flex: 1 1 0px;
+          flex: 0 1 auto;
           width: auto;
           min-width: 0;
           white-space: nowrap;
           text-align: center;
           justify-content: center;
-        }
-
-        body.mobile-page-actions-visible .cbi-page-actions[data-dirty="true"] > .cbi-button,
-        body.mobile-page-actions-visible .cbi-page-actions[data-dirty="true"] > .cbi-dropdown {
-          width: auto;
         }
       }
 
@@ -310,14 +305,10 @@
         overflow: auto !important;
         resize: vertical !important;
         padding: 1rem 1.1rem !important;
-        border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 58%, transparent) !important;
-        border-radius: 1.25rem;
-        background: color-mix(
-          in oklab,
-          var(--md-sys-color-surface-container-lowest) 90%,
-          var(--md-sys-color-primary-container)
-        ) !important;
-        color: color-mix(in oklab, var(--foreground) 94%, var(--md-sys-color-primary) 6%) !important;
+        border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 78%, transparent) !important;
+        border-radius: var(--md-sys-shape-corner-medium, 12px) !important;
+        background: var(--md-sys-color-surface-container-lowest) !important;
+        color: var(--md-sys-color-on-surface) !important;
         box-shadow: none !important;
         font-family: var(--font-mono) !important;
         font-size: 0.8125rem !important;
@@ -329,12 +320,12 @@
         tab-size: 4;
         caret-color: var(--md-sys-color-primary);
 
-        @media (max-width: 48rem) {
-          min-height: 56vh;
-          padding: 0.85rem !important;
-          border-radius: 1rem;
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          min-height: 50dvh;
+          padding: var(--md3e-card-pad) !important;
+          border-radius: var(--md-sys-shape-corner-medium, 12px) !important;
           font-size: 0.75rem !important;
-          line-height: 1.58;
+          line-height: 1.52;
         }
       }
 
@@ -348,9 +339,9 @@
       }
 
       [data-darkmode="true"] & :is(#syslog, #log_textarea) {
-        border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 72%, transparent) !important;
-        background: color-mix(in oklab, var(--md-sys-color-surface-container-lowest) 88%, black) !important;
-        color: color-mix(in oklab, var(--md-sys-color-on-surface) 94%, var(--md-sys-color-primary-container) 6%) !important;
+        border-color: color-mix(in oklab, var(--md-sys-color-outline-variant) 78%, transparent) !important;
+        background: var(--md-sys-color-surface-container-lowest) !important;
+        color: var(--md-sys-color-on-surface) !important;
         box-shadow: none !important;
       }
     }

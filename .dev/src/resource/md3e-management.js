@@ -243,12 +243,26 @@ function precedingHeadingLabel(table) {
 // empty state as a single placeholder cell. Both are chrome, not data, so the
 // empty-state detection below skips them.
 const nativeTableHeaderSelector =
-  "tr.table-titles, tr.cbi-section-table-titles, thead tr";
+  "tr.table-titles, tr.cbi-section-table-titles, .tr.table-titles, .tr.cbi-section-table-titles, thead tr, .thead .tr";
+
+function getTableRows(table) {
+  if (!table) return [];
+  if (table.rows && table.rows.length) return [...table.rows];
+  return Array.from(
+    table.querySelectorAll(":scope > tr, :scope > tbody > tr, :scope > thead > tr, :scope > .tr, :scope > .tbody > .tr, :scope > .thead > .tr"),
+  );
+}
+
+function getRowCells(row) {
+  if (!row) return [];
+  if (row.cells && row.cells.length) return [...row.cells];
+  return Array.from(row.children).filter((c) => c.matches("th, td, .th, .td"));
+}
 
 function nativeTableDataRows(table) {
-  return [...table.rows].filter(
+  return getTableRows(table).filter(
     (row) =>
-      !row.closest("thead") &&
+      !row.closest("thead, .thead") &&
       !row.classList.contains("placeholder") &&
       !row.classList.contains("table-titles") &&
       !row.classList.contains("cbi-section-table-titles"),
@@ -273,7 +287,7 @@ function styleDataTable(table, label, preferredLayout) {
   }
 
   const header = table.querySelector(nativeTableHeaderSelector);
-  const columns = header?.cells.length || 0;
+  const columns = getRowCells(header).length || 0;
   header?.querySelectorAll("th").forEach((cell) => {
     cell.scope = "col";
   });
@@ -281,7 +295,7 @@ function styleDataTable(table, label, preferredLayout) {
   // LuCI renders the empty state as one cell; span it over the real column
   // count so the localized text stays readable instead of wrapping one
   // character per line.
-  const placeholder = table.querySelector("tr.placeholder > td");
+  const placeholder = table.querySelector("tr.placeholder > td, .tr.placeholder > .td");
   if (placeholder && columns > 1 && placeholder.colSpan !== columns)
     placeholder.colSpan = columns;
 
@@ -513,30 +527,295 @@ function styleMounts(view) {
   styleCbiDataTables(view, "#cbi-fstab-swap", _("SWAP"));
 }
 
+function syncTableDataTitles(table) {
+  const header = table.querySelector(nativeTableHeaderSelector);
+  if (!header) return;
+  const labels = getRowCells(header).map((cell) =>
+    cell.textContent.trim(),
+  );
+  let tableHasDataTitle = false;
+
+  for (const row of nativeTableDataRows(table)) {
+    let rowHasDataTitle = false;
+    getRowCells(row).forEach((cell, index) => {
+      const label = labels[index] || "";
+      if (label) {
+        if (cell.getAttribute("data-title") !== label) {
+          cell.setAttribute("data-title", label);
+        }
+        cell.classList.add("md3e-table-data-title-cell");
+        rowHasDataTitle = true;
+        tableHasDataTitle = true;
+      }
+      if (cell.querySelector(".cbi-button, .btn, button")) {
+        cell.classList.add("md3e-table-action-cell");
+      }
+    });
+    row.classList.toggle("md3e-table-data-title-row", rowHasDataTitle);
+  }
+
+  if (tableHasDataTitle) {
+    table.classList.add("md3e-table-has-data-title");
+  }
+}
+
+function structureWirelessInfoCell(cell) {
+  if (!(cell instanceof HTMLElement)) return;
+  if (cell.querySelector("a, button, input, select, textarea")) return;
+
+  // Preserve LuCI native direct-child wrapper <div> (with its data-* attributes)
+  // so LuCI poll handlers calling getAttribute() on the child <div> (e.g. Mesh rows)
+  // never break.
+  const firstEl = cell.firstElementChild;
+  const container =
+    cell.children.length === 1 &&
+    firstEl instanceof HTMLElement &&
+    firstEl.tagName === "DIV" &&
+    !firstEl.classList.contains("md3e-wireless-card-title") &&
+    !firstEl.classList.contains("md3e-wireless-card-badges")
+      ? firstEl
+      : cell;
+
+  if (
+    container.querySelector(
+      ":scope > .md3e-wireless-spec-grid, :scope > .md3e-wireless-card-title, :scope > .md3e-wireless-card-badges, :scope > .md3e-wireless-card-note",
+    )
+  ) {
+    return;
+  }
+
+  const badges = [];
+  const segments = [];
+  let current = null;
+  let titleText = "";
+
+  const pushSegment = (endedByInlineKey = false) => {
+    if (!current) return;
+    current.endedByInlineKey = endedByInlineKey;
+    if (current.key !== null || current.raw.trim()) {
+      segments.push(current);
+    }
+    current = null;
+  };
+
+  const ensureTextSegment = () => {
+    if (!current) current = { key: null, raw: "", endedByInlineKey: false };
+  };
+
+  const walk = (node) => {
+    if (node.nodeType === 3) {
+      const text = node.textContent;
+      if (!text) return;
+      if (!current && !text.trim()) return;
+      ensureTextSegment();
+      current.raw += text;
+      return;
+    }
+    if (node.nodeType !== 1) return;
+
+    if (node.classList.contains("ifacebadge")) {
+      badges.push(node);
+      return;
+    }
+    if (node.tagName === "BR") {
+      pushSegment(false);
+      return;
+    }
+    if (node.tagName === "STRONG" || node.tagName === "B") {
+      const rawKey = node.textContent;
+      const text = rawKey.trim();
+      if (!text) return;
+      if (text.endsWith(":")) {
+        pushSegment(true);
+        current = {
+          key: text.slice(0, -1).trim(),
+          raw: "",
+          endedByInlineKey: false,
+          keyHadTrailingSpace: /:\s+$/.test(rawKey),
+        };
+        return;
+      }
+      if (!titleText && !current && node.closest("big")) {
+        titleText = text;
+        return;
+      }
+      if (!titleText && !current && !segments.length) {
+        titleText = text;
+        return;
+      }
+      ensureTextSegment();
+      current.raw += text;
+      return;
+    }
+    Array.from(node.childNodes).forEach(walk);
+  };
+
+  Array.from(container.childNodes).forEach(walk);
+  pushSegment(false);
+
+  const specs = [];
+  const notes = [];
+  for (const seg of segments) {
+    if (seg.key !== null) {
+      let value = seg.keyHadTrailingSpace ? seg.raw : seg.raw.replace(/^ /, "");
+      if (seg.endedByInlineKey) {
+        value = value.replace(/ \| $/, "");
+      }
+      if (value.trim()) specs.push({ key: seg.key, value });
+      continue;
+    }
+
+    const joined = seg.raw.trim();
+    if (!joined) continue;
+
+    // Plain-text multi-spec lines (without <strong>) only split on " | " when
+    // every piece is a valid Key: Value pair.
+    const pipeParts = joined.includes(" | ") ? joined.split(" | ") : null;
+    if (
+      pipeParts &&
+      pipeParts.length > 1 &&
+      pipeParts.every((p) => /^([^:]{1,40}):\s*(.+)$/.test(p.trim()))
+    ) {
+      for (const p of pipeParts) {
+        const m = p.trim().match(/^([^:]{1,40}):\s*(.+)$/);
+        if (m) specs.push({ key: m[1].trim(), value: m[2].trim() });
+      }
+      continue;
+    }
+
+    const match = joined.match(/^([^:]{1,40}):\s*(.+)$/);
+    if (match) {
+      specs.push({ key: match[1].trim(), value: match[2].trim() });
+    } else {
+      notes.push(joined);
+    }
+  }
+
+  // Extract SSID into card title when no hardware title was present.
+  const remainingSpecs = [];
+  for (const spec of specs) {
+    if (!titleText && spec.key.toLowerCase() === "ssid") {
+      titleText = spec.value;
+    } else {
+      remainingSpecs.push(spec);
+    }
+  }
+
+  // Only replace DOM when we parsed structured specs, notes, title, or standalone badges.
+  const hasContent =
+    Boolean(titleText) ||
+    badges.length > 0 ||
+    remainingSpecs.length > 0 ||
+    notes.length > 0;
+  if (!hasContent) return;
+
+  const fragment = document.createDocumentFragment();
+
+  if (titleText) {
+    fragment.appendChild(
+      E("div", { class: "md3e-wireless-card-title" }, [titleText]),
+    );
+  }
+
+  if (badges.length) {
+    fragment.appendChild(
+      E("div", { class: "md3e-wireless-card-badges" }, badges),
+    );
+  }
+
+  for (const note of notes) {
+    fragment.appendChild(
+      E("p", { class: "md3e-wireless-card-note" }, [note]),
+    );
+  }
+
+  if (remainingSpecs.length) {
+    const dl = E("dl", { class: "md3e-wireless-spec-grid" });
+    for (const { key, value } of remainingSpecs) {
+      const lowerKey = key.toLowerCase();
+      const isWide =
+        lowerKey === "encryption" ||
+        lowerKey === "加密" ||
+        value.length > 28;
+      dl.appendChild(
+        E(
+          "div",
+          {
+            class: isWide
+              ? "md3e-wireless-spec-item is-wide"
+              : "md3e-wireless-spec-item",
+          },
+          [E("dt", {}, [key]), E("dd", {}, [value])],
+        ),
+      );
+    }
+    fragment.appendChild(dl);
+  }
+
+  container.replaceChildren(fragment);
+}
+
 // Wireless Overview renders two native grids: the associated-station list and
 // the radio table inside the Wireless Overview GridSection. Both keep their
-// native markup and handlers; only the scroll region and labels are added.
+// native markup and handlers; mobile stacking and wrapping are driven by these
+// classes without forcing horizontal scroll.
 function styleWireless(view) {
-  const stations = view.querySelector("table#wifi_assoclist_table");
-  if (stations)
+  const stations = view.querySelector("#wifi_assoclist_table");
+  if (stations) {
+    stations.closest(".cbi-section")?.classList.add("md3e-tonal-data");
     styleNativeTable(
       stations,
       precedingHeadingLabel(stations) || _("Associated Stations"),
     );
+    stations.classList.add("md3e-wireless-stations-table");
+    syncTableDataTitles(stations);
+  }
 
   const radio = view.querySelector(
-    "#cbi-wireless-wifi-device > table, #cbi-wireless-wifi-device > .md3e-data-scroll > table",
+    "#cbi-wireless-wifi-device > :is(table, .table), #cbi-wireless-wifi-device > .md3e-data-scroll > :is(table, .table)",
   );
   if (radio) {
+    radio.closest(".cbi-section")?.classList.add("md3e-tonal-data");
     styleNativeTable(
       radio,
       radio.closest(".cbi-section")?.querySelector("h3")?.textContent.trim() ||
         _("Wireless Overview"),
     );
-    // The radio grid keeps three native columns; a populated one needs the wide
-    // floor so those columns stay legible inside its own scroll region.
-    if (nativeTableDataRows(radio).length > 0)
-      radio.parentElement.dataset.layout = "wide";
+    delete radio.parentElement.dataset.layout;
+    radio.classList.add("md3e-wireless-device-table");
+
+    for (const row of nativeTableDataRows(radio)) {
+      row.classList.add("md3e-wireless-device-row");
+      const hasIfaceAction = Boolean(
+        row.querySelector(".cbi-button-edit, .cbi-button-remove"),
+      );
+      const hasRadioAction = Boolean(
+        row.querySelector(".cbi-button-add") ||
+          Array.from(row.querySelectorAll("button, .btn")).some((btn) =>
+            /^(scan|add)$/i.test(btn.textContent.trim()),
+          ),
+      );
+      const isIfaceRow =
+        hasIfaceAction ||
+        (!hasRadioAction && Boolean(row.querySelector(".ifacebadge")));
+      row.classList.toggle("md3e-wireless-radio-row", !isIfaceRow);
+      row.classList.toggle("md3e-wireless-iface-row", isIfaceRow);
+      const cells = getRowCells(row);
+      cells.forEach((cell, index) => {
+        const isActionCell =
+          cell.classList.contains("cbi-section-actions") ||
+          (index === cells.length - 1 &&
+            Boolean(cell.querySelector(".cbi-button, .btn, button")));
+        if (isActionCell) {
+          cell.classList.add("md3e-wireless-actions-cell");
+        } else if (index === 0) {
+          cell.classList.add("md3e-wireless-badge-cell");
+        } else {
+          cell.classList.add("md3e-wireless-info-cell");
+          structureWirelessInfoCell(cell);
+        }
+      });
+    }
   }
 }
 
@@ -1006,7 +1285,17 @@ return baseclass.extend({
     toInput?.setAttribute("aria-label", _("To"));
     fromInput?.setAttribute("aria-label", _("From"));
 
-    const nativeTimeLabel = timeRow.querySelector("label")?.textContent.trim() || _("Time range (seconds):");
+    const getFilterLabel = (row, invertId, fallback) => {
+      const label = Array.from(row.querySelectorAll("label")).find((el) => {
+        if (el.getAttribute("for") === invertId) return false;
+        if (el.querySelector(`#${invertId}`)) return false;
+        const txt = el.textContent.trim();
+        return txt && txt !== _("Not") && txt !== "Not";
+      });
+      return label?.textContent.trim() || fallback;
+    };
+
+    const nativeTimeLabel = getFilterLabel(timeRow, "invertLogRangeTime", _("Time range (seconds):"));
     const timeLabelRow = E("div", { class: "md3e-log-label-row" }, [
       E("label", { for: "logFromTime" }, [nativeTimeLabel]),
     ]);
@@ -1031,7 +1320,7 @@ return baseclass.extend({
 
     const invertSev = sevRow.querySelector("#invertSeverity");
     const sevSelect = sevRow.querySelector("#logSeveritySelect");
-    const nativeSevLabel = sevRow.querySelector("label")?.textContent.trim() || _("Severity:");
+    const nativeSevLabel = getFilterLabel(sevRow, "invertSeverity", _("Severity:"));
     const sevLabelRow = E("div", { class: "md3e-log-label-row" }, [
       E("label", { for: "logSeveritySelect" }, [nativeSevLabel]),
     ]);
@@ -1051,7 +1340,7 @@ return baseclass.extend({
 
     const invertText = textRow.querySelector("#invertLogTextSearch");
     const textInput = textRow.querySelector("#logTextFilter");
-    const nativeTextLabel = textRow.querySelector("label")?.textContent.trim() || _("Search text:");
+    const nativeTextLabel = getFilterLabel(textRow, "invertLogTextSearch", _("Search text:"));
     const textLabelRow = E("div", { class: "md3e-log-label-row" }, [
       E("label", { for: "logTextFilter" }, [nativeTextLabel]),
     ]);
@@ -1271,18 +1560,24 @@ return baseclass.extend({
 
   positionMenu() {
     if (!this.current) return;
-    const { top, right, bottom } = this.current.trigger.getBoundingClientRect();
+    const { top, right, bottom, left: triggerLeft } = this.current.trigger.getBoundingClientRect();
     const { offsetWidth: width, offsetHeight: height } = this.menu;
     const gap = 8;
+    const preferredLeft = right - width >= gap ? right - width : triggerLeft;
     const left = Math.max(
       gap,
-      Math.min(right - width, innerWidth - width - gap),
+      Math.min(preferredLeft, innerWidth - width - gap),
     );
     const y =
       bottom + height + gap <= innerHeight
         ? bottom + gap
         : Math.max(gap, top - height - gap);
-    Object.assign(this.menu.style, { left: left + "px", top: y + "px" });
+    Object.assign(this.menu.style, {
+      left: left + "px",
+      top: y + "px",
+      right: "auto",
+      bottom: "auto",
+    });
   },
 
   runAction(index) {
@@ -1435,18 +1730,24 @@ return baseclass.extend({
 
   positionStartupMenu() {
     if (!this.currentStartup) return;
-    const { top, right, bottom } = this.currentStartup.trigger.getBoundingClientRect();
+    const { top, right, bottom, left: triggerLeft } = this.currentStartup.trigger.getBoundingClientRect();
     const { offsetWidth: width, offsetHeight: height } = this.startupMenu;
     const gap = 8;
+    const preferredLeft = right - width >= gap ? right - width : triggerLeft;
     const left = Math.max(
       gap,
-      Math.min(right - width, innerWidth - width - gap),
+      Math.min(preferredLeft, innerWidth - width - gap),
     );
     const y =
       bottom + height + gap <= innerHeight
         ? bottom + gap
         : Math.max(gap, top - height - gap);
-    Object.assign(this.startupMenu.style, { left: left + "px", top: y + "px" });
+    Object.assign(this.startupMenu.style, {
+      left: left + "px",
+      top: y + "px",
+      right: "auto",
+      bottom: "auto",
+    });
   },
 
   openStartupMenu(entry) {

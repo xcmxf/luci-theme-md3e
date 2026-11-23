@@ -69,3 +69,17 @@
   border: 0 !important;
   box-shadow: none !important;
 }
+
+@media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+  body.mobile-page-actions-visible #maincontent .cbi-page-actions[data-dirty="true"] {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 100;
+    margin: 0;
+    padding: 0.5rem var(--md3e-page-gutter, 0.75rem) calc(0.5rem + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in oklab, var(--md-sys-color-surface-container-low) 96%, transparent) !important;
+    border-top: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant) 58%, transparent) !important;
+    box-shadow: 0 -4px 16px var(--expressive-shadow) !important;
+  }
+}

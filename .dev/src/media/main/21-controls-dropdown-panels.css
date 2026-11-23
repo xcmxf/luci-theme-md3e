@@ -13,7 +13,10 @@
   /* Shared dropdown panel styles (outline-select + cbi-dropdown) */
   .outline-select.open .outline-select-panel,
   .cbi-dropdown[open] > ul.dropdown {
-    @apply absolute left-0 z-[120] block w-max min-w-full max-w-[calc(100vw-2rem)] max-h-64 overflow-x-auto overflow-y-auto border p-1.5 shadow-md;
+    @apply absolute left-0 z-[120] block w-max min-w-full max-w-[calc(100vw-2rem)] overflow-x-auto overflow-y-auto border p-1.5 shadow-md;
+    max-height: min(16rem, 45vh);
+    max-height: min(16rem, 45dvh);
+    overscroll-behavior: contain;
     border-radius: var(--md-sys-shape-corner-large);
     border-color: var(--md-sys-color-outline-variant);
     background: var(--md-sys-color-surface-container-highest);
@@ -25,8 +28,8 @@
     animation: dropdown-enter 200ms cubic-bezier(0.3, 0, 0, 1);
   }
 
-  .outline-select.open .outline-select-panel.align-end,
-  .cbi-dropdown[open] > ul.dropdown.align-end {
+  .outline-select.open .outline-select-panel.align-end:not(.md3e-dropdown-fixed),
+  .cbi-dropdown[open] > ul.dropdown.align-end:not(.md3e-dropdown-fixed) {
     left: auto !important;
     right: 0 !important;
     transform-origin: top right;
@@ -53,6 +56,26 @@
     &::before {
       content: "";
       @apply block h-3 w-3 shrink-0;
+    }
+  }
+
+  /* Multi-select items already render native checkboxes; suppress duplicate ::before checkmark. */
+  .cbi-dropdown[multiple][open] > ul.dropdown > li::before,
+  .cbi-dropdown[open] > ul.dropdown > li:has(input[type="checkbox"])::before,
+  .cbi-dropdown[open] > ul.dropdown > li:has(> form)::before {
+    display: none;
+    content: none;
+  }
+
+  /* Custom value input inside dropdown panels: crisp border & readable placeholder in light & dark modes. */
+  .cbi-dropdown[open] > ul.dropdown > li > form > input,
+  .cbi-dropdown[open] > ul.dropdown > li > input[type="text"] {
+    color: var(--md-sys-color-on-surface);
+    border-color: var(--md-sys-color-outline);
+
+    &::placeholder {
+      color: var(--md-sys-color-on-surface-variant);
+      opacity: 0.85;
     }
   }
 
@@ -116,6 +139,7 @@
     button {
       display: flex;
       align-items: center;
+      justify-content: flex-start !important;
       inline-size: 100%;
       padding: 0.45rem 0.75rem;
       border: 0;
@@ -154,6 +178,44 @@
 
     h4 {
       color: var(--md-sys-color-error) !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .outline-select.open .outline-select-panel,
+    .cbi-dropdown[open] > ul.dropdown {
+      max-width: calc(100vw - 1.25rem);
+      padding: 0.25rem;
+      border-radius: var(--md3e-subcard-radius, 0.75rem);
+    }
+
+    .outline-select-option,
+    .cbi-dropdown[open] > ul.dropdown > li {
+      white-space: normal;
+      overflow-wrap: anywhere;
+      padding: 0.45rem 0.625rem;
+      font-size: 0.8125rem;
+      line-height: 1.3;
+    }
+
+    .md3e-row-menu {
+      min-inline-size: 7rem;
+      padding: 0.25rem;
+
+      button {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.8125rem;
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    button.md3e-row-menu-trigger,
+    .md3e-row-menu-trigger {
+      inline-size: var(--md3e-control-height, 2.375rem) !important;
+      block-size: var(--md3e-control-height, 2.375rem) !important;
+      min-inline-size: var(--md3e-control-height, 2.375rem) !important;
+      min-block-size: var(--md3e-control-height, 2.375rem) !important;
     }
   }
 }

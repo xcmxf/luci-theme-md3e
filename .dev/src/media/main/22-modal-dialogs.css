@@ -9,6 +9,7 @@
 
       & > .modal {
         @apply border-border/50 bg-page-bg flex w-4xl max-w-full max-h-[90vh] flex-col gap-4 overflow-y-auto rounded-xl border p-6 wrap-break-word whitespace-normal max-md:max-h-[95vh] max-md:gap-3 max-md:p-4;
+        max-height: 90dvh;
         box-shadow: 0 18px 42px -32px var(--expressive-shadow);
 
         &.cbi-modal:has(> .cbi-map + .button-row) {
@@ -34,6 +35,14 @@
 
         & p {
           @apply text-default-foreground text-base leading-relaxed;
+        }
+
+        & :is(.cbi-map-descr, .cbi-section-descr),
+        &.md3e-native-editor p {
+          margin: 0 0 0.5rem;
+          color: var(--md-sys-color-on-surface-variant);
+          font-size: var(--md-sys-typescale-body-medium-size, 0.875rem);
+          line-height: 1.45;
         }
 
         & > ul {
@@ -278,7 +287,7 @@
 
       & > .cbi-map {
         min-height: 0;
-        padding: 0;
+        padding: 0 !important;
       }
 
       & > .cbi-map > .cbi-section {
@@ -313,6 +322,144 @@
         max-width: 100%;
         min-width: 0;
       }
+
+      /* Guard against 1-char label crushing if a checkbox description stays inside .cbi-value-field. */
+      .cbi-value:has(> .cbi-value-field > :is(.cbi-checkbox, input[type="checkbox"])):has(> .cbi-value-field > .cbi-value-description) {
+        flex-direction: column !important;
+        align-items: stretch !important;
+
+        & > .cbi-value-title {
+          width: 100% !important;
+          flex: none !important;
+        }
+
+        & > .cbi-value-field {
+          width: 100% !important;
+          flex: 1 1 auto !important;
+        }
+      }
+    }
+
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      body.modal-overlay-active #modal_overlay {
+        padding: var(--md3e-modal-gutter, 0.75rem);
+      }
+
+      body #modal_overlay > .modal {
+        max-height: 92vh;
+        max-height: 92dvh;
+        padding: var(--md3e-modal-pad, 1rem);
+        border-radius: var(--md3e-card-radius, 1.25rem);
+        gap: 0.625rem;
+      }
+
+      #modal_overlay > .modal.uci-dialog {
+        padding: var(--md3e-modal-pad, 1rem);
+        border-radius: var(--md3e-card-radius, 1.25rem);
+        gap: 0.625rem;
+
+        & > h4 {
+          font-size: 1.125rem;
+          line-height: 1.3;
+        }
+      }
+
+      #modal_overlay > .modal.md3e-native-editor {
+        padding: var(--md3e-modal-pad, 1rem) var(--md3e-modal-pad, 1rem) 0;
+        border-radius: var(--md3e-card-radius, 1.25rem);
+        gap: 0.5rem;
+
+        & > h4 {
+          padding-inline: 0;
+          font-size: 1.125rem;
+          line-height: 1.3;
+        }
+
+        & > .button-row {
+          padding: 0.55rem 0 max(0.55rem, env(safe-area-inset-bottom, 0px));
+          gap: 0.45rem;
+        }
+      }
+    }
+
+    @media (max-width: 640px) {
+      body #modal_overlay > .modal {
+        max-height: 94vh;
+        max-height: 94dvh;
+      }
+
+      /* Flatten nested card surface inside native editor dialogs on phones so
+         fields reclaim horizontal space and avoid flat-bottom inner card clips. */
+      #modal_overlay > .modal.md3e-native-editor {
+        background: var(--md-sys-color-surface-container-high);
+
+        & > .cbi-map {
+          padding: 0 0 0.5rem !important;
+        }
+
+        :is(.md3e-tonal-settings, .cbi-section.md3e-tonal-data, .cbi-section-node.md3e-tonal-data) {
+          padding: 0.15rem 0 !important;
+          border-radius: 0 !important;
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+
+        .cbi-tabmenu.md3e-secondary-tabs {
+          width: 100%;
+          max-width: 100%;
+          margin: 0 0 0.45rem;
+        }
+      }
+
+      #modal_overlay > .modal .button-row :is(button, .btn, .cbi-button) {
+        min-height: 2.5rem;
+        height: auto;
+        padding: 0.45rem 0.95rem;
+        font-size: 0.84rem;
+
+        @media (pointer: coarse) {
+          min-height: 2.75rem;
+        }
+      }
+    }
+
+    @media (max-width: 480px) {
+      #modal_overlay > .modal p,
+      #modal_overlay > .modal :is(.cbi-map-descr, .cbi-section-descr) {
+        font-size: 0.8125rem;
+        line-height: 1.4;
+      }
+
+      #modal_overlay > .modal.md3e-native-editor > h4,
+      #modal_overlay > .modal.uci-dialog > h4 {
+        font-size: 1.125rem;
+        line-height: 1.3;
+      }
+
+      #modal_overlay > .modal .button-row,
+      #modal_overlay > .modal div.left,
+      #modal_overlay > .modal div.right {
+        padding: 0.5rem 0 max(0.5rem, env(safe-area-inset-bottom, 0px));
+        gap: 0.4rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      #modal_overlay > .modal.md3e-native-editor > h4,
+      #modal_overlay > .modal.uci-dialog > h4 {
+        font-size: 1.125rem;
+        line-height: 1.3;
+      }
+
+      #modal_overlay > .modal .button-row :is(button, .btn, .cbi-button) {
+        min-height: 2.5rem;
+        padding: 0.4rem 0.85rem;
+        font-size: 0.82rem;
+
+        @media (pointer: coarse) {
+          min-height: 2.75rem;
+        }
+      }
     }
 
     /* Modal entrance/exit animations */
@@ -343,8 +490,8 @@
     }
 
     @keyframes modal-enter {
-      from { opacity: 0; transform: scale(0.96) translateY(8px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes modal-exit {

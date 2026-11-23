@@ -149,5 +149,28 @@
       grid-column: 1 / -1;
       text-align: left;
     }
+
+    @media (max-width: 640px) {
+      .md3e-port-card {
+        min-width: 0 !important;
+        max-width: none !important;
+        min-height: 7.5rem;
+        padding: 0.5rem;
+        border-radius: var(--md3e-subcard-radius, 0.75rem);
+      }
+
+      .md3e-port-card > .ifacebox-body:nth-child(3),
+      .md3e-port-card > .md3e-port-link {
+        min-height: 2.5rem;
+        padding: 0.35rem;
+        border-radius: var(--md-sys-shape-corner-small);
+      }
+
+      .md3e-port-card > .ifacebox-body:last-child > .cbi-tooltip-container,
+      .md3e-port-card .md3e-port-traffic {
+        padding: 0.22rem 0.25rem;
+        font-size: 0.68rem;
+      }
+    }
   }
 }

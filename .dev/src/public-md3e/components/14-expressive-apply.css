@@ -1,12 +1,12 @@
 #maincontent .cbi-page-actions > .md3e-apply-split {
   display: inline-grid;
-  grid-template-columns: minmax(0, 1fr) 2.75rem;
+  grid-template-columns: minmax(0, 1fr) var(--md3e-control-height, 2.75rem);
   gap: 3px;
   position: relative;
   min-inline-size: 0;
   max-inline-size: 100%;
-  min-block-size: 2.75rem;
-  height: 2.75rem;
+  min-block-size: var(--md3e-control-height, 2.75rem);
+  height: var(--md3e-control-height, 2.75rem);
   padding: 0;
   margin: 0;
   border: 0;
@@ -26,8 +26,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: 2.75rem;
-  height: 2.75rem;
+  min-block-size: var(--md3e-control-height, 2.75rem);
+  height: var(--md3e-control-height, 2.75rem);
   min-inline-size: 0;
   margin: 0;
   padding: 0 1.125rem;
@@ -139,4 +139,42 @@
 #maincontent .cbi-page-actions:has(> .md3e-apply-split) > .md3e-action-group > button:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: -3px;
+}
+
+@media (max-width: 480px) {
+  #maincontent .md3e-apply-split > :is(.md3e-apply-primary, .md3e-apply-toggle) {
+    font-size: 0.8125rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary {
+    padding: 0 0.85rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary:enabled:active {
+    padding-inline: 0.9rem;
+  }
+
+  .md3e-apply-menu {
+    max-inline-size: calc(100vw - 2 * var(--md3e-page-gutter, 0.5rem));
+    border-radius: var(--md3e-subcard-radius, 0.75rem);
+  }
+
+  #maincontent .md3e-apply-menu > button {
+    min-height: var(--md3e-control-height, 2.375rem);
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 360px) {
+  #maincontent .md3e-apply-split > :is(.md3e-apply-primary, .md3e-apply-toggle) {
+    font-size: 0.8rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary {
+    padding: 0 0.7rem;
+  }
+
+  #maincontent .md3e-apply-split > .md3e-apply-primary:enabled:active {
+    padding-inline: 0.72rem;
+  }
 }

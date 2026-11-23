@@ -79,10 +79,18 @@
             lastReveal?.width !== width || lastReveal?.extent !== extent;
           let offset = 0;
           if (reveal && width && extent > width + 1) {
+            const fadeSize = parseFloat(getComputedStyle(scrollport).getPropertyValue("--md3e-tab-fade-size")) || 28;
+            const clearance = Math.min(
+              Math.max(36, Math.ceil(fadeSize) + 8),
+              Math.max(4, Math.floor((width - activeRect.width) / 2)),
+            );
             const left = scrollport.getBoundingClientRect().left + scrollport.clientLeft;
             const right = left + width;
-            if (activeRect.left < left) offset = activeRect.left - left - 4;
-            else if (activeRect.right > right) offset = activeRect.right - right + 4;
+            if (activeRect.left < left + clearance) {
+              offset = activeRect.left - (left + clearance);
+            } else if (activeRect.right > right - clearance) {
+              offset = activeRect.right - (right - clearance);
+            }
           }
 
           const targetLeft =
@@ -181,7 +189,7 @@
 
     bindExistingTabs(document);
 
-    this.observeDomMutations(target, "vercel-tabs", (mutations) => {
+    const handleTabMutations = (mutations) => {
       for (const mutation of mutations) {
         if (mutation.type !== "childList") continue;
         for (const node of mutation.removedNodes) {
@@ -196,5 +204,33 @@
           bindExistingTabs(node);
         }
       }
-    }, { childList: true, subtree: true });
+    };
+
+    this.observeDomMutations(target, "vercel-tabs", handleTabMutations, {
+      childList: true,
+      subtree: true,
+    });
+
+    const attachModalOverlay = (overlay) => {
+      if (!(overlay instanceof HTMLElement) || overlay._md3eTabsObserved) return;
+      overlay._md3eTabsObserved = true;
+      bindExistingTabs(overlay);
+      this.observeDomMutations(overlay, "vercel-tabs", handleTabMutations, {
+        childList: true,
+        subtree: true,
+      });
+    };
+
+    const modalOverlay = document.getElementById("modal_overlay");
+    if (modalOverlay) {
+      attachModalOverlay(modalOverlay);
+    } else if (target !== document.body) {
+      const bodyObserver = new MutationObserver(() => {
+        const overlay = document.getElementById("modal_overlay");
+        if (!overlay) return;
+        bodyObserver.disconnect();
+        attachModalOverlay(overlay);
+      });
+      bodyObserver.observe(document.body, { childList: true });
+    }
   },

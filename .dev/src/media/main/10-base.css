@@ -28,6 +28,14 @@
 
     background-repeat: no-repeat;
 
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      scroll-padding-top: calc(var(--md3e-mobile-bar-end, 3.5rem) + 0.5rem);
+
+      &:has(body.mobile-page-actions-visible) {
+        scroll-padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+      }
+    }
+
     body {
       @apply text-foreground bg-page-bg relative flex flex-col text-base font-normal transition-all duration-300;
       line-height: 1.58;
@@ -49,6 +57,7 @@
   h2,
   h3 {
     @apply text-foreground leading-tight font-normal;
+    text-wrap: balance;
   }
 
   h1,
@@ -68,9 +77,11 @@
     line-height: var(--md-sys-typescale-display-medium-line-height);
     letter-spacing: -0.065em;
 
-    @media not all and (min-width: 48rem) {
-      font-size: 2.35rem;
-      line-height: 2.55rem;
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      font-size: clamp(1.45rem, 1.1rem + 1.4vw, 2rem);
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--md3e-section-gap);
     }
   }
 
@@ -82,9 +93,11 @@
     letter-spacing: -0.05em;
     border: none;
 
-    @media not all and (min-width: 48rem) {
-      font-size: 1.5rem;
-      line-height: 1.85rem;
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      font-size: clamp(1.2rem, 1rem + 0.8vw, 1.5rem);
+      line-height: 1.28;
+      letter-spacing: -0.025em;
+      margin-bottom: var(--md3e-section-gap);
     }
   }
 
@@ -96,9 +109,10 @@
     line-height: var(--md-sys-typescale-title-large-line-height);
     letter-spacing: -0.025em;
 
-    @media not all and (min-width: 48rem) {
-      font-size: 1.125rem;
-      line-height: 1.45rem;
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      line-height: 1.32;
+      margin-bottom: 0.5rem;
     }
   }
 
@@ -106,6 +120,10 @@
   .table + h3,
   div + h3 {
     @apply mt-12;
+
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      margin-top: var(--md3e-section-gap);
+    }
   }
 
   h4 {
@@ -169,6 +187,11 @@
     color: var(--muted-foreground);
     font-size: var(--md-sys-typescale-body-large-size);
     line-height: calc(var(--md-sys-typescale-body-large-line-height) + 0.04rem);
+
+    @media (max-width: 480px) {
+      font-size: var(--md-sys-typescale-body-medium-size);
+      line-height: 1.45;
+    }
   }
 
   pre {
@@ -179,6 +202,13 @@
     background: color-mix(in oklab, var(--md-sys-color-secondary-container) 54%, transparent);
     font-size: var(--md-sys-typescale-body-medium-size);
     line-height: 1.65;
+
+    @media (max-width: 480px) {
+      padding: 0.625rem 0.75rem;
+      border-radius: var(--md3e-subcard-radius);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
   }
 
   code {

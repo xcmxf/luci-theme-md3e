@@ -236,6 +236,36 @@
         outline-offset: -3px;
       }
 
+      @media (max-width: 480px) {
+        .md3e-mobile-primary-toggle,
+        .md3e-mobile-main-menu,
+        .md3e-mobile-secondary-link {
+          gap: 0.75rem;
+          min-block-size: 2.75rem;
+          padding: 0.4rem 0.75rem;
+          font-size: 0.9375rem;
+        }
+
+        .md3e-mobile-section-label {
+          margin: 0.25rem 0.75rem 0.25rem 1.25rem;
+          margin-inline: 1.25rem 0.75rem;
+        }
+
+        .md3e-mobile-secondary-list {
+          padding-inline-start: 1.25rem;
+        }
+
+        .md3e-mobile-secondary-link {
+          padding-inline: 0.75rem;
+        }
+
+        .mobile-nav-footer .mobile-nav-footer-btn,
+        .mobile-nav-footer [data-indicator] {
+          inline-size: 2.75rem;
+          block-size: 2.75rem;
+        }
+      }
+
       @media (prefers-reduced-motion: no-preference) {
         &[open]::before {
           animation: md3e-mobile-scrim-in 200ms ease-out;

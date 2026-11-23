@@ -136,7 +136,7 @@
         outline: none !important;
       }
 
-      @media (width < 48rem) {
+      @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
         width: 100%;
         max-width: 100%;
         min-width: 0;
@@ -185,7 +185,7 @@
         0 18px 30px -24px color-mix(in oklab, var(--md-comp-filled-button-container-color) 28%, transparent);
     }
 
-    @media (min-width: 48rem) {
+    @media (min-width: __MD3E_DESKTOP_LAYOUT_MIN_WIDTH__px) {
       .cbi-page-actions {
         @apply flex items-center justify-end gap-2.5 w-full p-0 border-0;
         --md3e-action-save-bg: color-mix(in oklab, var(--md-sys-color-secondary-container) 74%, var(--md-sys-color-surface-container-high));

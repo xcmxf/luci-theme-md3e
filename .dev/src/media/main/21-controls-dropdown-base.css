@@ -13,8 +13,25 @@
         @apply h-8;
       }
 
+      &[data-tooltip] {
+        display: inline-flex;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
       &:not(.btn):not(.cbi-button) {
-        @apply border-border/60 bg-page-bg h-9 rounded-lg border text-sm font-normal transition-colors duration-200 hover:bg-muted/40;
+        @apply border-border/60 bg-page-bg border text-sm font-normal transition-colors duration-200 hover:bg-muted/40;
+        height: auto;
+        min-height: 2.75rem;
+        border-radius: var(--md3e-comp-field-radius, var(--md-sys-shape-corner-large));
+        border-color: var(--md3e-comp-field-border, var(--md-comp-filled-field-outline-color));
+        background: var(--md3e-comp-field-bg, var(--md-comp-filled-field-container-color));
+
+        @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+          min-height: var(--md3e-control-height, 2.5rem);
+          border-radius: var(--md3e-control-radius, 0.875rem);
+        }
+
         & > ul > li {
           &[placeholder] {
             @apply hidden;
@@ -24,9 +41,17 @@
 
       & > ul {
         @apply m-0 flex flex-1 list-none flex-nowrap items-center gap-0.5 overflow-hidden max-md:flex-wrap;
+        min-width: 0;
 
         & > li {
-          @apply m-0 hidden list-none items-center gap-1 overflow-hidden py-1.5 pl-3 pr-0;
+          @apply m-0 hidden list-none items-center gap-1 overflow-hidden pl-3;
+          padding-block: 0.35rem;
+          padding-inline-end: 0.25rem;
+          line-height: 1.4;
+
+          & :is(em, i) {
+            padding-inline-end: 0.18em;
+          }
 
           &[display] {
             @apply !flex;
@@ -114,7 +139,9 @@
         &[more],
         &[empty] {
           & > .more {
-            @apply flex flex-none shrink-0 px-2.5 py-1.5;
+            @apply flex flex-1 min-w-0 px-3 py-1.5;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
 
@@ -134,6 +161,7 @@
 
       & > .open {
         @apply text-muted-foreground flex flex-none shrink-0 cursor-pointer items-center justify-center border-0 pr-2.5 pl-2 text-[0px] leading-none;
+        margin-left: auto;
 
         &::after {
           content: "";

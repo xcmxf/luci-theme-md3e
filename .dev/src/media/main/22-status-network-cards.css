@@ -18,8 +18,8 @@
       text-align: left;
 
       @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
-        padding: var(--space-md);
-        border-radius: 1.25rem;
+        padding: var(--md3e-card-pad, 1rem);
+        border-radius: var(--md3e-card-radius, 1.25rem);
       }
     }
 
@@ -164,6 +164,45 @@
       font-size: var(--md-sys-typescale-title-small-size);
       font-weight: 650;
       line-height: var(--md-sys-typescale-title-small-line-height);
+    }
+
+    @media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
+      .md3e-network-card > .ifacebox-body {
+        padding: 0.6rem 0 0;
+        gap: 0.35rem;
+      }
+
+      .md3e-network-list-item,
+      .md3e-network-card .ifacebadge {
+        grid-template-columns: 1.65rem minmax(0, 1fr);
+        gap: 0.5rem;
+        min-height: 3.35rem;
+        padding: 0.5rem 0.65rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .md3e-network-card > .ifacebox-head {
+        min-height: 1.65rem;
+        padding: 0.18rem 0.6rem;
+        font-size: 0.8125rem;
+      }
+
+      .md3e-network-card > .ifacebox-body > span > .nowrap {
+        grid-template-columns: minmax(4rem, min(42%, 7.5rem)) minmax(0, 1fr);
+        column-gap: 0.45rem;
+        font-size: 0.8125rem;
+      }
+
+      .md3e-network-card > .ifacebox-body > div {
+        border-radius: var(--md3e-subcard-radius, 0.75rem);
+      }
+
+      .md3e-network-list-item,
+      .md3e-network-card .ifacebadge {
+        min-height: 2.9rem;
+        padding: 0.4rem 0.5rem;
+      }
     }
   }
 }

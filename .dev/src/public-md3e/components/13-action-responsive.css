@@ -1,8 +1,8 @@
-@media not all and (min-width: 48rem) {
+@media (max-width: __MD3E_MOBILE_LAYOUT_MAX_WIDTH__px) {
   #maincontent .cbi-page-actions {
     width: 100%;
     max-width: 100%;
-    margin-block: 1rem 0;
+    margin-block: var(--md3e-section-gap, 0.875rem) 0;
     margin-inline: 0;
     padding: 0;
     gap: 0.5rem;
@@ -17,6 +17,7 @@
     order: 1;
     flex: 0 0 auto;
     width: auto;
+    min-height: var(--md3e-control-height, 2.5rem);
     display: inline-flex;
     flex-wrap: nowrap;
     gap: 3px;
@@ -24,11 +25,13 @@
     padding: 0;
   }
 
-  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn) {
+  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+  #maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+  #maincontent .cbi-page-actions > .cbi-button-reset {
     flex: 0 0 auto;
     min-width: 0;
-    height: 2.75rem;
-    min-height: 2.75rem;
+    height: var(--md3e-control-height, 2.5rem);
+    min-height: var(--md3e-control-height, 2.5rem);
     padding-inline: 0.875rem;
     justify-content: center;
   }
@@ -39,16 +42,66 @@
     width: auto;
     min-width: 0;
     max-width: 100%;
-    min-height: 2.75rem;
-    height: 2.75rem;
+    min-height: var(--md3e-control-height, 2.5rem);
+    height: var(--md3e-control-height, 2.5rem);
   }
 
   #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
-    padding: 0 0.75rem 0 1rem;
+    padding: 0 0.75rem 0 0.95rem;
   }
 
   #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]) > .open {
-    width: 2.75rem !important;
-    min-width: 2.75rem;
+    width: var(--md3e-control-height, 2.5rem) !important;
+    min-width: var(--md3e-control-height, 2.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  #maincontent .cbi-page-actions {
+    gap: 0.375rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+  #maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+  #maincontent .cbi-page-actions > .cbi-button-reset {
+    padding-inline: 0.72rem;
+    font-size: 0.8125rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-save:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-reset:only-child:active {
+    padding-inline: 0.78rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.6rem 0 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  #maincontent .cbi-page-actions {
+    gap: 0.3rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > :is(.cbi-button, .btn),
+  #maincontent .cbi-page-actions > :is(.cbi-button-save, .btn.cbi-button-save):only-child,
+  #maincontent .cbi-page-actions > .cbi-button-reset {
+    padding-inline: 0.625rem;
+    font-size: 0.8rem;
+  }
+
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-reset:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button-save:not(:only-child):active,
+  #maincontent .cbi-page-actions > .md3e-action-group > .cbi-button:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-save:only-child:active,
+  #maincontent .cbi-page-actions > .cbi-button-reset:only-child:active {
+    padding-inline: 0.65rem;
+  }
+
+  #maincontent .cbi-page-actions > :is(.md3e-split-button, [data-md3e-split-button]):not([open]) > ul > li[display] {
+    padding: 0 0.5rem 0 0.7rem;
   }
 }
